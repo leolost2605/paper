@@ -4,12 +4,13 @@
  */
 
 public class Quicknote.Pen : Quicknote.Tool {
+    public Gdk.RGBA color { get; set; default = { 0, 0, 0, 1 }; }
+    public float width { get; set; default = 2.0f; }
+
     private Stroke stroke;
 
     public override void start (Note note) {
-        var color = Gdk.RGBA ();
-        color.parse ("#000000");
-        stroke = new Stroke (new Line (new Gee.ArrayList<Point> ()), 2.0f, color);
+        stroke = new Stroke (new Line (new Gee.ArrayList<Point> ()), width, color);
 
         note.items.add (stroke);
     }

@@ -24,6 +24,7 @@ files = [
     'NoteView' / 'Canvas' / 'MoveHandler.vala',
     'NoteView' / 'Penbar' / 'Penbar.vala',
     'NoteView' / 'Penbar' / 'PenButton.vala',
+    'NoteView' / 'Penbar' / 'PenPopover.vala',
 ]
 
 # Create a new executable, list the files we want to compile, and install
