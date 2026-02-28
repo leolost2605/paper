@@ -30,7 +30,17 @@ public class Quicknote.Canvas : Adw.NavigationPage {
 
         input_handler = new InputHandler (draw_target, viewport, manipulator);
 
-        child = draw_target;
+        var penbar = new Penbar (tool_store) {
+            halign = START,
+            valign = CENTER
+        };
+
+        var overlay = new Gtk.Overlay () {
+            child = draw_target,
+        };
+        overlay.add_overlay (penbar);
+
+        child = overlay;
 
         tool_store.add_tool (new Pen ());
         tool_store.add_tool (new Eraser ());

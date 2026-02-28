@@ -1,0 +1,7 @@
+listview {
+    background: none;
+}
+
+:selected {
+    background: red;
+}
