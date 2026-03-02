@@ -9,6 +9,8 @@ public class Quicknote.Stroke : Item {
     public Gdk.RGBA color { get; construct; }
 
     private Gsk.Stroke stroke;
+    private Gsk.Path path;
+    private Graphene.Rect bounds;
 
     public Stroke (Line line, float width, Gdk.RGBA color) {
         Object (line: line, width: width, color: color);
@@ -16,22 +18,16 @@ public class Quicknote.Stroke : Item {
 
     construct {
         stroke = new Gsk.Stroke (width);
+        path = line.to_path ();
+        path.get_bounds (out bounds);
     }
 
     public override void snapshot (Gtk.Snapshot snapshot) {
-        var path_builder = new Gsk.PathBuilder ();
+        snapshot.append_stroke (path, stroke, color);
+    }
 
-        bool first = true;
-        foreach (var point in line.points) {
-            if (first) {
-                path_builder.move_to (point.x, point.y);
-                first = false;
-            } else {
-                path_builder.line_to (point.x, point.y);
-            }
-        }
-
-        snapshot.append_stroke (path_builder.to_path (), stroke, color);
+    public override Graphene.Rect get_bounds () {
+        return bounds;
     }
 
     public override bool intersects (Line line) {

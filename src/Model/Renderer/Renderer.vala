@@ -18,8 +18,12 @@ public class Quicknote.Renderer : Object {
         snapshot.save ();
         snapshot.transform (viewport.get_transform ());
 
-        foreach (var item in note.items) {
+        foreach (var item in note.items.get_intersecting_rect (bounds)) {
             item.snapshot (snapshot);
+        }
+
+        if (note.current_item != null) {
+            note.current_item.snapshot (snapshot);
         }
 
         snapshot.restore ();

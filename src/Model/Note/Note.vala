@@ -5,10 +5,11 @@
 
 public class Quicknote.Note : Object {
     public Background background { get; construct; }
-    public Gee.ArrayList<Item> items { get; construct; }
+    public ItemStore items { get; construct; }
+    public Item? current_item { get; set; }
 
     construct {
         background = new WhiteBackground ();
-        items = new Gee.ArrayList<Item> ();
+        items = new ItemStore ();
     }
 }

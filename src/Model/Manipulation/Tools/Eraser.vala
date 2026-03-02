@@ -20,17 +20,12 @@ public class Quicknote.Eraser : Quicknote.Tool {
             return;
         }
 
-        var points = new Gee.ArrayList<Point> ();
-        points.add (last_point);
-        points.add (point);
+        var line = new Line ({ point, last_point });
 
-        var line = new Line (points);
+        var hit = current_note.items.get_intersecting_line (line);
 
-        for (int i = current_note.items.size - 1; i >= 0; i--) {
-            var item = current_note.items[i];
-            if (item.intersects (line)) {
-                current_note.items.remove (item);
-            }
+        foreach (var item in hit) {
+            current_note.items.remove (item);
         }
 
         last_point = point;

@@ -4,10 +4,24 @@
 */
 
 public class Quicknote.Line : Object {
-    public Gee.List<Point> points { get; construct; }
+    private Gee.List<Point> points;
 
-    public Line (Gee.List<Point> points) {
-        Object (points: points);
+    public Line (Point[] points) {
+        this.points = new Gee.ArrayList<Point>.wrap (points);
+    }
+
+    public Gsk.Path to_path () {
+        var path_builder = new Gsk.PathBuilder ();
+
+        if (points.size > 0) {
+            path_builder.move_to (points[0].x, points[0].y);
+
+            for (int i = 1; i < points.size; i++) {
+                path_builder.line_to (points[i].x, points[i].y);
+            }
+        }
+
+        return path_builder.to_path ();
     }
 
     public bool intersects (Line other) {

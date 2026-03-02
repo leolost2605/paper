@@ -15,6 +15,7 @@ files = [
     'Model' / 'Note' / 'Note.vala',
     'Model' / 'Note' / 'Backgrounds' / 'WhiteBackground.vala',
     'Model' / 'Note' / 'Items' / 'Stroke.vala',
+    'Model' / 'Note' / 'ItemStore' / 'ItemStore.vala',
     'Model' / 'Renderer' / 'Renderer.vala',
     'NoteView' / 'NotesList.vala',
     'NoteView' / 'NoteView.vala',
