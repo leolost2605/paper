@@ -33,6 +33,7 @@ gresource = gnome.compile_resources(
 deps = [
     dependency('granite-7'),
     dependency('gtk4'),
+    dependency('json-glib-1.0'),
     dependency('libadwaita-1'),
 ]
 

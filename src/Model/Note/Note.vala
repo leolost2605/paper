@@ -4,7 +4,7 @@
 */
 
 public class Quicknote.Note : Object {
-    public Background background { get; construct; }
+    public Background background { get; construct set; }
     public ItemStore items { get; construct; }
     public Item? current_item { get; set; }
 

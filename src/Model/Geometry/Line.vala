@@ -10,6 +10,12 @@ public class Quicknote.Line : Object {
         this.points = new Gee.ArrayList<Point>.wrap (points);
     }
 
+    public Gee.Collection<Point> get_points () {
+        var result = new Gee.ArrayList<Point> ();
+        result.add_all (points);
+        return result;
+    }
+
     public Gsk.Path to_path () {
         var path_builder = new Gsk.PathBuilder ();
 

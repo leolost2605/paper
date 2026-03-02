@@ -28,7 +28,10 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         header_bar.pack_start (toggle_notes_list_button);
 
         canvas = new Canvas ();
-        canvas.note = new Note ();
+        var note_file = new NoteFile (File.new_for_path ("./my-note"));
+        note_file.load.begin ();
+        note_file.ref ();
+        canvas.note = note_file.note;
 
         var split_view = new Adw.OverlaySplitView () {
             content = canvas,

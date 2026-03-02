@@ -22,6 +22,12 @@ public class Quicknote.ItemStore : Object {
         items.remove (item);
     }
 
+    public Gee.Collection<Item> get_all () {
+        var result = new Gee.ArrayList<Item> ();
+        result.add_all (items);
+        return result;
+    }
+
     public Gee.Collection<Item> get_intersecting_rect (Graphene.Rect rect) {
         var result = new Gee.ArrayList<Item> ();
 

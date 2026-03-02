@@ -2,6 +2,8 @@ files = [
     'Application.vala',
     'MainWindow.vala',
     'Model' / 'Notebook.vala',
+    'Model' / 'NoteFile.vala',
+    'Model' / 'Parser.vala',
     'Model' / 'Viewport.vala',
     'Model' / 'Geometry' / 'Line.vala',
     'Model' / 'Geometry' / 'Point.vala',
