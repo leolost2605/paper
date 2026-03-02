@@ -5,6 +5,8 @@ project(
   version: '0.1'
 )
 
+cc = meson.get_compiler('c')
+
 # Include Gnome and the translations module
 gnome = import('gnome')
 i18n = import('i18n')
@@ -35,6 +37,7 @@ deps = [
     dependency('gtk4'),
     dependency('json-glib-1.0'),
     dependency('libadwaita-1'),
+    cc.find_library('m'),
 ]
 
 subdir('src')

@@ -24,6 +24,7 @@ files = [
     'NoteView' / 'Canvas' / 'Canvas.vala',
     'NoteView' / 'Canvas' / 'DrawTarget.vala',
     'NoteView' / 'Canvas' / 'InputHandler.vala',
+    'NoteView' / 'Canvas' / 'KineticScrolling.vala',
     'NoteView' / 'Canvas' / 'MoveHandler.vala',
     'NoteView' / 'Penbar' / 'Penbar.vala',
     'NoteView' / 'Penbar' / 'PenButton.vala',
