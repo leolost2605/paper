@@ -17,10 +17,10 @@ public class Quicknote.Manipulator : Object {
     }
 
     public void add_point (float x, float y) {
-        tool_store.active_tool?.add_point (x, y);
+        tool_store.active_tool?.add_point (note, x, y);
     }
 
     public void commit () {
-        tool_store.active_tool?.commit ();
+        tool_store.active_tool?.commit (note);
     }
 }

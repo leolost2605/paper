@@ -6,25 +6,28 @@
 public class Quicknote.Canvas : Adw.NavigationPage {
     public Note note { get; set; }
 
-    private Renderer renderer;
     private Viewport viewport;
+    private ToolStore tool_store;
+
+    private Renderer renderer;
 
     private MoveHandler move_handler;
 
-    private ToolStore tool_store;
     private Manipulator manipulator;
     private InputHandler input_handler;
 
     construct {
         viewport = new Viewport ();
-        renderer = new Renderer (viewport);
+
+        tool_store = new ToolStore ();
+
+        renderer = new Renderer (viewport, tool_store);
         bind_property ("note", renderer, "note", SYNC_CREATE);
 
         var draw_target = new DrawTarget (renderer);
 
         move_handler = new MoveHandler (draw_target, viewport);
 
-        tool_store = new ToolStore ();
         manipulator = new Manipulator (tool_store);
         bind_property ("note", manipulator, "note", SYNC_CREATE);
 

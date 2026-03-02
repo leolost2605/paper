@@ -5,11 +5,12 @@
 
 public class Quicknote.Renderer : Object {
     public Viewport viewport { get; construct; }
+    public ToolStore tool_store { get; construct; }
 
     public Note note { get; set; }
 
-    public Renderer (Viewport viewport) {
-        Object (viewport: viewport);
+    public Renderer (Viewport viewport, ToolStore tool_store) {
+        Object (viewport: viewport, tool_store: tool_store);
     }
 
     public void snapshot (Gtk.Snapshot snapshot, Graphene.Rect bounds) {
@@ -22,9 +23,7 @@ public class Quicknote.Renderer : Object {
             item.snapshot (snapshot);
         }
 
-        if (note.current_item != null) {
-            note.current_item.snapshot (snapshot);
-        }
+        tool_store.active_tool?.snapshot (snapshot);
 
         snapshot.restore ();
     }

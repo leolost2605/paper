@@ -5,6 +5,7 @@
 
 public abstract class Quicknote.Tool : Object {
     public abstract void start (Note note);
-    public abstract void add_point (float x, float y);
-    public abstract void commit ();
+    public abstract void add_point (Note note, float x, float y);
+    public abstract void commit (Note note);
+    public virtual void snapshot (Gtk.Snapshot snapshot) {}
 }
