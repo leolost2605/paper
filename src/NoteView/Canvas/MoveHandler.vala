@@ -56,8 +56,6 @@ public class Quicknote.MoveHandler : Object {
 
         last_x = x;
         last_y = y;
-
-        target.queue_draw ();
     }
 
     private void on_swipe (double velocity_x, double velocity_y) {
@@ -102,8 +100,6 @@ public class Quicknote.MoveHandler : Object {
             }
         }
 
-        target.queue_draw ();
-
         var should_continue = kinetic_x != null || kinetic_y != null;
 
         if (!should_continue) {
@@ -122,7 +118,5 @@ public class Quicknote.MoveHandler : Object {
         last_zoom = scale;
 
         // TODO: Keep zoom center centered
-
-        target.queue_draw ();
     }
 }

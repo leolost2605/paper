@@ -25,6 +25,7 @@ public class Quicknote.Canvas : Adw.NavigationPage {
         bind_property ("note", renderer, "note", SYNC_CREATE);
 
         var draw_target = new DrawTarget (renderer);
+        viewport.notify.connect (draw_target.queue_draw);
 
         move_handler = new MoveHandler (draw_target, viewport);
 
