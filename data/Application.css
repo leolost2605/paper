@@ -1,7 +1,18 @@
-listview {
+box > listview {
     background: none;
 }
 
 :selected {
     background: red;
 }
+
+listview.notes-list {
+    border-spacing: 3px;
+    padding: 3px;
+}
+
+listview.notes-list > row {
+    border-radius: 4px;
+    padding: 6px;
+}
+

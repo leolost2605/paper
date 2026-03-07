@@ -10,6 +10,8 @@ public class Quicknote.NoteView : Adw.NavigationPage {
 
     public Notebook notebook { get; construct; }
 
+    public NoteFile? current_note { get; set; }
+
     private Canvas canvas;
 
     public NoteView (Notebook notebook) {
@@ -28,14 +30,18 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         header_bar.pack_start (toggle_notes_list_button);
 
         canvas = new Canvas ();
-        var note_file = new NoteFile (File.new_for_path ("./my-note"));
-        note_file.load.begin ();
-        note_file.ref ();
-        canvas.note = note_file.note;
+        bind_property ("current-note", canvas, "note", SYNC_CREATE, (binding, from_val, ref to_val) => {
+            var note = (NoteFile?) from_val.get_object ();
+            to_val.set_object (note?.note);
+            return true;
+        });
+
+        var notes_list = new NotesList (notebook);
+        bind_property ("current-note", notes_list, "selected-note", SYNC_CREATE | BIDIRECTIONAL);
 
         var split_view = new Adw.OverlaySplitView () {
             content = canvas,
-            sidebar = new NotesList (notebook),
+            sidebar = notes_list,
             vexpand = true,
         };
 

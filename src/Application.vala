@@ -17,6 +17,7 @@ public class Quicknote.Application : Gtk.Application {
         base.startup ();
 
         Granite.init ();
+        FileBase.init ();
 
         Intl.setlocale (LocaleCategory.ALL, "");
         Intl.bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);

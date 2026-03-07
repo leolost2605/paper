@@ -20,7 +20,13 @@ public class Quicknote.MainWindow : Adw.ApplicationWindow {
 	}
 
     construct {
-        var note_view = new NoteView (new Notebook ());
+        start.begin ();
+    }
+
+    private async void start () {
+        var path = Environment.get_user_data_dir () + "/my-first-notebook";
+        var notebook = yield new Notebook (path);
+        var note_view = new NoteView (notebook);
         content = note_view;
     }
 }
