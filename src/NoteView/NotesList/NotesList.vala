@@ -68,6 +68,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         };
 
         child = scrolled_window;
+        title = _("Notes");
     }
 
     private ListModel? create_child_model_func (Object item) {

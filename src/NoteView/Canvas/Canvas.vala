@@ -46,6 +46,7 @@ public class Quicknote.Canvas : Adw.NavigationPage {
         overlay.add_overlay (penbar);
 
         child = overlay;
+        title = _("Canvas");
 
         tool_store.add_tool (new Pen ());
         tool_store.add_tool (new Eraser ());

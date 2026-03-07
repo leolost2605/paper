@@ -62,6 +62,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         main_box.append (split_view);
 
         child = main_box;
+        title = _("Note view");
 
         var show_noteslist_action = new PropertyAction (SHOW_NOTESLIST_ACTION, split_view, "show-sidebar");
 
