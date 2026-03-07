@@ -164,7 +164,8 @@ public class Quicknote.Database : Object {
         var coords_array = coords_str.split (";");
         var points = new Point[coords_array.length / 2];
 
-        for (int i = 0; i < coords_array.length; i += 2) {
+        /* -1 because the last one is always the empty string */
+        for (int i = 0; i < coords_array.length - 1; i += 2) {
             var x = float.parse (coords_array[i]);
             var y = float.parse (coords_array[i + 1]);
             points[i / 2] = new Point (x, y);
