@@ -13,14 +13,14 @@ public class Quicknote.Manipulator : Object {
     }
 
     public void start () {
-        tool_store.active_tool?.start (note);
+        tool_store.active_tool?.start (note.content);
     }
 
     public void add_point (float x, float y) {
-        tool_store.active_tool?.add_point (note, x, y);
+        tool_store.active_tool?.add_point (note.content, x, y);
     }
 
     public void commit () {
-        tool_store.active_tool?.commit (note);
+        tool_store.active_tool?.commit (note.content);
     }
 }

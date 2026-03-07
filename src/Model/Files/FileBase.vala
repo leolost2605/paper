@@ -32,7 +32,7 @@ public abstract class Quicknote.FileBase : Object {
         if (info.get_file_type () == DIRECTORY) {
             return new Directory (file, info);
         } else {
-            return new NoteFile (file, info);
+            return new Note (file, info);
         }
     }
 
@@ -65,7 +65,7 @@ public abstract class Quicknote.FileBase : Object {
         if (info.get_file_type () == DIRECTORY) {
             return new Directory (file, info);
         } else {
-            return new NoteFile (file, info);
+            return new Note (file, info);
         }
     }
 

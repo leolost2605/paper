@@ -10,13 +10,20 @@ public class Quicknote.NoteView : Adw.NavigationPage {
 
     public Notebook notebook { get; construct; }
 
-    private NoteFile? _current_note;
-    public NoteFile? current_note {
+    private Note? _current_note;
+    public Note? current_note {
         get { return _current_note; }
         set {
             // TODO: Unload previous note
+            if (_current_note != null) {
+                _current_note.close ();
+            }
+
             _current_note = value;
-            load_current_note.begin ();
+
+            if (_current_note != null) {
+                _current_note.open.begin ();
+            }
         }
     }
 
@@ -38,11 +45,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         header_bar.pack_start (toggle_notes_list_button);
 
         canvas = new Canvas ();
-        bind_property ("current-note", canvas, "note", SYNC_CREATE, (binding, from_val, ref to_val) => {
-            var note = (NoteFile?) from_val.get_object ();
-            to_val.set_object (note?.note);
-            return true;
-        });
+        bind_property ("current-note", canvas, "note", SYNC_CREATE);
 
         var notes_list = new NotesList (notebook);
         bind_property ("current-note", notes_list, "selected-note", SYNC_CREATE | BIDIRECTIONAL);
@@ -65,17 +68,5 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         var action_group = new SimpleActionGroup ();
         action_group.add_action (show_noteslist_action);
         insert_action_group (ACTION_GROUP_PREFIX, action_group);
-    }
-
-    private async void load_current_note () {
-        if (current_note == null) {
-            return;
-        }
-
-        try {
-            yield current_note.note.load ();
-        } catch (Error e) {
-            critical ("Error loading note: %s", e.message);
-        }
     }
 }

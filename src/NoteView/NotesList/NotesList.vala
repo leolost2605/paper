@@ -6,7 +6,7 @@
 public class Quicknote.NotesList : Adw.NavigationPage {
     public Notebook notebook { get; construct; }
 
-    public NoteFile? selected_note { get; set; }
+    public Note? selected_note { get; set; }
 
     public NotesList (Notebook notebook) {
         Object (notebook: notebook);
@@ -19,7 +19,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         bind_property (
             "selected-note", selection_model, "selected", SYNC_CREATE | BIDIRECTIONAL,
             (binding, from_val, ref to_val) => {
-                var note = (NoteFile?) from_val.get_object ();
+                var note = (Note?) from_val.get_object ();
 
                 if (note == null) {
                     to_val.set_uint (Gtk.INVALID_LIST_POSITION);
@@ -46,8 +46,8 @@ public class Quicknote.NotesList : Adw.NavigationPage {
 
                 var row = (Gtk.TreeListRow) tree_model.get_item (index);
 
-                if (row.item is NoteFile) {
-                    to_val.set_object ((NoteFile) row.item);
+                if (row.item is Note) {
+                    to_val.set_object ((Note) row.item);
                     return true;
                 }
 

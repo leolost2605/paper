@@ -83,6 +83,11 @@ public class Quicknote.Database : Object {
         }
     }
 
+    public void close () requires (db != null) {
+        /* Automatically closes the db */
+        db = null;
+    }
+
     public Background get_background () throws Error {
         Sqlite.Statement stmt;
         var ec = db.prepare_v2 (BACKGROUND_QUERY, BACKGROUND_QUERY.length, out stmt);

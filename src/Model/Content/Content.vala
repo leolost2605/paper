@@ -6,14 +6,14 @@
 /**
  * This is the facade of the note model.
  */
-public class Quicknote.Note : Object {
+public class Quicknote.Content : Object {
     public Database database { get; construct; }
 
     public Background background { get; construct set; }
 
     private ItemStore items;
 
-    public Note (Database database) {
+    public Content (Database database) {
         Object (database: database);
     }
 
@@ -21,10 +21,6 @@ public class Quicknote.Note : Object {
         background = new WhiteBackground ();
 
         items = new ItemStore (database);
-    }
-
-    public async void load () throws Error {
-        yield database.open ();
     }
 
     public Gee.Collection<Item> get_items_intersecting_rect (Graphene.Rect rect) {

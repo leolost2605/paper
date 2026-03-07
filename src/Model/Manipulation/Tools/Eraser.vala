@@ -6,11 +6,11 @@
 public class Quicknote.Eraser : Quicknote.Tool {
     private Point? last_point;
 
-    public override void start (Note note) {
+    public override void start (Content content) {
         // Nothing to do here
     }
 
-    public override void add_point (Note note, float x, float y) {
+    public override void add_point (Content content, float x, float y) {
         var point = new Point (x, y);
 
         if (last_point == null) {
@@ -20,16 +20,16 @@ public class Quicknote.Eraser : Quicknote.Tool {
 
         var line = new Line ({ point, last_point });
 
-        var hit = note.get_items_intersecting_line (line);
+        var hit = content.get_items_intersecting_line (line);
 
         foreach (var item in hit) {
-            note.remove_item (item);
+            content.remove_item (item);
         }
 
         last_point = point;
     }
 
-    public override void commit (Note note) {
+    public override void commit (Content content) {
         last_point = null;
     }
 }
