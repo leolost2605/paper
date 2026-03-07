@@ -14,7 +14,6 @@ public class Quicknote.NoteView : Adw.NavigationPage {
     public Note? current_note {
         get { return _current_note; }
         set {
-            // TODO: Unload previous note
             if (_current_note != null) {
                 _current_note.close ();
             }
