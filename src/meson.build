@@ -3,7 +3,7 @@ files = [
     'MainWindow.vala',
     'Model' / 'Notebook.vala',
     'Model' / 'Viewport.vala',
-    'Model' / 'Database' / 'Parser.vala',
+    'Model' / 'Database' / 'Database.vala',
     'Model' / 'Files' / 'Directory.vala',
     'Model' / 'Files' / 'FileBase.vala',
     'Model' / 'Files' / 'FileModel.vala',

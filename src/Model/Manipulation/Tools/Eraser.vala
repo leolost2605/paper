@@ -20,10 +20,10 @@ public class Quicknote.Eraser : Quicknote.Tool {
 
         var line = new Line ({ point, last_point });
 
-        var hit = note.items.get_intersecting_line (line);
+        var hit = note.get_items_intersecting_line (line);
 
         foreach (var item in hit) {
-            note.items.remove (item);
+            note.remove_item (item);
         }
 
         last_point = point;

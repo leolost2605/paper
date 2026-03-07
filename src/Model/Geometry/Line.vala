@@ -4,10 +4,14 @@
 */
 
 public class Quicknote.Line : Object {
+    private Graphene.Rect _bounds;
+    public Graphene.Rect bounds { get { return _bounds; } }
+
     private Gee.List<Point> points;
 
     public Line (Point[] points) {
         this.points = new Gee.ArrayList<Point>.wrap (points);
+        to_path ().get_bounds (out _bounds);
     }
 
     public Gee.Collection<Point> get_points () {

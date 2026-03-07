@@ -23,7 +23,7 @@ public class Quicknote.Renderer : Object {
         snapshot.save ();
         snapshot.transform (viewport.get_transform ());
 
-        foreach (var item in note.items.get_intersecting_rect (bounds)) {
+        foreach (var item in note.get_items_intersecting_rect (bounds)) {
             item.snapshot (snapshot);
         }
 

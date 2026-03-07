@@ -7,43 +7,79 @@
  * Currently just a fancy wrapper around a list but
  * should in the future be implemented as a R-Tree
  */
-public class Quicknote.ItemStore : Object {
-    private Gee.ArrayList<Item> items;
+internal class Quicknote.ItemStore : Object {
+    public Database database { get; construct; }
+
+    private HashTable<int, Item> items;
+    private HashTable<Item, int> item_ids;
+
+    public ItemStore (Database database) {
+        Object (database: database);
+    }
 
     construct {
-        items = new Gee.ArrayList<Item> ();
+        items = new HashTable<int, Item> (null, null);
+        item_ids = new HashTable<Item, int> (null, null);
+    }
+
+    private Item get_item (int id) throws Error {
+        if (!(id in items)) {
+            cache_item (id, database.get_item (id));
+        }
+
+        return items[id];
+    }
+
+    private void cache_item (int id, Item item) {
+        items[id] = item;
+        item_ids[item] = id;
+    }
+
+    private void remove_cached_item (int id, Item item) {
+        items.remove (id);
+        item_ids.remove (item);
     }
 
     public void add (Item item) {
-        items.add (item);
+        try {
+            database.add_item (item);
+        } catch (Error e) {
+            warning ("Failed to add item to database: %s", e.message);
+        }
     }
 
-    public void remove (Item item) {
-        items.remove (item);
-    }
+    public void remove (Item item) requires (item in item_ids) {
+        var id = item_ids[item];
 
-    public Gee.Collection<Item> get_all () {
-        var result = new Gee.ArrayList<Item> ();
-        result.add_all (items);
-        return result;
+        remove_cached_item (id, item);
+
+        try {
+            database.remove_item (id);
+        } catch (Error e) {
+            warning ("Failed to remove item from database: %s", e.message);
+        }
     }
 
     public Gee.Collection<Item> get_intersecting_rect (Graphene.Rect rect) {
-        var result = new Gee.ArrayList<Item> ();
+        var results = new Gee.ArrayList<Item> ();
 
-        foreach (var item in items) {
-            if (item.get_bounds ().intersection (rect, null)) {
-                result.add (item);
+        try {
+            var indeces = database.get_items_intersecting (rect);
+
+            foreach (var index in indeces) {
+                results.add (get_item (index));
             }
+        } catch (Error e) {
+            warning ("Failed to query database for items in bounds: %s", e.message);
         }
 
-        return result;
+        return results;
     }
 
     public Gee.Collection<Item> get_intersecting_line (Line line) {
         var result = new Gee.ArrayList<Item> ();
 
-        foreach (var item in items) {
+        foreach (var item in get_intersecting_rect (line.bounds)) {
             if (item.intersects (line)) {
                 result.add (item);
             }

@@ -22,7 +22,7 @@ public class Quicknote.Pen : Quicknote.Tool {
 
     public override void commit (Note note) {
         if (current_stroke != null) {
-            note.items.add (current_stroke);
+            note.add_item (current_stroke);
         }
 
         current_stroke = null;

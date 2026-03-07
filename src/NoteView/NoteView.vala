@@ -10,7 +10,15 @@ public class Quicknote.NoteView : Adw.NavigationPage {
 
     public Notebook notebook { get; construct; }
 
-    public NoteFile? current_note { get; set; }
+    private NoteFile? _current_note;
+    public NoteFile? current_note {
+        get { return _current_note; }
+        set {
+            // TODO: Unload previous note
+            _current_note = value;
+            load_current_note.begin ();
+        }
+    }
 
     private Canvas canvas;
 
@@ -57,5 +65,17 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         var action_group = new SimpleActionGroup ();
         action_group.add_action (show_noteslist_action);
         insert_action_group (ACTION_GROUP_PREFIX, action_group);
+    }
+
+    private async void load_current_note () {
+        if (current_note == null) {
+            return;
+        }
+
+        try {
+            yield current_note.note.load ();
+        } catch (Error e) {
+            critical ("Error loading note: %s", e.message);
+        }
     }
 }

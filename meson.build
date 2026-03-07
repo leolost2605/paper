@@ -38,6 +38,7 @@ deps = [
     dependency('json-glib-1.0'),
     dependency('libadwaita-1'),
     cc.find_library('m'),
+    dependency('sqlite3'),
 ]
 
 subdir('src')
