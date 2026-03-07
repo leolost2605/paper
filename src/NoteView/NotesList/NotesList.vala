@@ -71,8 +71,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
     }
 
     private ListModel? create_child_model_func (Object item) {
-        var file = (FileBase) item;
-        return file.open (null)?.children;
+        return (item as Directory)?.children;
     }
 
     private void on_setup (Object obj) {

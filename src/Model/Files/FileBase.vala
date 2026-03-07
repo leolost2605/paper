@@ -149,26 +149,6 @@ public abstract class Quicknote.FileBase : Object {
         return Source.REMOVE;
     }
 
-    public virtual Directory? open (Gtk.Window? parent) {
-        return null;
-    }
-
-    public async Directory? get_parent () {
-        var parent = file.get_parent ();
-
-        if (parent == null) {
-            return null;
-        }
-
-        var parent_file_base = yield FileBase.get_for_uri (parent.get_uri ());
-
-        if (parent_file_base is Directory) {
-            return (Directory) parent_file_base;
-        }
-
-        return null;
-    }
-
     public async void refresh () {
         refreshing = true;
 

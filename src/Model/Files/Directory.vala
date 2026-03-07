@@ -78,8 +78,4 @@ public class Quicknote.Directory : FileBase {
         cancellable.cancel ();
         children.remove_all ();
     }
-
-    public override Directory? open (Gtk.Window? parent) {
-        return this;
-    }
 }
