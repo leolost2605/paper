@@ -18,6 +18,9 @@ public class Quicknote.Stroke : Item {
 
     construct {
         stroke = new Gsk.Stroke (width);
+        stroke.set_line_join (ROUND);
+        stroke.set_line_cap (ROUND);
+
         path = line.to_path ();
         path.get_bounds (out bounds);
     }
