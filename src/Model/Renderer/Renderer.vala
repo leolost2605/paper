@@ -24,12 +24,16 @@ public class Quicknote.Renderer : Object {
             return;
         }
 
-        note.content.background.snapshot (snapshot, bounds);
+        var transform = viewport.get_transform ();
 
         snapshot.save ();
-        snapshot.transform (viewport.get_transform ());
+        snapshot.transform (transform);
 
-        foreach (var item in note.content.get_items_intersecting_rect (bounds)) {
+        var transformed_bounds = transform.invert ().transform_bounds (bounds);
+
+        note.content.background.snapshot (snapshot, transformed_bounds);
+
+        foreach (var item in note.content.get_items_intersecting_rect (transformed_bounds)) {
             snapshot_item (snapshot, item);
         }
 
