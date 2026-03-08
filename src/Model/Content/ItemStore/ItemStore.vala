@@ -4,8 +4,7 @@
  */
 
 /**
- * Currently just a fancy wrapper around a list but
- * should in the future be implemented as a R-Tree
+ * Wrapper around the database for caching and some convenience methods.
  */
 internal class Quicknote.ItemStore : Object {
     public Database database { get; construct; }
