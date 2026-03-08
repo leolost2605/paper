@@ -23,7 +23,8 @@ public class Quicknote.NotesListItem : Granite.Bin {
 
     construct {
         label = new Gtk.Label (null) {
-            margin_start = 3
+            margin_start = 3,
+            ellipsize = END
         };
 
         expander = new Gtk.TreeExpander () {

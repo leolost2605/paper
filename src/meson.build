@@ -14,6 +14,7 @@ files = [
     'Model' / 'Files' / 'FileBase.vala',
     'Model' / 'Files' / 'FileModel.vala',
     'Model' / 'Files' / 'Note.vala',
+    'Model' / 'Files' / 'OperationManager.vala',
     'Model' / 'Geometry' / 'Line.vala',
     'Model' / 'Geometry' / 'Point.vala',
     'Model' / 'Manipulation' / 'Manipulator.vala',
