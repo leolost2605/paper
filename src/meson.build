@@ -31,6 +31,7 @@ files = [
     'NoteView' / 'Canvas' / 'MoveHandler.vala',
     'NoteView' / 'NotesList' / 'NotesListItem.vala',
     'NoteView' / 'NotesList' / 'NotesList.vala',
+    'NoteView' / 'NotesList' / 'RenameDialog.vala',
     'NoteView' / 'Penbar' / 'Penbar.vala',
     'NoteView' / 'Penbar' / 'PenButton.vala',
     'NoteView' / 'Penbar' / 'PenPopover.vala',

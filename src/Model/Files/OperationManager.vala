@@ -55,4 +55,25 @@ public class Quicknote.OperationManager : Object {
             uri_to_select = null;
         }
     }
+
+    public async void delete_file (File file) {
+        try {
+            yield file.trash_async (Priority.DEFAULT, null);
+        } catch (Error e) {
+            warning ("Failed to delete file: %s", e.message);
+        }
+    }
+
+    public async void rename_file (File file, string new_name) {
+        var new_file = file.get_parent ().get_child (new_name);
+
+        uri_to_select = new_file.get_uri ();
+
+        try {
+            yield file.set_display_name_async (new_name, Priority.DEFAULT);
+        } catch (Error e) {
+            uri_to_select = null;
+            warning ("Failed to rename file: %s", e.message);
+        }
+    }
 }

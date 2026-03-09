@@ -5,14 +5,19 @@
 
 public class Quicknote.NotesList : Adw.NavigationPage {
     private const string ACTION_GROUP_NAME = "notes_list";
-    private const string ACTION_PREFIX = ACTION_GROUP_NAME + ".";
+    public const string ACTION_PREFIX = "notes_list.";
     private const string CREATE_NOTE_ACTION = "create_note";
     private const string CREATE_FOLDER_ACTION = "create_folder";
+    public const string DELETE_ACTION = "delete";
+    public const string RENAME_ACTION = "rename";
 
     public Notebook notebook { get; construct; }
 
     public Note? selected_note { get; set; }
 
+    private FileBase? selected_file { get { return (selection_model.selected_item as Gtk.TreeListRow)?.item as FileBase; } }
+
+    private Gtk.SingleSelection selection_model;
     private OperationManager operation_manager;
 
     public NotesList (Notebook notebook) {
@@ -22,7 +27,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
     construct {
         var tree_model = new Gtk.TreeListModel (notebook.root.children, false, false, create_child_model_func);
 
-        var selection_model = new Gtk.SingleSelection (tree_model) {
+        selection_model = new Gtk.SingleSelection (tree_model) {
             autoselect = true
         };
         bind_property (
@@ -110,10 +115,16 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         create_note_action.activate.connect (create_new_note);
         var create_folder_action = new SimpleAction (CREATE_FOLDER_ACTION, new VariantType.maybe (VariantType.STRING));
         create_folder_action.activate.connect (create_new_folder);
+        var delete_action = new SimpleAction (DELETE_ACTION, null);
+        delete_action.activate.connect (delete_note);
+        var rename_action = new SimpleAction (RENAME_ACTION, null);
+        rename_action.activate.connect (rename_file);
 
         var action_group = new SimpleActionGroup ();
         action_group.add_action (create_note_action);
         action_group.add_action (create_folder_action);
+        action_group.add_action (delete_action);
+        action_group.add_action (rename_action);
         insert_action_group (ACTION_GROUP_NAME, action_group);
     }
 
@@ -123,7 +134,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
 
     private void on_setup (Object obj) {
         var item = (Gtk.ListItem) obj;
-        item.child = new NotesListItem ();
+        item.child = new NotesListItem (selection_model);
     }
 
     private void on_bind (Object obj) {
@@ -149,7 +160,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
     }
 
     private void create_new_note (Variant? param) requires (param != null) {
-        var parent_uri = (selected_note is Directory) ? selected_note.uri : selected_note.file.get_parent ().get_uri ();
+        var parent_uri = (selected_file is Directory) ? selected_file.uri : selected_file.file.get_parent ().get_uri ();
 
         var maybe = param.get_maybe ();
         if (maybe != null) {
@@ -162,7 +173,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
     }
 
     private void create_new_folder (Variant? param) requires (param != null) {
-        var parent_uri = (selected_note is Directory) ? selected_note.uri : selected_note.file.get_parent ().get_uri ();
+        var parent_uri = (selected_file is Directory) ? selected_file.uri : selected_file.file.get_parent ().get_uri ();
 
         var maybe = param.get_maybe ();
         if (maybe != null) {
@@ -172,5 +183,24 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         var parent_file = File.new_for_uri (parent_uri);
         var new_dir = parent_file.get_child (Uuid.string_random ());
         operation_manager.create_directory.begin (new_dir);
+    }
+
+    private void delete_note (Variant? param) requires (param == null) {
+        if (selected_file == null) {
+            return;
+        }
+
+        operation_manager.delete_file.begin (selected_file.file);
+    }
+
+    private void rename_file (Variant? param) requires (param == null) {
+        if (selected_file == null) {
+            return;
+        }
+
+        new RenameDialog (selected_file, operation_manager) {
+            transient_for = get_root () as Gtk.Window,
+            modal = true,
+        }.present ();
     }
 }
