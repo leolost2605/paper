@@ -160,7 +160,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
     }
 
     private void create_new_note (Variant? param) requires (param != null) {
-        var parent_uri = (selected_file is Directory) ? selected_file.uri : selected_file.file.get_parent ().get_uri ();
+        var parent_uri = get_parent_uri_for_creation ();
 
         var maybe = param.get_maybe ();
         if (maybe != null) {
@@ -173,7 +173,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
     }
 
     private void create_new_folder (Variant? param) requires (param != null) {
-        var parent_uri = (selected_file is Directory) ? selected_file.uri : selected_file.file.get_parent ().get_uri ();
+        var parent_uri = get_parent_uri_for_creation ();
 
         var maybe = param.get_maybe ();
         if (maybe != null) {
@@ -183,6 +183,18 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         var parent_file = File.new_for_uri (parent_uri);
         var new_dir = parent_file.get_child (Uuid.string_random ());
         operation_manager.create_directory.begin (new_dir);
+    }
+
+    private string get_parent_uri_for_creation () {
+        if (selected_file == null) {
+            return notebook.root.uri;
+        }
+
+        if (selected_file is Directory) {
+            return selected_file.uri;
+        }
+
+        return selected_file.file.get_parent ().get_uri ();
     }
 
     private void delete_note (Variant? param) requires (param == null) {
