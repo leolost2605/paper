@@ -28,7 +28,7 @@ public class Quicknote.PdfExporter : Exporter {
         foreach (var page in pages) {
             var snapshot = new Gtk.Snapshot ();
 
-            renderer.snapshot_page (snapshot, page);
+            renderer.snapshot_page (note.content, snapshot, page);
             var node = snapshot.to_node ();
 
             node.draw (context);

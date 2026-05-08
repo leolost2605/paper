@@ -6,21 +6,21 @@
 public class Quicknote.Manipulator : Object {
     public ToolStore tool_store { get; construct; }
 
-    public Note note { get; set; }
+    public Content content { get; set; }
 
     public Manipulator (ToolStore tool_store) {
         Object (tool_store: tool_store);
     }
 
     public void start () {
-        tool_store.active_tool?.start (note.content);
+        tool_store.active_tool?.start (content);
     }
 
     public void add_point (float x, float y) {
-        tool_store.active_tool?.add_point (note.content, x, y);
+        tool_store.active_tool?.add_point (content, x, y);
     }
 
     public void commit () {
-        tool_store.active_tool?.commit (note.content);
+        tool_store.active_tool?.commit (content);
     }
 }

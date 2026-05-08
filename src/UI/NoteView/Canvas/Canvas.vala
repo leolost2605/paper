@@ -4,30 +4,30 @@
 */
 
 public class Quicknote.Canvas : Adw.NavigationPage {
-    public Viewport viewport { private get; construct; }
     public ToolStore tool_store { private get; construct; }
     public Renderer renderer { private get; construct; }
 
-    public Note note { get; set; }
+    public Content content { get; set; }
 
     private MoveHandler move_handler;
 
     private Manipulator manipulator;
     private InputHandler input_handler;
 
-    public Canvas (Viewport viewport, ToolStore tool_store, Renderer renderer) {
-        Object (viewport: viewport, tool_store: tool_store, renderer: renderer);
+    public Canvas (ToolStore tool_store, Renderer renderer) {
+        Object (tool_store: tool_store, renderer: renderer);
     }
 
     construct {
-        var draw_target = new DrawTarget (renderer);
-        viewport.notify.connect (draw_target.queue_draw);
-        notify["note"].connect (draw_target.queue_draw);
+        var viewport = new Viewport ();
+
+        var draw_target = new DrawTarget (renderer, viewport);
+        bind_property ("content", draw_target, "content", SYNC_CREATE);
 
         move_handler = new MoveHandler (draw_target, viewport);
 
         manipulator = new Manipulator (tool_store);
-        bind_property ("note", manipulator, "note", SYNC_CREATE);
+        bind_property ("content", manipulator, "content", SYNC_CREATE);
 
         input_handler = new InputHandler (draw_target, viewport, manipulator);
 
