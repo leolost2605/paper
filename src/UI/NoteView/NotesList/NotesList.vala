@@ -92,7 +92,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
             action_target = new Variant.maybe (VariantType.STRING, null)
         };
 
-        var toolbar = new Granite.Box (HORIZONTAL) {
+        var toolbar = new Granite.Box (HORIZONTAL, HALF) {
             margin_start = 3,
             margin_bottom = 3,
             margin_end = 3,
@@ -103,6 +103,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
 
         var toolbar_view = new Adw.ToolbarView () {
             content = scrolled_window,
+            bottom_bar_style = RAISED,
         };
         toolbar_view.add_bottom_bar (toolbar);
 
