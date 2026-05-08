@@ -12,7 +12,7 @@ public class Quicknote.Content : Object {
     public ViewMode view_mode { get; construct set; }
     public Background background { get; construct set; }
     public Pattern? pattern { get; construct set; }
-    public PageFormat? page_format { get; construct set; }
+    public PageFormat page_format { get; construct set; }
 
     private ItemStore items;
 
@@ -23,6 +23,7 @@ public class Quicknote.Content : Object {
     construct {
         view_mode = new InfiniteViewMode ();
         background = new WhiteBackground ();
+        page_format = new PageFormat ();
 
         items = new ItemStore (database);
     }
@@ -52,7 +53,7 @@ public class Quicknote.Content : Object {
 
         var full_bounds = calculate_full_bounds ();
 
-        if (page_format == null) {
+        if (!page_format.active) {
             pages.add (new Page (full_bounds));
             return pages;
         }
