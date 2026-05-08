@@ -7,6 +7,8 @@
  * This is the facade of the note model.
  */
 public class Quicknote.Content : Object {
+    public signal void changed ();
+
     public Database database { get; construct; }
 
     public ViewMode view_mode { get; construct set; }
@@ -24,8 +26,13 @@ public class Quicknote.Content : Object {
         view_mode = new InfiniteViewMode ();
         background = new WhiteBackground ();
         page_format = new PageFormat ();
+        page_format.notify.connect (emit_changed);
 
         items = new ItemStore (database);
+    }
+
+    private void emit_changed () {
+        changed ();
     }
 
     public Gee.Collection<Item> get_all_items () {

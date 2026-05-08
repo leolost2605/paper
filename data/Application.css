@@ -11,3 +11,7 @@ listview.notes-list > row {
     border-radius: 4px;
 }
 
+grid.preferences-grid {
+    border-spacing: 1em;
+}
+

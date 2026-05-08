@@ -36,6 +36,7 @@ files = [
     'UI' / 'Library' / 'NotebookList.vala',
     'UI' / 'Library' / 'NotebookListItem.vala',
     'UI' / 'NoteView' / 'NoteView.vala',
+    'UI' / 'NoteView' / 'PropertiesDialog.vala',
     'UI' / 'NoteView' / 'Canvas' / 'Canvas.vala',
     'UI' / 'NoteView' / 'Canvas' / 'DrawTarget.vala',
     'UI' / 'NoteView' / 'Canvas' / 'InputHandler.vala',
