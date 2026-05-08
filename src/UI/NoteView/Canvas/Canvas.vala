@@ -7,7 +7,7 @@ public class Quicknote.Canvas : Adw.NavigationPage {
     public ToolStore tool_store { private get; construct; }
     public Renderer renderer { private get; construct; }
 
-    public Content content { get; set; }
+    public Content? content { get; set; }
 
     private MoveHandler move_handler;
 
@@ -21,7 +21,7 @@ public class Quicknote.Canvas : Adw.NavigationPage {
     construct {
         var viewport = new Viewport ();
 
-        var draw_target = new DrawTarget (renderer, viewport);
+        var draw_target = new DrawTarget (renderer, tool_store, viewport);
         bind_property ("content", draw_target, "content", SYNC_CREATE);
 
         move_handler = new MoveHandler (draw_target, viewport);
@@ -31,20 +31,6 @@ public class Quicknote.Canvas : Adw.NavigationPage {
 
         input_handler = new InputHandler (draw_target, viewport, manipulator);
 
-        var penbar = new Penbar (tool_store) {
-            halign = START,
-            valign = CENTER
-        };
-
-        var overlay = new Gtk.Overlay () {
-            child = draw_target,
-        };
-        overlay.add_overlay (penbar);
-
-        child = overlay;
-        title = _("Canvas");
-
-        tool_store.add_tool (new Pen ());
-        tool_store.add_tool (new Eraser ());
+        child = draw_target;
     }
 }

@@ -22,7 +22,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
 
             _current_note = value;
 
-            canvas.content = _current_note?.content;
+            drawing_area.content = _current_note?.content;
 
             export_button.sensitive = _current_note != null;
             properties_button.sensitive = _current_note != null;
@@ -38,7 +38,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
 
     private Gtk.MenuButton export_button;
     private Gtk.Button properties_button;
-    private Canvas canvas;
+    private DrawingArea drawing_area;
 
     public NoteView (Notebook notebook) {
         Object (notebook: notebook);
@@ -47,7 +47,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
     construct {
         tool_store = new ToolStore ();
 
-        renderer = new Renderer (tool_store);
+        renderer = new Renderer ();
 
         var toggle_notes_list_button = new Gtk.ToggleButton () {
             icon_name = "folder",
@@ -79,13 +79,13 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         header_bar.pack_start (export_button);
         header_bar.pack_end (properties_button);
 
-        canvas = new Canvas (tool_store, renderer);
+        drawing_area = new DrawingArea (tool_store, renderer);
 
         var notes_list = new NotesList (notebook);
         bind_property ("current-note", notes_list, "selected-note", SYNC_CREATE | BIDIRECTIONAL);
 
         var split_view = new Adw.OverlaySplitView () {
-            content = canvas,
+            content = drawing_area,
             sidebar = notes_list,
             vexpand = true,
         };
