@@ -31,7 +31,7 @@ public class Quicknote.Renderer : Object {
 
         var transformed_bounds = transform.invert ().transform_bounds (bounds);
 
-        note.content.view_mode.push_clip (snapshot, transformed_bounds);
+        note.content.view_mode.push_clip (snapshot, transformed_bounds, note.content.page_format);
         note.content.background.snapshot (snapshot, transformed_bounds);
 
         if (note.content.pattern != null) {
