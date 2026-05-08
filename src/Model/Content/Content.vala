@@ -46,4 +46,29 @@ public class Quicknote.Content : Object {
     public void remove_item (Item item) {
         items.remove (item);
     }
+
+    public Gee.List<Page> calculate_pages () {
+        var pages = new Gee.ArrayList<Page> ();
+
+        var full_bounds = calculate_full_bounds ();
+
+        if (page_format == null) {
+            pages.add (new Page (full_bounds));
+            return pages;
+        }
+
+        critical ("Page calculation not implemented yet");
+        return pages;
+    }
+
+    private Graphene.Rect calculate_full_bounds () {
+        var items = get_all_items ();
+
+        Graphene.Rect full_bounds = { { 0, 0 }, { 0, 0} };
+        foreach (var item in items) {
+            full_bounds = full_bounds.union (item.get_bounds ());
+        }
+
+        return full_bounds;
+    }
 }
