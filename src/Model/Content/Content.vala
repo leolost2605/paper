@@ -27,6 +27,10 @@ public class Quicknote.Content : Object {
         items = new ItemStore (database);
     }
 
+    public Gee.Collection<Item> get_all_items () {
+        return items.get_all ();
+    }
+
     public Gee.Collection<Item> get_items_intersecting_rect (Graphene.Rect rect) {
         return items.get_intersecting_rect (rect);
     }
