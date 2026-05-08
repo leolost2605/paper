@@ -31,11 +31,22 @@ public class Quicknote.Renderer : Object {
 
         var transformed_bounds = transform.invert ().transform_bounds (bounds);
 
+        note.content.view_mode.push_clip (snapshot, transformed_bounds);
         note.content.background.snapshot (snapshot, transformed_bounds);
+
+        if (note.content.pattern != null) {
+            note.content.pattern.snapshot (snapshot, transformed_bounds);
+        }
+
+        if (note.content.page_format != null) {
+            note.content.page_format.snapshot (snapshot, transformed_bounds);
+        }
 
         foreach (var item in note.content.get_items_intersecting_rect (transformed_bounds)) {
             snapshot_item (snapshot, item);
         }
+
+        note.content.view_mode.pop_clip (snapshot);
 
         tool_store.active_tool?.snapshot (snapshot);
 
