@@ -5,6 +5,7 @@
 
 public class Quicknote.DrawTarget : Gtk.Widget {
     public Renderer renderer { get; construct; }
+    public ToolStore tool_store { get; construct; }
     public Viewport viewport { get; construct; }
 
     private Content? _content;
@@ -25,8 +26,8 @@ public class Quicknote.DrawTarget : Gtk.Widget {
         }
     }
 
-    public DrawTarget (Renderer renderer, Viewport viewport) {
-        Object (renderer: renderer, viewport: viewport);
+    public DrawTarget (Renderer renderer, ToolStore tool_store, Viewport viewport) {
+        Object (renderer: renderer, tool_store: tool_store, viewport: viewport);
     }
 
     construct {
@@ -46,6 +47,6 @@ public class Quicknote.DrawTarget : Gtk.Widget {
             return;
         }
 
-        renderer.snapshot (content, viewport, snapshot, get_bounds ());
+        renderer.snapshot (content, tool_store.active_tool, viewport, snapshot, get_bounds ());
     }
 }

@@ -4,19 +4,13 @@
  */
 
 public class Quicknote.Renderer : Object {
-    public ToolStore tool_store { get; construct; }
-
     private HashTable<Item, Gsk.RenderNode> render_nodes;
-
-    public Renderer (ToolStore tool_store) {
-        Object (tool_store: tool_store);
-    }
 
     construct {
         render_nodes = new HashTable<Item, Gsk.RenderNode> (null, null);
     }
 
-    public void snapshot (Content content, Viewport viewport, Gtk.Snapshot snapshot, Graphene.Rect bounds) {
+    public void snapshot (Content content, Tool? tool, Viewport viewport, Gtk.Snapshot snapshot, Graphene.Rect bounds) {
         var transform = viewport.get_transform ();
 
         snapshot.save ();
@@ -39,7 +33,7 @@ public class Quicknote.Renderer : Object {
 
         content.view_mode.pop_clip (snapshot);
 
-        tool_store.active_tool?.snapshot (snapshot);
+        tool?.snapshot (snapshot);
 
         snapshot.restore ();
     }
