@@ -6,6 +6,7 @@ files = [
     'Model' / 'Content' / 'Background.vala',
     'Model' / 'Content' / 'Content.vala',
     'Model' / 'Content' / 'Item.vala',
+    'Model' / 'Content' / 'Page.vala',
     'Model' / 'Content' / 'PageFormat.vala',
     'Model' / 'Content' / 'Pattern.vala',
     'Model' / 'Content' / 'ViewMode.vala',
