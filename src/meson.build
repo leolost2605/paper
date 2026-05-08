@@ -15,6 +15,8 @@ files = [
     'Model' / 'Content' / 'ItemStore' / 'ItemStore.vala',
     'Model' / 'Content' / 'ViewModes' / 'InfiniteViewMode.vala',
     'Model' / 'Database' / 'Database.vala',
+    'Model' / 'Exporter' / 'Exporter.vala',
+    'Model' / 'Exporter' / 'PdfExporter.vala',
     'Model' / 'Files' / 'Directory.vala',
     'Model' / 'Files' / 'FileBase.vala',
     'Model' / 'Files' / 'FileModel.vala',

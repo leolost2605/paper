@@ -53,6 +53,31 @@ public class Quicknote.Renderer : Object {
         snapshot.restore ();
     }
 
+    public void snapshot_page (Gtk.Snapshot snapshot, Page page) {
+        if (note == null) {
+            return;
+        }
+
+        var transform = page.get_transform ();
+
+        snapshot.save ();
+        snapshot.transform (transform);
+
+        snapshot.push_clip (page.bounds);
+
+        note.content.background.snapshot (snapshot, page.bounds);
+        note.content.pattern?.snapshot (snapshot, page.bounds);
+        note.content.page_format?.snapshot (snapshot, page.bounds);
+
+        foreach (var item in note.content.get_items_intersecting_rect (page.bounds)) {
+            snapshot_item (snapshot, item);
+        }
+
+        snapshot.pop (); /* page.bounds */
+
+        snapshot.restore ();
+    }
+
     private void snapshot_item (Gtk.Snapshot snapshot, Item item) {
         if (!render_nodes.contains (item)) {
             render_nodes[item] = create_render_node_for_item (item);
