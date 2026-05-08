@@ -59,6 +59,22 @@ internal class Quicknote.ItemStore : Object {
         }
     }
 
+    public Gee.Collection<Item> get_all () {
+        var results = new Gee.ArrayList<Item> ();
+
+        try {
+            var indeces = database.get_all_items ();
+
+            foreach (var index in indeces) {
+                results.add (get_item (index));
+            }
+        } catch (Error e) {
+            warning ("Failed to query database for all items: %s", e.message);
+        }
+
+        return results;
+    }
+
     public Gee.Collection<Item> get_intersecting_rect (Graphene.Rect rect) {
         var results = new Gee.ArrayList<Item> ();
 

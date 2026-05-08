@@ -36,6 +36,8 @@ public class Quicknote.Database : Object {
 
     private const string BACKGROUND_QUERY = "SELECT background_type FROM note WHERE id = 0";
 
+    private const string ALL_ITEMS_QUERY = "SELECT id FROM note_item";
+
     private const string BOUNDS_QUERY = """
         SELECT item_id FROM item_bounds
         WHERE NOT (min_x > ? OR max_x < ? OR min_y > ? OR max_y < ?)
@@ -102,6 +104,23 @@ public class Quicknote.Database : Object {
         }
 
         throw new IOError.FAILED ("Failed to get background type: %s".printf (db.errmsg ()));
+    }
+
+    public Gee.ArrayList<int> get_all_items () throws Error {
+        Sqlite.Statement stmt;
+        var ec = db.prepare_v2 (ALL_ITEMS_QUERY, ALL_ITEMS_QUERY.length, out stmt);
+
+        if (ec != Sqlite.OK) {
+            throw new IOError.FAILED ("Failed to prepare statement: %s".printf (db.errmsg ()));
+        }
+
+        var result = new Gee.ArrayList<int> ();
+
+        while (stmt.step () == Sqlite.ROW) {
+            result.add (stmt.column_int (0));
+        }
+
+        return result;
     }
 
     public Gee.ArrayList<int> get_items_intersecting (Graphene.Rect bounds) throws Error {
