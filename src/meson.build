@@ -29,6 +29,7 @@ files = [
     'Model' / 'Manipulation' / 'ToolStore.vala',
     'Model' / 'Manipulation' / 'Tools' / 'Eraser.vala',
     'Model' / 'Manipulation' / 'Tools' / 'Pen.vala',
+    'Model' / 'Manipulation' / 'Tools' / 'RectangleSelector.vala',
     'Model' / 'Renderer' / 'ContentPaintable.vala',
     'Model' / 'Renderer' / 'Renderer.vala',
     'UI' / 'CreateNotebookDialog.vala',

@@ -31,5 +31,6 @@ public class Quicknote.DrawingArea : Granite.Bin {
 
         tool_store.add_tool (new Pen ());
         tool_store.add_tool (new Eraser ());
+        tool_store.add_tool (new RectangleSelector ());
     }
 }
