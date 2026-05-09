@@ -32,13 +32,14 @@ public class Quicknote.Penbar : Granite.Bin {
         };
 
         var box = new Granite.Box (VERTICAL);
+        box.add_css_class ("content-margin");
         box.append (list_view);
         box.append (new Gtk.Separator (HORIZONTAL));
         box.append (add_button);
 
         child = box;
-
-        add_css_class ("osd");
+        add_css_class ("penbar");
+        add_css_class (Granite.CssClass.CARD);
 
         var add_pen_action = new SimpleAction ("add-pen", null);
         add_pen_action.activate.connect (add_pen);
