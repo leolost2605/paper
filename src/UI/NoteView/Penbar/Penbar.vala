@@ -73,6 +73,13 @@ public class Quicknote.Penbar : Granite.Bin {
             };
             return;
         }
+
+        if (tool is RectangleSelector) {
+            list_item.child = new Gtk.Image.from_icon_name ("edit-select") {
+                pixel_size = ICON_SIZE,
+            };
+            return;
+        }
     }
 
     private void add_pen () {
@@ -84,6 +91,6 @@ public class Quicknote.Penbar : Granite.Bin {
     }
 
     private void add_select () {
-        // TODO
+        tool_store.add_tool (new RectangleSelector ());
     }
 }

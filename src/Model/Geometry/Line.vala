@@ -63,4 +63,12 @@ public class Quicknote.Line : Object {
 
         return ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1;
     }
+
+    public Line copy_with_offset (Point offset) {
+        var new_points = new Point[points.size];
+        for (int i = 0; i < points.size; i++) {
+            new_points[i] = new Point (points[i].x + offset.x, points[i].y + offset.y);
+        }
+        return new Line (new_points);
+    }
 }
