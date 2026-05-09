@@ -75,7 +75,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         factory.unbind.connect (on_unbind);
 
         var list_view = new Gtk.ListView (selection_model, factory);
-        list_view.add_css_class ("notes-list");
+        list_view.add_css_class ("navigation-sidebar");
 
         var scrolled_window = new Gtk.ScrolledWindow () {
             child = list_view,

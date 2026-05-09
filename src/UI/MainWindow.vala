@@ -30,7 +30,7 @@ public class Quicknote.MainWindow : Adw.ApplicationWindow {
         notebook_manager = new NotebookManager ();
 
         navigation_view = new Adw.NavigationView ();
-        navigation_view.add (new LibraryView (notebook_manager));
+        navigation_view.add (new WelcomeView (notebook_manager));
 
         content = navigation_view;
 
