@@ -56,17 +56,8 @@ public class Quicknote.Content : Object {
     }
 
     public Gee.List<Page> calculate_pages () {
-        var pages = new Gee.ArrayList<Page> ();
-
         var full_bounds = calculate_full_bounds ();
-
-        if (!page_format.active) {
-            pages.add (new Page (full_bounds));
-            return pages;
-        }
-
-        critical ("Page calculation not implemented yet");
-        return pages;
+        return page_format.calculate_pages (full_bounds);
     }
 
     private Graphene.Rect calculate_full_bounds () {

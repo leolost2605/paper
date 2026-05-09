@@ -52,4 +52,32 @@ public class Quicknote.PageFormat : Object {
             height = height
         };
     }
+
+    public Gee.List<Page> calculate_pages (Graphene.Rect content_bounds) {
+        var pages = new Gee.ArrayList<Page> ();
+
+        if (!active) {
+            pages.add (new Page (content_bounds));
+            return pages;
+        }
+
+        // TODO: This doesn't really work yet
+        var top_y = (int) (content_bounds.origin.y / height) - 1;
+        var bottom_y = (int) ((content_bounds.origin.y + content_bounds.size.height) / height) + 1;
+
+        var left_x = (int) (content_bounds.origin.x / width) - 1;
+        var right_x = (int) ((content_bounds.origin.x + content_bounds.size.width) / width) + 1;
+
+        for (var x = left_x; x <= right_x; x++) {
+            for (var y = top_y; y <= bottom_y; y++) {
+                var page_bounds = Graphene.Rect () {
+                    origin = { x * width, y * height },
+                    size = { width, height }
+                };
+                pages.add (new Page (page_bounds));
+            }
+        }
+
+        return pages;
+    }
 }
