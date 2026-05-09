@@ -7,28 +7,22 @@ public class Quicknote.Canvas : Granite.Bin {
     public ToolStore tool_store { private get; construct; }
     public Renderer renderer { private get; construct; }
 
-    private Content? _content;
     public Content? content {
-        private get { return _content; }
         set {
-            if (_content != null) {
-                _content.changed.disconnect (draw_target.queue_draw);
+            manipulator.content = value;
+
+            if (value == null) {
+                content_picture.paintable = null;
+                return;
             }
 
-            _content = value;
-
-            manipulator.content = _content;
-
-            if (_content != null) {
-                _content.changed.connect (draw_target.queue_draw);
-            }
-
-            draw_target.queue_draw ();
+            content_picture.paintable = new ContentPaintable (value, tool_store, viewport, renderer);
         }
     }
 
+    private Gtk.Picture content_picture;
+
     private Viewport viewport;
-    private DrawTarget draw_target;
 
     private MoveHandler move_handler;
 
@@ -40,27 +34,17 @@ public class Quicknote.Canvas : Granite.Bin {
     }
 
     construct {
-        draw_target = new DrawTarget ();
-        draw_target.request_render.connect (on_request_render);
-        draw_target.set_cursor (new Gdk.Cursor.from_name ("none", null));
+        content_picture = new Gtk.Picture ();
 
         viewport = new Viewport ();
-        viewport.notify.connect (draw_target.queue_draw);
 
-        move_handler = new MoveHandler (draw_target, viewport);
+        move_handler = new MoveHandler (content_picture, viewport);
 
         manipulator = new Manipulator (tool_store);
 
-        input_handler = new InputHandler (draw_target, viewport, manipulator);
+        input_handler = new InputHandler (content_picture, viewport, manipulator);
 
-        child = draw_target;
-    }
-
-    private void on_request_render (Gtk.Snapshot snapshot) {
-        if (content == null) {
-            return;
-        }
-
-        renderer.snapshot (content, tool_store.active_tool, viewport, snapshot, draw_target.get_bounds ());
+        child = content_picture;
+        set_cursor (new Gdk.Cursor.from_name ("none", null));
     }
 }
