@@ -31,4 +31,12 @@ listview.navigation-sidebar > row:selected {
     color: @selected_fg_color;
 }
 
+.content-margin {
+    margin: 0.5rem;
+}
+
+.penbar {
+    margin: 1rem;
+}
+
 
