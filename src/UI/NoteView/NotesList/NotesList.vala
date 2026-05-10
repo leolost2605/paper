@@ -86,26 +86,24 @@ public class Quicknote.NotesList : Adw.NavigationPage {
             action_name = ACTION_PREFIX + CREATE_NOTE_ACTION,
             action_target = new Variant.maybe (VariantType.STRING, null)
         };
+        create_note_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
 
         var create_folder_button = new Gtk.Button.from_icon_name ("folder-new") {
             action_name = ACTION_PREFIX + CREATE_FOLDER_ACTION,
             action_target = new Variant.maybe (VariantType.STRING, null)
         };
+        create_folder_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
 
-        var toolbar = new Granite.Box (HORIZONTAL, HALF) {
-            margin_start = 3,
-            margin_bottom = 3,
-            margin_end = 3,
-            margin_top = 3,
+        var header_bar = new Adw.HeaderBar () {
+            show_title = false
         };
-        toolbar.append (create_note_button);
-        toolbar.append (create_folder_button);
+        header_bar.pack_start (create_note_button);
+        header_bar.pack_start (create_folder_button);
 
         var toolbar_view = new Adw.ToolbarView () {
             content = scrolled_window,
-            bottom_bar_style = RAISED,
         };
-        toolbar_view.add_bottom_bar (toolbar);
+        toolbar_view.add_top_bar (header_bar);
 
         child = toolbar_view;
         title = _("Notes");
