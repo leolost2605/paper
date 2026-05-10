@@ -75,6 +75,79 @@ public class Quicknote.PropertiesDialog : Gtk.Window {
         view_mode_grid.attach (view_mode_label, 0, 0);
         view_mode_grid.attach (view_mode_dropdown, 1, 0);
 
+        var pattern_label = new Granite.HeaderLabel (_("Pattern")) {
+            secondary_text = _("Set a custom pattern for this note. This will affect how the note looks while editing, but not how it is exported or printed.")
+        };
+
+        var pattern_switch = new Gtk.Switch () {
+            valign = CENTER
+        };
+        content.pattern.bind_property ("active", pattern_switch, "active", SYNC_CREATE | BIDIRECTIONAL);
+        content.pattern.bind_property ("active", pattern_switch, "state", SYNC_CREATE);
+
+        var pattern_header_grid = new Gtk.Grid ();
+        pattern_header_grid.add_css_class ("preferences-grid");
+        pattern_header_grid.attach (pattern_label, 0, 0);
+        pattern_header_grid.attach (pattern_switch, 1, 0);
+
+        var pattern_style_label = new Gtk.Label (_("Style")) {
+            hexpand = true,
+            xalign = 0,
+        };
+
+        var patterns_model = new ListStore (typeof (PatternStyle));
+        patterns_model.append (new GridStyle ());
+
+        var name_expression = new Gtk.PropertyExpression (typeof (PatternStyle), null, "name");
+
+        var pattern_style_dropdown = new Gtk.DropDown (patterns_model, name_expression) {
+            valign = CENTER,
+        };
+
+        if (content.pattern.style is GridStyle) {
+            pattern_style_dropdown.selected = 0;
+        }
+
+        pattern_style_dropdown.bind_property ("selected-item", content.pattern, "style", SYNC_CREATE);
+
+        var pattern_width_label = new Gtk.Label (_("Width:")) {
+            hexpand = true,
+            xalign = 0,
+        };
+
+        var pattern_width_spin = new Gtk.SpinButton.with_range (0, 1000, 1) {
+            valign = CENTER,
+        };
+        content.pattern.bind_property ("width", pattern_width_spin, "value", SYNC_CREATE | BIDIRECTIONAL);
+
+        var pattern_height_label = new Gtk.Label (_("Height:")) {
+            hexpand = true,
+            xalign = 0,
+        };
+
+        var pattern_height_spin = new Gtk.SpinButton.with_range (0, 1000, 1) {
+            valign = CENTER,
+        };
+        content.pattern.bind_property ("height", pattern_height_spin, "value", SYNC_CREATE | BIDIRECTIONAL);
+
+        var pattern_grid = new Gtk.Grid ();
+        pattern_grid.add_css_class ("preferences-grid");
+        pattern_grid.attach (pattern_style_label, 0, 0);
+        pattern_grid.attach (pattern_style_dropdown, 1, 0);
+        pattern_grid.attach (pattern_width_label, 0, 1);
+        pattern_grid.attach (pattern_width_spin, 1, 1);
+        pattern_grid.attach (pattern_height_label, 0, 2);
+        pattern_grid.attach (pattern_height_spin, 1, 2);
+
+        var pattern_revealer = new Gtk.Revealer () {
+            child = pattern_grid
+        };
+        content.pattern.bind_property ("active", pattern_revealer, "reveal-child", SYNC_CREATE);
+
+        var pattern_box = new Granite.Box (VERTICAL, SINGLE);
+        pattern_box.append (pattern_header_grid);
+        pattern_box.append (pattern_revealer);
+
         var main_box = new Granite.Box (VERTICAL, DOUBLE) {
             margin_start = 12,
             margin_end = 12,
@@ -83,6 +156,7 @@ public class Quicknote.PropertiesDialog : Gtk.Window {
         };
         main_box.append (page_format_box);
         main_box.append (view_mode_grid);
+        main_box.append (pattern_box);
 
         var scrolled_window = new Gtk.ScrolledWindow () {
             child = main_box,

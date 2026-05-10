@@ -13,7 +13,7 @@ public class Quicknote.Content : Object {
 
     public ViewMode view_mode { get; construct set; }
     public Background background { get; construct set; }
-    public Pattern? pattern { get; construct set; }
+    public Pattern pattern { get; construct set; }
     public PageFormat page_format { get; construct set; }
 
     private ItemStore items;
@@ -25,6 +25,10 @@ public class Quicknote.Content : Object {
     construct {
         view_mode = new InfiniteViewMode ();
         background = new WhiteBackground ();
+
+        pattern = new Pattern ();
+        pattern.notify.connect (emit_changed);
+
         page_format = new PageFormat ();
         page_format.notify.connect (emit_changed);
 

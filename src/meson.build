@@ -13,6 +13,8 @@ files = [
     'Model' / 'Content' / 'Backgrounds' / 'WhiteBackground.vala',
     'Model' / 'Content' / 'Items' / 'Stroke.vala',
     'Model' / 'Content' / 'ItemStore' / 'ItemStore.vala',
+    'Model' / 'Content' / 'Patterns' / 'GridStyle.vala',
+    'Model' / 'Content' / 'Patterns' / 'PatternStyle.vala',
     'Model' / 'Content' / 'ViewModes' / 'InfiniteViewMode.vala',
     'Model' / 'Database' / 'Database.vala',
     'Model' / 'Exporter' / 'Exporter.vala',
