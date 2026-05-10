@@ -6,7 +6,7 @@
 public class Quicknote.GridStyle : Quicknote.PatternStyle {
     public override string name { get { return _("Grid"); } }
 
-    private Gsk.Stroke stroke = new Gsk.Stroke (1.0f);
+    private Gsk.Stroke stroke = new Gsk.Stroke (0.5f);
 
     public override void snapshot (
         float width, float height,

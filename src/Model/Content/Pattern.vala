@@ -15,7 +15,7 @@ public class Quicknote.Pattern : Object {
         style = new GridStyle ();
 
         var color = Gdk.RGBA ();
-        color.parse ("blue");
+        color.parse ("#43adf0");
         this.color = color;
     }
 
