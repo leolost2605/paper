@@ -32,12 +32,18 @@ public class Quicknote.MoveHandler : Object {
         swipe_gesture.swipe.connect (on_swipe);
         swipe_gesture.group (drag_gesture);
 
+        var scroll_controller = new Gtk.EventControllerScroll (BOTH_AXES | KINETIC);
+        scroll_controller.scroll_begin.connect (stop_kinetic);
+        scroll_controller.scroll.connect (on_scroll);
+        scroll_controller.decelerate.connect (on_decelerate);
+
         var zoom_gesture = new Gtk.GestureZoom ();
         zoom_gesture.begin.connect (on_zoom_begin);
         zoom_gesture.scale_changed.connect (on_zoom);
 
         target.add_controller (drag_gesture);
         target.add_controller (swipe_gesture);
+        target.add_controller (scroll_controller);
         target.add_controller (zoom_gesture);
     }
 
@@ -107,6 +113,17 @@ public class Quicknote.MoveHandler : Object {
         }
 
         return should_continue ? Source.CONTINUE : Source.REMOVE;
+    }
+
+    private bool on_scroll (double delta_x, double delta_y) {
+        viewport.x -= (float) delta_x;
+        viewport.y -= (float) delta_y;
+
+        return Gdk.EVENT_STOP;
+    }
+
+    private void on_decelerate (double velocity_x, double velocity_y) {
+        on_swipe (-velocity_x, -velocity_y);
     }
 
     private void on_zoom_begin () {
