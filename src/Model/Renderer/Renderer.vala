@@ -21,10 +21,7 @@ public class Quicknote.Renderer : Object {
         content.view_mode.push_clip (snapshot, transformed_bounds, content.page_format);
         content.background.snapshot (snapshot, transformed_bounds);
 
-        if (content.pattern != null) {
-            content.pattern.snapshot (snapshot, transformed_bounds);
-        }
-
+        content.pattern.snapshot (snapshot, transformed_bounds);
         content.page_format.snapshot (snapshot, transformed_bounds);
 
         foreach (var item in content.get_items_intersecting_rect (transformed_bounds)) {
@@ -47,7 +44,7 @@ public class Quicknote.Renderer : Object {
         snapshot.push_clip (page.bounds);
 
         content.background.snapshot (snapshot, page.bounds);
-        content.pattern?.snapshot (snapshot, page.bounds);
+        content.pattern.snapshot (snapshot, page.bounds);
         content.page_format.snapshot (snapshot, page.bounds);
 
         foreach (var item in content.get_items_intersecting_rect (page.bounds)) {
