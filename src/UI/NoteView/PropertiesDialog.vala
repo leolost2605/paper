@@ -95,20 +95,14 @@ public class Quicknote.PropertiesDialog : Gtk.Window {
             xalign = 0,
         };
 
-        var patterns_model = new ListStore (typeof (PatternStyle));
-        patterns_model.append (new GridStyle ());
+        var patterns_model = new Adw.EnumListModel (typeof (Pattern.Style));
 
-        var name_expression = new Gtk.PropertyExpression (typeof (PatternStyle), null, "name");
+        var name_expression = new Gtk.PropertyExpression (typeof (Adw.EnumListItem), null, "nick");
 
         var pattern_style_dropdown = new Gtk.DropDown (patterns_model, name_expression) {
             valign = CENTER,
         };
-
-        if (content.pattern.style is GridStyle) {
-            pattern_style_dropdown.selected = 0;
-        }
-
-        pattern_style_dropdown.bind_property ("selected-item", content.pattern, "style", SYNC_CREATE);
+        content.pattern.bind_property ("style", pattern_style_dropdown, "selected", SYNC_CREATE | BIDIRECTIONAL);
 
         var pattern_width_label = new Gtk.Label (_("Width:")) {
             hexpand = true,

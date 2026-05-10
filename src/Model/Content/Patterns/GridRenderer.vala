@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.GridStyle : Quicknote.PatternStyle {
+public class Quicknote.GridRenderer : Quicknote.PatternRenderer {
     public override string name { get { return _("Grid"); } }
 
     private Gsk.Stroke stroke = new Gsk.Stroke (0.5f);

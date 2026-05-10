@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public abstract class Quicknote.PatternStyle : Object {
+public abstract class Quicknote.PatternRenderer : Object {
     public abstract string name { get; }
 
     public abstract void snapshot (
