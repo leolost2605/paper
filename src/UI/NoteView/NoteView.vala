@@ -84,18 +84,20 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         var notes_list = new NotesList (notebook);
         bind_property ("current-note", notes_list, "selected-note", SYNC_CREATE | BIDIRECTIONAL);
 
-        var split_view = new Adw.OverlaySplitView () {
+        var content_view = new Adw.ToolbarView () {
             content = drawing_area,
+        };
+        content_view.add_top_bar (header_bar);
+        content_view.add_top_bar (new Gtk.Separator (HORIZONTAL));
+
+        var split_view = new Adw.OverlaySplitView () {
+            content = content_view,
             sidebar = notes_list,
             vexpand = true,
         };
+        split_view.bind_property ("show-sidebar", header_bar, "show-back-button", SYNC_CREATE | INVERT_BOOLEAN);
 
-        var main_box = new Granite.Box (VERTICAL, NONE);
-        main_box.append (header_bar);
-        main_box.append (new Gtk.Separator (HORIZONTAL));
-        main_box.append (split_view);
-
-        child = main_box;
+        child = split_view;
         notebook.bind_property ("name", this, "title", SYNC_CREATE);
 
         var show_noteslist_action = new PropertyAction (SHOW_NOTESLIST_ACTION, split_view, "show-sidebar");
