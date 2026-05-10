@@ -11,6 +11,18 @@ public class Quicknote.Database : Object {
             background_type TEXT
         );
 
+        CREATE TABLE IF NOT EXISTS pattern (
+            id INTEGER PRIMARY KEY,
+            active INTEGER,
+            style INTEGER,
+            width REAL,
+            height REAL,
+            color_r REAL,
+            color_g REAL,
+            color_b REAL,
+            color_a REAL
+        );
+
         CREATE TABLE IF NOT EXISTS note_item (
             id INTEGER PRIMARY KEY,
             type TEXT,
@@ -36,6 +48,28 @@ public class Quicknote.Database : Object {
 
     private const string BACKGROUND_QUERY = "SELECT background_type FROM note WHERE id = 0";
 
+    private const string HAS_PATTERN_QUERY = "SELECT COUNT(*) FROM pattern WHERE id = 0";
+
+    private const string GET_PATTERN_QUERY = """
+        SELECT active, style, width, height, color_r, color_g, color_b, color_a
+        FROM pattern
+        WHERE id = 0
+    """;
+
+    private const string SET_PATTERN_QUERY = """
+        INSERT INTO pattern (id, active, style, width, height, color_r, color_g, color_b, color_a)
+        VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+            active=excluded.active,
+            style=excluded.style,
+            width=excluded.width,
+            height=excluded.height,
+            color_r=excluded.color_r,
+            color_g=excluded.color_g,
+            color_b=excluded.color_b,
+            color_a=excluded.color_a
+    """;
+
     private const string ALL_ITEMS_QUERY = "SELECT id FROM note_item";
 
     private const string BOUNDS_QUERY = """
@@ -60,6 +94,8 @@ public class Quicknote.Database : Object {
 
     private const string ADD_STROKE_QUERY = "INSERT INTO strokes (coords, r, g, b, a, width) VALUES (?, ?, ?, ?, ?, ?)";
 
+    public signal void ready ();
+
     public string path { get; construct; }
 
     private Sqlite.Database? db;
@@ -83,6 +119,8 @@ public class Quicknote.Database : Object {
         if (ec != Sqlite.OK) {
             throw new IOError.FAILED ("Failed to setup database: %s".printf (db.errmsg ()));
         }
+
+        ready ();
     }
 
     public void close () requires (db != null) {
@@ -104,6 +142,70 @@ public class Quicknote.Database : Object {
         }
 
         throw new IOError.FAILED ("Failed to get background type: %s".printf (db.errmsg ()));
+    }
+
+    public bool has_pattern () throws Error {
+        Sqlite.Statement stmt;
+        var ec = db.prepare_v2 (HAS_PATTERN_QUERY, HAS_PATTERN_QUERY.length, out stmt);
+
+        if (ec != Sqlite.OK) {
+            throw new IOError.FAILED ("Failed to prepare statement: %s".printf (db.errmsg ()));
+        }
+
+        if (stmt.step () != Sqlite.ROW) {
+            throw new IOError.FAILED ("Failed to check for pattern: %s".printf (db.errmsg ()));
+        }
+
+        return stmt.column_int (0) > 0;
+    }
+
+    public void get_pattern (
+        out bool active, out Pattern.Style style, out float width, out float height, out Gdk.RGBA color
+    ) throws Error {
+        Sqlite.Statement stmt;
+        var ec = db.prepare_v2 (GET_PATTERN_QUERY, GET_PATTERN_QUERY.length, out stmt);
+
+        if (ec != Sqlite.OK) {
+            throw new IOError.FAILED ("Failed to prepare statement: %s".printf (db.errmsg ()));
+        }
+
+        if (stmt.step () != Sqlite.ROW) {
+            throw new IOError.FAILED ("Failed to get pattern: %s".printf (db.errmsg ()));
+        }
+
+        active = stmt.column_int (0) != 0;
+        style = (Pattern.Style) stmt.column_int (1);
+        width = (float) stmt.column_double (2);
+        height = (float) stmt.column_double (3);
+
+        color = Gdk.RGBA () {
+            red = (float) stmt.column_double (4),
+            green = (float) stmt.column_double (5),
+            blue = (float) stmt.column_double (6),
+            alpha = (float) stmt.column_double (7),
+        };
+    }
+
+    public void set_pattern (bool active, Pattern.Style style, float width, float height, Gdk.RGBA color) throws Error {
+        Sqlite.Statement stmt;
+        var ec = db.prepare_v2 (SET_PATTERN_QUERY, SET_PATTERN_QUERY.length, out stmt);
+
+        if (ec != Sqlite.OK) {
+            throw new IOError.FAILED ("Failed to prepare statement: %s".printf (db.errmsg ()));
+        }
+
+        stmt.bind_int (1, active ? 1 : 0);
+        stmt.bind_int (2, style);
+        stmt.bind_double (3, width);
+        stmt.bind_double (4, height);
+        stmt.bind_double (5, color.red);
+        stmt.bind_double (6, color.green);
+        stmt.bind_double (7, color.blue);
+        stmt.bind_double (8, color.alpha);
+
+        if (stmt.step () != Sqlite.DONE) {
+            throw new IOError.FAILED ("Failed to set pattern: %s".printf (db.errmsg ()));
+        }
     }
 
     public Gee.ArrayList<int> get_all_items () throws Error {

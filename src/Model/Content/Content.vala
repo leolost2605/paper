@@ -26,7 +26,7 @@ public class Quicknote.Content : Object {
         view_mode = new InfiniteViewMode ();
         background = new WhiteBackground ();
 
-        pattern = new Pattern ();
+        pattern = new Pattern (database);
         pattern.notify.connect (emit_changed);
 
         page_format = new PageFormat ();
