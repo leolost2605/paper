@@ -25,7 +25,8 @@ public class Quicknote.NotesList : Adw.NavigationPage {
     }
 
     construct {
-        var tree_model = new Gtk.TreeListModel (notebook.root.children, false, false, create_child_model_func);
+        var sorted_children = create_sort_model (notebook.root.children);
+        var tree_model = new Gtk.TreeListModel (sorted_children, false, false, create_child_model_func);
 
         selection_model = new Gtk.SingleSelection (tree_model) {
             autoselect = true
@@ -128,7 +129,37 @@ public class Quicknote.NotesList : Adw.NavigationPage {
     }
 
     private ListModel? create_child_model_func (Object item) {
-        return (item as Directory)?.children;
+        if (!(item is Directory)) {
+            return null;
+        }
+
+        return create_sort_model (((Directory) item).children);
+    }
+
+    private static Gtk.SortListModel create_sort_model (ListModel model) {
+        var folder_before_files_sorter = new Gtk.CustomSorter (folder_before_files_sort_func);
+
+        var name_expression = new Gtk.PropertyExpression (typeof (FileBase), null, "display-name");
+        var name_sorter = new Gtk.StringSorter (name_expression);
+
+        var multi_sorter = new Gtk.MultiSorter ();
+        multi_sorter.append (folder_before_files_sorter);
+        multi_sorter.append (name_sorter);
+
+        return new Gtk.SortListModel (model, multi_sorter);
+    }
+
+    private static int folder_before_files_sort_func (Object? a, Object? b) {
+        var file_a = (FileBase) a;
+        var file_b = (FileBase) b;
+
+        if (file_a is Directory && !(file_b is Directory)) {
+            return -1;
+        } else if (!(file_a is Directory) && file_b is Directory) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     private void on_setup (Object obj) {
