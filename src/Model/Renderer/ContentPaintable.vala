@@ -5,12 +5,11 @@
 
 public class Quicknote.ContentPaintable : Object, Gdk.Paintable {
     public Content content { get; construct; }
-    public ToolStore tool_store { get; construct; }
     public Viewport viewport { get; construct; }
     public Renderer renderer { get; construct; }
 
-    public ContentPaintable (Content content, ToolStore tool_store, Viewport viewport, Renderer renderer) {
-        Object (content: content, tool_store: tool_store, viewport: viewport, renderer: renderer);
+    public ContentPaintable (Content content, Viewport viewport, Renderer renderer) {
+        Object (content: content, viewport: viewport, renderer: renderer);
     }
 
     construct {
@@ -24,6 +23,6 @@ public class Quicknote.ContentPaintable : Object, Gdk.Paintable {
             size = { (float) width, (float) height },
         };
 
-        renderer.snapshot (content, tool_store.active_tool, viewport, (Gtk.Snapshot) snapshot, bounds);
+        renderer.snapshot (content, viewport, (Gtk.Snapshot) snapshot, bounds);
     }
 }

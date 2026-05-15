@@ -9,14 +9,14 @@ public class Quicknote.Canvas : Granite.Bin {
 
     public Content? content {
         set {
-            manipulator.content = value;
+            tool_holder.content = value;
 
             if (value == null) {
                 content_picture.paintable = null;
                 return;
             }
 
-            content_picture.paintable = new ContentPaintable (value, tool_store, viewport, renderer);
+            content_picture.paintable = new ContentPaintable (value, viewport, renderer);
         }
     }
 
@@ -24,10 +24,9 @@ public class Quicknote.Canvas : Granite.Bin {
 
     private Viewport viewport;
 
-    private MoveHandler move_handler;
+    private ToolHolder tool_holder;
 
-    private Manipulator manipulator;
-    private InputHandler input_handler;
+    private MoveHandler move_handler;
 
     public Canvas (ToolStore tool_store, Renderer renderer) {
         Object (tool_store: tool_store, renderer: renderer);
@@ -38,13 +37,16 @@ public class Quicknote.Canvas : Granite.Bin {
 
         viewport = new Viewport ();
 
-        move_handler = new MoveHandler (content_picture, viewport);
+        tool_holder = new ToolHolder (tool_store, viewport);
 
-        manipulator = new Manipulator (tool_store);
+        var overlay = new Gtk.Overlay () {
+            child = content_picture
+        };
+        overlay.add_overlay (tool_holder);
 
-        input_handler = new InputHandler (content_picture, viewport, manipulator);
+        move_handler = new MoveHandler (overlay, viewport);
 
-        child = content_picture;
+        child = overlay;
         set_cursor (new Gdk.Cursor.from_name ("none", null));
     }
 }

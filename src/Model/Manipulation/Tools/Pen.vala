@@ -29,7 +29,7 @@ public class Quicknote.Pen : Quicknote.Tool {
         points = null;
     }
 
-    public override void snapshot (Gtk.Snapshot snapshot) {
+    public override void snapshot_transformed (Gtk.Snapshot snapshot) {
         if (current_stroke == null) {
             return;
         }

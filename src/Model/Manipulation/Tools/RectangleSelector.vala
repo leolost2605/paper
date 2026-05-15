@@ -62,7 +62,7 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
         selection = null;
     }
 
-    public override void snapshot (Gtk.Snapshot snapshot) {
+    public override void snapshot_transformed (Gtk.Snapshot snapshot) {
         if (selection == null) {
             snapshot_selection_rectangle (snapshot);
         } else {
