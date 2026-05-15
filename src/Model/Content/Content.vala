@@ -53,10 +53,12 @@ public class Quicknote.Content : Object {
 
     public void add_item (Item item) {
         items.add (item);
+        emit_changed ();
     }
 
     public void remove_item (Item item) {
         items.remove (item);
+        emit_changed ();
     }
 
     public Gee.List<Page> calculate_pages () {
