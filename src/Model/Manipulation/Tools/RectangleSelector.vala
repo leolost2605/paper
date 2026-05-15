@@ -53,10 +53,15 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
             return;
         }
 
-        var delta = new Point (current_point.x - start_point.x, current_point.y - start_point.y);
+        var delta = Graphene.Point () {
+            x = current_point.x - start_point.x,
+            y = current_point.y - start_point.y
+        };
+
+        var transform = new Gsk.Transform ().translate (delta);
 
         foreach (var item in selection) {
-            content.add_item (item.copy_with_offset (delta));
+            content.add_item (item.copy_transformed (transform));
         }
 
         selection = null;

@@ -37,7 +37,7 @@ public class Quicknote.Stroke : Item {
         return this.line.intersects (line);
     }
 
-    public override Item copy_with_offset (Point offset) {
-        return new Stroke (line.copy_with_offset (offset), width, color);
+    public override Item copy_transformed (Gsk.Transform transform) {
+        return new Stroke (line.copy_transformed (transform), width, color);
     }
 }

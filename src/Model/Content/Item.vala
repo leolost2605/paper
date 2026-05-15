@@ -7,5 +7,5 @@ public abstract class Quicknote.Item : Object {
     public abstract void snapshot (Gtk.Snapshot snapshot);
     public abstract Graphene.Rect get_bounds ();
     public abstract bool intersects (Line line);
-    public abstract Item copy_with_offset (Point offset);
+    public abstract Item copy_transformed (Gsk.Transform transform);
 }

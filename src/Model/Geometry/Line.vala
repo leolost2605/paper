@@ -64,10 +64,15 @@ public class Quicknote.Line : Object {
         return ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1;
     }
 
-    public Line copy_with_offset (Point offset) {
+    public Line copy_transformed (Gsk.Transform transform) {
         var new_points = new Point[points.size];
         for (int i = 0; i < points.size; i++) {
-            new_points[i] = new Point (points[i].x + offset.x, points[i].y + offset.y);
+            var point = Graphene.Point () {
+                x = points[i].x,
+                y = points[i].y
+            };
+            var transformed_point = transform.transform_point (point);
+            new_points[i] = new Point (transformed_point.x, transformed_point.y);
         }
         return new Line (new_points);
     }
