@@ -15,6 +15,10 @@ public class Quicknote.Pen : Quicknote.Tool {
     }
 
     public override void motion (Content content, float x, float y, Graphene.Point[] backlog) {
+        foreach (var point in backlog) {
+            points.add (new Point (point.x, point.y));
+        }
+
         points.add (new Point (x, y));
 
         current_stroke = new Stroke (new Line (points.to_array ()), width, color);
