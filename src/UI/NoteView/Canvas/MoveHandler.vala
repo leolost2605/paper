@@ -57,8 +57,8 @@ public class Quicknote.MoveHandler : Object {
         var delta_x = (x - last_x);
         var delta_y = (y - last_y);
 
-        viewport.x += (float) delta_x;
-        viewport.y += (float) delta_y;
+        viewport.x += (float) delta_x / viewport.zoom;
+        viewport.y += (float) delta_y / viewport.zoom;
 
         last_x = x;
         last_y = y;
@@ -69,8 +69,8 @@ public class Quicknote.MoveHandler : Object {
 
         var current_time = target.get_frame_clock ().get_frame_time ();
 
-        kinetic_x = new KineticScrolling (current_time, viewport.x, velocity_x, FRICTION);
-        kinetic_y = new KineticScrolling (current_time, viewport.y, velocity_y, FRICTION);
+        kinetic_x = new KineticScrolling (current_time, viewport.x * viewport.zoom, velocity_x, FRICTION);
+        kinetic_y = new KineticScrolling (current_time, viewport.y * viewport.zoom, velocity_y, FRICTION);
 
         tick_id = target.add_tick_callback (tick_callback);
     }
@@ -90,7 +90,7 @@ public class Quicknote.MoveHandler : Object {
 
         if (kinetic_x != null) {
             kinetic_x.tick (current_time);
-            viewport.x = (float) kinetic_x.position;
+            viewport.x = (float) kinetic_x.position / viewport.zoom;
 
             if (kinetic_x.velocity.abs () < 0.1) {
                 kinetic_x = null;
@@ -99,7 +99,7 @@ public class Quicknote.MoveHandler : Object {
 
         if (kinetic_y != null) {
             kinetic_y.tick (current_time);
-            viewport.y = (float) kinetic_y.position;
+            viewport.y = (float) kinetic_y.position / viewport.zoom;
 
             if (kinetic_y.velocity.abs () < 0.1) {
                 kinetic_y = null;
@@ -116,8 +116,8 @@ public class Quicknote.MoveHandler : Object {
     }
 
     private bool on_scroll (double delta_x, double delta_y) {
-        viewport.x -= (float) delta_x;
-        viewport.y -= (float) delta_y;
+        viewport.x -= (float) delta_x / viewport.zoom;
+        viewport.y -= (float) delta_y / viewport.zoom;
 
         return Gdk.EVENT_STOP;
     }
@@ -126,14 +126,34 @@ public class Quicknote.MoveHandler : Object {
         on_swipe (-velocity_x, -velocity_y);
     }
 
-    private void on_zoom_begin () {
-        last_zoom = 1.0;
+    private Graphene.Point center_begin_widget_coords;
+    private Graphene.Point center_begin_content_coords;
+    private void on_zoom_begin (Gtk.Gesture zoom, Gdk.EventSequence? seq) {
+        zoom.set_state (CLAIMED);
+        stop_kinetic ();
+
+        last_zoom = viewport.zoom;
+
+        double center_x, center_y;
+        zoom.get_bounding_box_center (out center_x, out center_y);
+
+        center_begin_widget_coords = Graphene.Point () {
+            x = (float) center_x,
+            y = (float) center_y
+        };
+
+        center_begin_content_coords = viewport.get_transform ().invert ().transform_point (center_begin_widget_coords);
     }
 
     private void on_zoom (Gtk.GestureZoom zoom, double scale) {
-        viewport.zoom *= (float) (scale / last_zoom);
-        last_zoom = scale;
+        viewport.zoom = (float) (scale * last_zoom);
 
-        // TODO: Keep zoom center centered
+        var new_content_coords = viewport.get_transform ().invert ().transform_point (center_begin_widget_coords);
+
+        var delta_x = (new_content_coords.x - center_begin_content_coords.x);
+        var delta_y = (new_content_coords.y - center_begin_content_coords.y);
+
+        viewport.x += delta_x;
+        viewport.y += delta_y;
     }
 }

@@ -13,6 +13,6 @@ public class Quicknote.Viewport : Object {
             x = x,
             y = y
         };
-        return new Gsk.Transform ().translate (point).scale (zoom, zoom);
+        return new Gsk.Transform ().scale (zoom, zoom).translate (point);
     }
 }
