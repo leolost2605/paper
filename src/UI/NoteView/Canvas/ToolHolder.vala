@@ -10,29 +10,92 @@ public class Quicknote.ToolHolder : Granite.Bin {
     public Content? content { get; set; }
 
     private Tool? current_tool {
-        get { return (Tool?) child; }
-        set { child = value; }
+        get { return tool_store.active_tool; }
     }
+
+    private Gtk.GestureStylus stylus_gesture;
 
     public ToolHolder (ToolStore tool_store, Viewport viewport) {
         Object (tool_store: tool_store, viewport: viewport);
     }
 
     construct {
-        notify["content"].connect (update_tool);
-        tool_store.tools.selection_changed.connect (update_tool);
-        update_tool ();
+        stylus_gesture = new Gtk.GestureStylus () {
+            stylus_only = false
+        };
+        stylus_gesture.down.connect (on_down);
+        stylus_gesture.motion.connect (on_motion);
+        stylus_gesture.up.connect (on_up);
+        add_controller (stylus_gesture);
     }
 
-    private void update_tool () {
-        if (current_tool != null) {
-            current_tool.deactivate_tool ();
+    private Graphene.Point transform_point (double x, double y) {
+        var transform = viewport.get_transform ().invert ();
+
+        var point = Graphene.Point () {
+            x = (float) x,
+            y = (float) y
+        };
+
+        return transform.transform_point (point);
+    }
+
+    private void on_down (double x, double y) {
+        var point = transform_point (x, y);
+        current_tool?.start (content, point.x, point.y);
+    }
+
+    private void on_motion (double x, double y) {
+        var transform = viewport.get_transform ().invert ();
+
+        var point = Graphene.Point () {
+            x = (float) x,
+            y = (float) y
+        };
+
+        var note_point = transform.transform_point (point);
+
+        Gdk.TimeCoord[] time_coords;
+        stylus_gesture.get_backlog (out time_coords);
+
+        Graphene.Point[] points = {};
+        foreach (var time_coord in time_coords) {
+            if (!(Gdk.AxisFlags.X in time_coord.flags && Gdk.AxisFlags.Y in time_coord.flags)) {
+                continue;
+            }
+
+            var coord = Graphene.Point () {
+                x = (float) time_coord.axes[Gdk.AxisUse.X],
+                y = (float) time_coord.axes[Gdk.AxisUse.Y]
+            };
+
+            points += transform.transform_point (coord);
         }
 
-        current_tool = tool_store.active_tool;
+        current_tool?.motion (content, note_point.x, note_point.y, points);
 
-        if (current_tool != null && content != null) {
-            current_tool.activate_tool (viewport, content);
+        queue_draw ();
+    }
+
+    private void on_up (double x, double y) {
+        var point = transform_point (x, y);
+        current_tool?.commit (content, point.x, point.y);
+
+        queue_draw ();
+    }
+
+    public override void snapshot (Gtk.Snapshot snapshot) {
+        if (!stylus_gesture.is_active ()) {
+            return;
         }
+
+        var transform = viewport.get_transform ();
+
+        snapshot.save ();
+        snapshot.transform (transform);
+
+        current_tool?.snapshot_transformed (snapshot);
+
+        snapshot.restore ();
     }
 }
