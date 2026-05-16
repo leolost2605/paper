@@ -15,6 +15,8 @@ public class Quicknote.ToolHolder : Granite.Bin {
 
     private Gtk.GestureStylus stylus_gesture;
 
+    private Gdk.DeviceTool? last_device_tool;
+
     public ToolHolder (ToolStore tool_store, Viewport viewport) {
         Object (tool_store: tool_store, viewport: viewport);
     }
@@ -26,6 +28,7 @@ public class Quicknote.ToolHolder : Granite.Bin {
         stylus_gesture.down.connect (on_down);
         stylus_gesture.motion.connect (on_motion);
         stylus_gesture.up.connect (on_up);
+        stylus_gesture.proximity.connect (on_proximity);
         add_controller (stylus_gesture);
     }
 
@@ -82,6 +85,27 @@ public class Quicknote.ToolHolder : Granite.Bin {
         current_tool?.commit (content, point.x, point.y);
 
         queue_draw ();
+    }
+
+    private void on_proximity () {
+        if (stylus_gesture.get_device_tool () == last_device_tool) {
+            return;
+        }
+
+        last_device_tool = stylus_gesture.get_device_tool ();
+
+        switch (last_device_tool.tool_type) {
+            case PEN:
+                tool_store.select_last_tool_of_type (typeof (Pen));
+                break;
+
+            case ERASER:
+                tool_store.select_last_tool_of_type (typeof (Eraser));
+                break;
+
+            default:
+                break;
+        }
     }
 
     public override void snapshot (Gtk.Snapshot snapshot) {
