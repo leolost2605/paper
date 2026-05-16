@@ -8,36 +8,55 @@ public class Quicknote.Pen : Quicknote.Tool {
     public float width { get; set; default = 2.0f; }
 
     private Gee.ArrayList<Point>? points;
-    private Stroke? current_stroke;
+    private Gee.ArrayList<Gsk.RenderNode>? render_nodes;
 
     public override void start (Content content, float x, float y) {
         points = new Gee.ArrayList<Point> ();
+        points.add (new Point (x, y));
+
+        render_nodes = new Gee.ArrayList<Gsk.RenderNode> ();
     }
 
     public override void motion (Content content, float x, float y, Graphene.Point[] backlog) {
+        var last_point = points[points.size - 1];
+
+        var path_builder = new Gsk.PathBuilder ();
+        path_builder.move_to (last_point.x, last_point.y);
+
         foreach (var point in backlog) {
             points.add (new Point (point.x, point.y));
+            path_builder.line_to (point.x, point.y);
         }
 
         points.add (new Point (x, y));
+        path_builder.line_to (x, y);
 
-        current_stroke = new Stroke (new Line (points.to_array ()), width, color);
+        var snapshot = new Gtk.Snapshot ();
+        snapshot.append_stroke (path_builder.to_path (), new Gsk.Stroke (width), color);
+
+        var node = snapshot.to_node ();
+
+        render_nodes.add (node);
     }
 
     public override void commit (Content content, float x, float y) {
-        if (current_stroke != null) {
-            content.add_item (current_stroke);
-        }
+        points.add (new Point (x, y));
 
-        current_stroke = null;
+        var stroke = new Stroke (new Line (points.to_array ()), width, color);
+
+        content.add_item (stroke);
+
         points = null;
+        render_nodes = null;
     }
 
     public override void snapshot_transformed (Gtk.Snapshot snapshot) {
-        if (current_stroke == null) {
+        if (render_nodes == null) {
             return;
         }
 
-        current_stroke.snapshot (snapshot);
+        foreach (var render_node in render_nodes) {
+            snapshot.append_node (render_node);
+        }
     }
 }
