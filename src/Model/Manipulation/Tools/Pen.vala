@@ -10,17 +10,17 @@ public class Quicknote.Pen : Quicknote.Tool {
     private Gee.ArrayList<Point>? points;
     private Stroke? current_stroke;
 
-    public override void start (Content content) {
+    public override void start (Content content, float x, float y) {
         points = new Gee.ArrayList<Point> ();
     }
 
-    public override void add_point (Content content, float x, float y) {
+    public override void motion (Content content, float x, float y, Graphene.Point[] backlog) {
         points.add (new Point (x, y));
 
         current_stroke = new Stroke (new Line (points.to_array ()), width, color);
     }
 
-    public override void commit (Content content) {
+    public override void commit (Content content, float x, float y) {
         if (current_stroke != null) {
             content.add_item (current_stroke);
         }

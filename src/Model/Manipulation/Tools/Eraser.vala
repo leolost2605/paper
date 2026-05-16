@@ -6,11 +6,11 @@
 public class Quicknote.Eraser : Quicknote.Tool {
     private Point? last_point;
 
-    public override void start (Content content) {
+    public override void start (Content content, float x, float y) {
         // Nothing to do here
     }
 
-    public override void add_point (Content content, float x, float y) {
+    public override void motion (Content content, float x, float y, Graphene.Point[] backlog) {
         var point = new Point (x, y);
 
         if (last_point == null) {
@@ -29,7 +29,7 @@ public class Quicknote.Eraser : Quicknote.Tool {
         last_point = point;
     }
 
-    public override void commit (Content content) {
+    public override void commit (Content content, float x, float y) {
         last_point = null;
     }
 }

@@ -11,8 +11,10 @@ public abstract class Quicknote.Tool : Gtk.Widget {
     private Content? content;
     private Viewport? viewport;
 
+    private Gtk.GestureStylus stylus_gesture;
+
     construct {
-        var stylus_gesture = new Gtk.GestureStylus () {
+        stylus_gesture = new Gtk.GestureStylus () {
             stylus_only = false
         };
         stylus_gesture.down.connect (on_down);
@@ -21,23 +23,57 @@ public abstract class Quicknote.Tool : Gtk.Widget {
         add_controller (stylus_gesture);
     }
 
-    private void on_down (double x, double y) {
-        start (content);
-    }
+    private Graphene.Point transform_point (double x, double y) {
+        var transform = viewport.get_transform ().invert ();
 
-    private void on_motion (double x, double y) {
         var point = Graphene.Point () {
             x = (float) x,
             y = (float) y
         };
 
-        var note_point = viewport.get_transform ().invert ().transform_point (point);
-        add_point (content, note_point.x, note_point.y);
+        return transform.transform_point (point);
+    }
+
+    private void on_down (double x, double y) {
+        var point = transform_point (x, y);
+        start (content, point.x, point.y);
+    }
+
+    private void on_motion (double x, double y) {
+        var transform = viewport.get_transform ().invert ();
+
+        var point = Graphene.Point () {
+            x = (float) x,
+            y = (float) y
+        };
+
+        var note_point = transform.transform_point (point);
+
+        Gdk.TimeCoord[] time_coords;
+        stylus_gesture.get_backlog (out time_coords);
+
+        Graphene.Point[] points = {};
+        foreach (var time_coord in time_coords) {
+            if (!(Gdk.AxisFlags.X in time_coord.flags && Gdk.AxisFlags.Y in time_coord.flags)) {
+                continue;
+            }
+
+            var coord = Graphene.Point () {
+                x = (float) time_coord.axes[Gdk.AxisUse.X],
+                y = (float) time_coord.axes[Gdk.AxisUse.Y]
+            };
+
+            points += transform.transform_point (coord);
+        }
+
+        motion (content, note_point.x, note_point.y, points);
+
         queue_draw ();
     }
 
     private void on_up (double x, double y) {
-        commit (content);
+        var point = transform_point (x, y);
+        commit (content, point.x, point.y);
     }
 
     public void activate_tool (Viewport viewport, Content content) {
@@ -67,9 +103,9 @@ public abstract class Quicknote.Tool : Gtk.Widget {
         snapshot.restore ();
     }
 
-    protected abstract void start (Content content);
-    protected abstract void add_point (Content content, float x, float y);
-    protected abstract void commit (Content content);
+    protected abstract void start (Content content, float x, float y);
+    protected abstract void motion (Content content, float x, float y, Graphene.Point[] backlog);
+    protected abstract void commit (Content content, float x, float y);
     protected virtual void cancel (Content content) {}
     protected virtual void snapshot_transformed (Gtk.Snapshot snapshot) {}
 }

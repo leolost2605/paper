@@ -9,7 +9,7 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
     private Point? start_point;
     private Point? current_point;
 
-    public override void start (Content content) {
+    public override void start (Content content, float x, float y) {
         if (selection != null) {
             foreach (var item in selection) {
                 content.remove_item (item);
@@ -17,7 +17,7 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
         }
     }
 
-    public override void add_point (Content content, float x, float y) {
+    public override void motion (Content content, float x, float y, Graphene.Point[] backlog) {
         var point = new Point (x, y);
 
         if (start_point == null) {
@@ -27,7 +27,7 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
         }
     }
 
-    public override void commit (Content content) {
+    public override void commit (Content content, float x, float y) {
         if (selection == null) {
             select_items_in_rectangle (content);
         } else {
