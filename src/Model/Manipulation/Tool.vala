@@ -11,56 +11,33 @@ public abstract class Quicknote.Tool : Gtk.Widget {
     private Content? content;
     private Viewport? viewport;
 
-    private bool is_drawing = false;
-
     construct {
-        var controller = new Gtk.EventControllerLegacy ();
-        controller.event.connect (on_event);
-        add_controller (controller);
+        var stylus_gesture = new Gtk.GestureStylus () {
+            stylus_only = false
+        };
+        stylus_gesture.down.connect (on_down);
+        stylus_gesture.motion.connect (on_motion);
+        stylus_gesture.up.connect (on_up);
+        add_controller (stylus_gesture);
     }
 
-    private bool on_event (Gdk.Event event) requires (content != null) {
-        switch (event.get_event_type ()) {
-            case Gdk.EventType.BUTTON_PRESS:
-                is_drawing = true;
-                start (content);
-                break;
+    private void on_down (double x, double y) {
+        start (content);
+    }
 
-            case Gdk.EventType.BUTTON_RELEASE:
-                is_drawing = false;
-                commit (content);
-                break;
+    private void on_motion (double x, double y) {
+        var point = Graphene.Point () {
+            x = (float) x,
+            y = (float) y
+        };
 
-            case Gdk.EventType.MOTION_NOTIFY:
-                if (is_drawing) {
-                    double surface_x, surface_y;
-                    event.get_position (out surface_x, out surface_y);
+        var note_point = viewport.get_transform ().invert ().transform_point (point);
+        add_point (content, note_point.x, note_point.y);
+        queue_draw ();
+    }
 
-                    var root = get_root ();
-                    double transform_x, transform_y;
-                    root.get_surface_transform (out transform_x, out transform_y);
-
-                    var root_point = Graphene.Point () {
-                        x = (float) (surface_x - transform_x),
-                        y = (float) (surface_y - transform_y),
-                    };
-
-                    Graphene.Point widget_point;
-                    root.compute_point (this, root_point, out widget_point);
-
-                    var note_point = viewport.get_transform ().invert ().transform_point (widget_point);
-                    add_point (content, note_point.x, note_point.y);
-                    queue_draw ();
-                    return true;
-                }
-
-                break;
-
-            default:
-                break;
-        }
-
-        return false;
+    private void on_up (double x, double y) {
+        commit (content);
     }
 
     public void activate_tool (Viewport viewport, Content content) {
