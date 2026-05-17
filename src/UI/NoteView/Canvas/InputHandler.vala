@@ -3,9 +3,10 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.ToolHolder : Granite.Bin {
-    public ToolSelection tool_selection { get; construct; }
+public class Quicknote.InputHandler : Object {
+    public Gtk.Widget target { get; construct; }
     public Viewport viewport { get; construct; }
+    public ToolSelection tool_selection { get; construct; }
 
     public Content? content { get; set; }
 
@@ -17,8 +18,8 @@ public class Quicknote.ToolHolder : Granite.Bin {
 
     private Gdk.DeviceTool? last_device_tool;
 
-    public ToolHolder (ToolSelection tool_selection, Viewport viewport) {
-        Object (tool_selection: tool_selection, viewport: viewport);
+    public InputHandler (Gtk.Widget target, Viewport viewport, ToolSelection tool_selection) {
+        Object (target: target, viewport: viewport, tool_selection: tool_selection);
     }
 
     construct {
@@ -29,7 +30,7 @@ public class Quicknote.ToolHolder : Granite.Bin {
         stylus_gesture.motion.connect (on_motion);
         stylus_gesture.up.connect (on_up);
         stylus_gesture.proximity.connect (on_proximity);
-        add_controller (stylus_gesture);
+        target.add_controller (stylus_gesture);
     }
 
     private Graphene.Point transform_point (double x, double y) {
@@ -44,6 +45,8 @@ public class Quicknote.ToolHolder : Granite.Bin {
     }
 
     private void on_down (double x, double y) {
+        stylus_gesture.set_state (CLAIMED);
+
         var point = transform_point (x, y);
         current_tool?.start (content, point.x, point.y);
     }
@@ -76,15 +79,11 @@ public class Quicknote.ToolHolder : Granite.Bin {
         }
 
         current_tool?.motion (content, note_point.x, note_point.y, points);
-
-        queue_draw ();
     }
 
     private void on_up (double x, double y) {
         var point = transform_point (x, y);
         current_tool?.commit (content, point.x, point.y);
-
-        queue_draw ();
     }
 
     private void on_proximity () {
@@ -106,20 +105,5 @@ public class Quicknote.ToolHolder : Granite.Bin {
             default:
                 break;
         }
-    }
-
-    public override void snapshot (Gtk.Snapshot snapshot) {
-        if (!stylus_gesture.is_active ()) {
-            return;
-        }
-
-        var transform = viewport.get_transform ();
-
-        snapshot.save ();
-        snapshot.transform (transform);
-
-        current_tool?.snapshot_transformed (snapshot);
-
-        snapshot.restore ();
     }
 }

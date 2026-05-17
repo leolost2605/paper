@@ -25,6 +25,8 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
         } else {
             current_point = point;
         }
+
+        changed ();
     }
 
     public override void commit (Content content, float x, float y) {

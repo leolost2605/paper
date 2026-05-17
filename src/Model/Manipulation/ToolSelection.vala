@@ -7,7 +7,7 @@ public class Quicknote.ToolSelection : Object {
     public ListModel tool_store { private get; construct; }
     public Gtk.SingleSelection tools { get; private set; }
 
-    public Tool? active_tool { get { return tools.selected_item as Tool; } }
+    public Tool? active_tool { get { return (Tool?) tools.selected_item; } }
 
     private HashTable<Type, Tool> last_tool_of_type;
 
@@ -21,6 +21,7 @@ public class Quicknote.ToolSelection : Object {
         tools = new Gtk.SingleSelection (tool_store) {
             autoselect = true,
         };
+        tools.notify["selected-item"].connect (() => notify_property ("active-tool"));
         tools.selection_changed.connect (update_last_tool);
     }
 

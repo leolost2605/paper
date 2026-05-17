@@ -67,4 +67,17 @@ public class Quicknote.Renderer : Object {
         item.snapshot (snapshot);
         return snapshot.to_node ();
     }
+
+    // Currently completely separate from the content methods but we might want to optimize some stuff here
+    // so we go already via the renderer
+    public void snapshot_tool (Tool tool, Viewport viewport, Gtk.Snapshot snapshot) {
+        var transform = viewport.get_transform ();
+
+        snapshot.save ();
+        snapshot.transform (transform);
+
+        tool.snapshot_transformed (snapshot);
+
+        snapshot.restore ();
+    }
 }

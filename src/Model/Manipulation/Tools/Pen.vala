@@ -37,6 +37,8 @@ public class Quicknote.Pen : Quicknote.Tool {
         var node = snapshot.to_node ();
 
         render_nodes.add (node);
+
+        changed ();
     }
 
     public override void commit (Content content, float x, float y) {
