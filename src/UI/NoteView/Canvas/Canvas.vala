@@ -4,7 +4,7 @@
 */
 
 public class Quicknote.Canvas : Granite.Bin {
-    public ToolStore tool_store { private get; construct; }
+    public ToolSelection tool_selection { private get; construct; }
     public Renderer renderer { private get; construct; }
 
     public Content? content {
@@ -28,8 +28,8 @@ public class Quicknote.Canvas : Granite.Bin {
 
     private MoveHandler move_handler;
 
-    public Canvas (ToolStore tool_store, Renderer renderer) {
-        Object (tool_store: tool_store, renderer: renderer);
+    public Canvas (ToolSelection tool_selection, Renderer renderer) {
+        Object (tool_selection: tool_selection, renderer: renderer);
     }
 
     construct {
@@ -37,7 +37,7 @@ public class Quicknote.Canvas : Granite.Bin {
 
         viewport = new Viewport ();
 
-        tool_holder = new ToolHolder (tool_store, viewport);
+        tool_holder = new ToolHolder (tool_selection, viewport);
 
         var overlay = new Gtk.Overlay () {
             child = content_picture

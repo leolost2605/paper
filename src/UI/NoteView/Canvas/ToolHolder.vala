@@ -4,21 +4,21 @@
 */
 
 public class Quicknote.ToolHolder : Granite.Bin {
-    public ToolStore tool_store { get; construct; }
+    public ToolSelection tool_selection { get; construct; }
     public Viewport viewport { get; construct; }
 
     public Content? content { get; set; }
 
     private Tool? current_tool {
-        get { return tool_store.active_tool; }
+        get { return tool_selection.active_tool; }
     }
 
     private Gtk.GestureStylus stylus_gesture;
 
     private Gdk.DeviceTool? last_device_tool;
 
-    public ToolHolder (ToolStore tool_store, Viewport viewport) {
-        Object (tool_store: tool_store, viewport: viewport);
+    public ToolHolder (ToolSelection tool_selection, Viewport viewport) {
+        Object (tool_selection: tool_selection, viewport: viewport);
     }
 
     construct {
@@ -96,11 +96,11 @@ public class Quicknote.ToolHolder : Granite.Bin {
 
         switch (last_device_tool.tool_type) {
             case PEN:
-                tool_store.select_last_tool_of_type (typeof (Pen));
+                tool_selection.select_last_tool_of_type (typeof (Pen));
                 break;
 
             case ERASER:
-                tool_store.select_last_tool_of_type (typeof (Eraser));
+                tool_selection.select_last_tool_of_type (typeof (Eraser));
                 break;
 
             default:

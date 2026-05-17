@@ -27,6 +27,7 @@ files = [
     'Model' / 'Geometry' / 'Line.vala',
     'Model' / 'Geometry' / 'Point.vala',
     'Model' / 'Manipulation' / 'Tool.vala',
+    'Model' / 'Manipulation' / 'ToolSelection.vala',
     'Model' / 'Manipulation' / 'ToolStore.vala',
     'Model' / 'Manipulation' / 'Tools' / 'Eraser.vala',
     'Model' / 'Manipulation' / 'Tools' / 'Pen.vala',

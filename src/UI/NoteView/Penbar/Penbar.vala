@@ -7,16 +7,17 @@ public class Quicknote.Penbar : Granite.Bin {
     public const int ICON_SIZE = 32;
 
     public ToolStore tool_store { get; construct; }
+    public ToolSelection tool_selection { get; construct; }
 
-    public Penbar (ToolStore tool_store) {
-        Object (tool_store: tool_store);
+    public Penbar (ToolStore tool_store, ToolSelection tool_selection) {
+        Object (tool_store: tool_store, tool_selection: tool_selection);
     }
 
     construct {
         var factory = new Gtk.SignalListItemFactory ();
         factory.bind.connect (on_bind);
 
-        var list_view = new Gtk.ListView (tool_store.tools, factory);
+        var list_view = new Gtk.ListView (tool_selection.tools, factory);
 
         var menu = new Menu ();
         menu.append (_("Pen"), "penbar.add-pen");

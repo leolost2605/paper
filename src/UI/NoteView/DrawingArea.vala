@@ -9,15 +9,19 @@ public class Quicknote.DrawingArea : Granite.Bin {
 
     public Content? content { get; set; }
 
+    private ToolSelection tool_selection;
+
     public DrawingArea (ToolStore tool_store, Renderer renderer) {
         Object (tool_store: tool_store, renderer: renderer);
     }
 
     construct {
-        var canvas = new Canvas (tool_store, renderer);
+        tool_selection = new ToolSelection (tool_store.tools);
+
+        var canvas = new Canvas (tool_selection, renderer);
         bind_property ("content", canvas, "content", SYNC_CREATE);
 
-        var penbar = new Penbar (tool_store) {
+        var penbar = new Penbar (tool_store, tool_selection) {
             halign = START,
             valign = CENTER
         };
