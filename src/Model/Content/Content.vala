@@ -99,14 +99,6 @@ public class Quicknote.Content : Object {
         emit_changed ();
     }
 
-    public bool is_item_selected (Item item) {
-        return items.is_selected (item);
-    }
-
-    public Gsk.Transform get_selection_transform () {
-        return items.get_selection_transform ();
-    }
-
     public void commit_selection () {
         items.commit_selection ();
         emit_changed ();

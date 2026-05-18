@@ -29,6 +29,13 @@ public class Quicknote.Stroke : Item {
         snapshot.append_stroke (path, stroke, color);
     }
 
+    public override void snapshot_selected (Gtk.Snapshot snapshot) {
+        this.snapshot (snapshot);
+
+        var selection_stroke = new Gsk.Stroke (width + 2.0f);
+        snapshot.append_stroke (path, selection_stroke, SelectedItem.SELECTION_COLOR);
+    }
+
     public override Graphene.Rect get_bounds () {
         return bounds;
     }

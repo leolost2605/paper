@@ -30,7 +30,14 @@ internal class Quicknote.ItemStore : Object {
             cache_item (id, database.get_item (id));
         }
 
-        return items[id];
+        var item = items[id];
+
+        var selected_item = selection.get_selected_item (item);
+        if (selected_item != null) {
+            return selected_item;
+        }
+
+        return item;
     }
 
     private void cache_item (int id, Item item) {
@@ -116,20 +123,15 @@ internal class Quicknote.ItemStore : Object {
         selection.transform (transform);
     }
 
-    public bool is_selected (Item item) {
-        return selection.is_item_selected (item);
-    }
-
-    public Gsk.Transform get_selection_transform () {
-        return selection.get_selection_transform ();
-    }
-
     public void commit_selection () {
-        var transform = get_selection_transform ();
-        var items = selection.clear_selection ();
-        foreach (var item in items) {
+        foreach (var entry in selection.get_selected_items ()) {
+            var item = entry.key;
+            var selected_item = entry.value;
+
             remove (item);
-            add (item.copy_transformed (transform));
+            add (selected_item.get_transformed_item ());
         }
+
+        selection.clear ();
     }
 }

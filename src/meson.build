@@ -11,6 +11,7 @@ files = [
     'Model' / 'Content' / 'Pattern.vala',
     'Model' / 'Content' / 'ViewMode.vala',
     'Model' / 'Content' / 'Backgrounds' / 'WhiteBackground.vala',
+    'Model' / 'Content' / 'Items' / 'SelectedItem.vala',
     'Model' / 'Content' / 'Items' / 'Stroke.vala',
     'Model' / 'Content' / 'ItemStore' / 'ItemStore.vala',
     'Model' / 'Content' / 'ItemStore' / 'Selection.vala',
