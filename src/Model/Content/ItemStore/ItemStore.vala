@@ -41,7 +41,8 @@ internal class Quicknote.ItemStore : Object {
 
     public void add (Item item) {
         try {
-            database.add_item (item);
+            var id = database.add_item (item);
+            cache_item (id, item);
         } catch (Error e) {
             warning ("Failed to add item to database: %s", e.message);
         }

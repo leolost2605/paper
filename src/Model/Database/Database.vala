@@ -336,7 +336,7 @@ public class Quicknote.Database : Object {
         }
     }
 
-    public void add_item (Item item) throws Error {
+    public int add_item (Item item) throws Error {
         string type;
         int64 type_id;
 
@@ -363,6 +363,7 @@ public class Quicknote.Database : Object {
 
         var id = db.last_insert_rowid ();
         add_to_tree (id, item.get_bounds ());
+        return (int) id;
     }
 
     private void add_to_tree (int64 item_id, Graphene.Rect bounds) throws Error {
