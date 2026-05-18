@@ -232,7 +232,30 @@ public class Quicknote.NotesList : Adw.NavigationPage {
             return;
         }
 
-        operation_manager.delete_file.begin (selected_file.file);
+        var message_dialog = new Granite.MessageDialog (
+            _("Delete “%s”?").printf (selected_note.display_name),
+            _("This can't be undone"),
+            new ThemedIcon ("edit-delete"),
+            NONE
+        ) {
+            transient_for = (Gtk.Window) get_root (),
+            modal = true,
+        };
+        message_dialog.set_data ("file", selected_file.file);
+        message_dialog.add_button (_("Cancel"), Gtk.ResponseType.CANCEL);
+        message_dialog.add_button (_("Delete"), Gtk.ResponseType.OK).add_css_class (Granite.CssClass.DESTRUCTIVE);
+
+        message_dialog.response.connect (on_delete_note_response);
+        message_dialog.present ();
+    }
+
+    private void on_delete_note_response (Gtk.Dialog dialog, int response) {
+        if (response == Gtk.ResponseType.OK) {
+            var file = dialog.get_data<File> ("file");
+            operation_manager.delete_file.begin (file);
+        }
+
+        dialog.destroy ();
     }
 
     private void rename_file (Variant? param) requires (param == null) {
