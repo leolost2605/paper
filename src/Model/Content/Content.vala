@@ -76,4 +76,39 @@ public class Quicknote.Content : Object {
 
         return full_bounds;
     }
+
+    public Graphene.Rect get_item_bounds (Gee.Collection<Item> items) requires (!items.is_empty) {
+        Graphene.Rect? bounds = null;
+        foreach (var item in items) {
+            if (bounds == null) {
+                bounds = item.get_bounds ();
+            } else {
+                bounds = bounds.union (item.get_bounds ());
+            }
+        }
+        return bounds;
+    }
+
+    public void select_items (Gee.Collection<Item> to_select) {
+        items.select (to_select);
+        emit_changed ();
+    }
+
+    public void transform_selection (Gsk.Transform transform) {
+        items.transform_selection (transform);
+        emit_changed ();
+    }
+
+    public bool is_item_selected (Item item) {
+        return items.is_selected (item);
+    }
+
+    public Gsk.Transform get_selection_transform () {
+        return items.get_selection_transform ();
+    }
+
+    public void commit_selection () {
+        items.commit_selection ();
+        emit_changed ();
+    }
 }

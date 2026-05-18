@@ -4,26 +4,31 @@
  */
 
 public class Quicknote.RectangleSelector : Quicknote.Tool {
-    private Gee.Collection<Item>? selection;
+    private SelectionManager? selection;
 
-    private Point? start_point;
-    private Point? current_point;
+    private Graphene.Point? start_point;
+    private Graphene.Point? current_point;
 
     public override void start (Content content, float x, float y) {
-        if (selection != null) {
-            foreach (var item in selection) {
-                content.remove_item (item);
-            }
+        start_point = Graphene.Point () {
+            x = x,
+            y = y
+        };
+
+        if (selection != null && !selection.start (start_point)) {
+            content.commit_selection ();
+            selection = null;
         }
     }
 
     public override void motion (Content content, float x, float y, Graphene.Point[] backlog) {
-        var point = new Point (x, y);
+        current_point = Graphene.Point () {
+            x = x,
+            y = y
+        };
 
-        if (start_point == null) {
-            start_point = point;
-        } else {
-            current_point = point;
+        if (selection != null) {
+            selection.motion (content, current_point);
         }
 
         changed ();
@@ -32,12 +37,12 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
     public override void commit (Content content, float x, float y) {
         if (selection == null) {
             select_items_in_rectangle (content);
-        } else {
-            move_selection (content);
         }
 
         start_point = null;
         current_point = null;
+
+        changed ();
     }
 
     private void select_items_in_rectangle (Content content) {
@@ -47,33 +52,24 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
 
         var rect = get_selection_rectangle ();
 
-        selection = content.get_items_intersecting_rect (rect);
-    }
+        var items = content.get_items_intersecting_rect (rect);
 
-    private void move_selection (Content content) {
-        if (selection == null || start_point == null || current_point == null) {
+        if (items.is_empty) {
             return;
         }
 
-        var delta = Graphene.Point () {
-            x = current_point.x - start_point.x,
-            y = current_point.y - start_point.y
-        };
+        content.select_items (items);
 
-        var transform = new Gsk.Transform ().translate (delta);
+        var bounds = content.get_item_bounds (items);
 
-        foreach (var item in selection) {
-            content.add_item (item.copy_transformed (transform));
-        }
-
-        selection = null;
+        selection = new SelectionManager (bounds);
     }
 
     public override void snapshot_transformed (Gtk.Snapshot snapshot) {
         if (selection == null) {
             snapshot_selection_rectangle (snapshot);
         } else {
-            snapshot_transformed_selection (snapshot);
+            selection.snapshot (snapshot);
         }
     }
 
@@ -110,29 +106,5 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
                 height = (current_point.y - start_point.y).abs ()
             }
         };
-    }
-
-    private void snapshot_transformed_selection (Gtk.Snapshot snapshot) {
-        if (start_point == null || current_point == null || selection == null) {
-            return;
-        }
-
-        snapshot.save ();
-        snapshot.transform (build_transform ());
-
-        foreach (var item in selection) {
-            item.snapshot (snapshot);
-        }
-
-        snapshot.restore ();
-    }
-
-    private Gsk.Transform build_transform () {
-        var point = Graphene.Point () {
-            x = current_point.x - start_point.x,
-            y = current_point.y - start_point.y
-        };
-
-        return new Gsk.Transform ().translate (point);
     }
 }

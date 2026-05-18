@@ -12,6 +12,8 @@ internal class Quicknote.ItemStore : Object {
     private HashTable<int, Item> items;
     private HashTable<Item, int> item_ids;
 
+    private Selection selection;
+
     public ItemStore (Database database) {
         Object (database: database);
     }
@@ -19,6 +21,8 @@ internal class Quicknote.ItemStore : Object {
     construct {
         items = new HashTable<int, Item> (null, null);
         item_ids = new HashTable<Item, int> (null, null);
+
+        selection = new Selection ();
     }
 
     private Item get_item (int id) throws Error {
@@ -102,5 +106,30 @@ internal class Quicknote.ItemStore : Object {
         }
 
         return result;
+    }
+
+    public void select (Gee.Collection<Item> items) {
+        selection.select (items);
+    }
+
+    public void transform_selection (Gsk.Transform transform) {
+        selection.transform (transform);
+    }
+
+    public bool is_selected (Item item) {
+        return selection.is_item_selected (item);
+    }
+
+    public Gsk.Transform get_selection_transform () {
+        return selection.get_selection_transform ();
+    }
+
+    public void commit_selection () {
+        var transform = get_selection_transform ();
+        var items = selection.clear_selection ();
+        foreach (var item in items) {
+            remove (item);
+            add (item.copy_transformed (transform));
+        }
     }
 }

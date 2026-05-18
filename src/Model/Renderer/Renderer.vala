@@ -25,7 +25,14 @@ public class Quicknote.Renderer : Object {
         content.page_format.snapshot (snapshot, transformed_bounds);
 
         foreach (var item in content.get_items_intersecting_rect (transformed_bounds)) {
-            snapshot_item (snapshot, item);
+            if (content.is_item_selected (item)) {
+                snapshot.save ();
+                snapshot.transform (content.get_selection_transform ());
+                snapshot_item (snapshot, item);
+                snapshot.restore ();
+            } else {
+                snapshot_item (snapshot, item);
+            }
         }
 
         content.view_mode.pop_clip (snapshot);
