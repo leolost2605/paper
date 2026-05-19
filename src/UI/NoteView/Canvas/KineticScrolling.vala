@@ -12,6 +12,7 @@ public class Quicknote.KineticScrolling : Object {
 
     public int64 frame_time { get; construct; }
     public double position { get; construct set; }
+    public double delta { get; private set; }
     public double velocity { get; construct set; }
     public double decel_friction { get; construct; }
 
@@ -32,7 +33,11 @@ public class Quicknote.KineticScrolling : Object {
 
         var exp_part = Math.exp (-decel_friction * t);
 
-        position = c1 + c2 * exp_part;
+        var new_position = c1 + c2 * exp_part;
+
+        delta = new_position - position;
+
+        position = new_position;
         velocity = c2 * -decel_friction * exp_part;
     }
 }

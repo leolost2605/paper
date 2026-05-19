@@ -5,21 +5,15 @@
 
 public class Quicknote.DrawingArea : Granite.Bin {
     public ToolStore tool_store { private get; construct; }
-    public Renderer renderer { private get; construct; }
+    public ToolSelection tool_selection { private get; construct; }
+    public Engine engine { private get; construct; }
 
-    public Content? content { get; set; }
-
-    private ToolSelection tool_selection;
-
-    public DrawingArea (ToolStore tool_store, Renderer renderer) {
-        Object (tool_store: tool_store, renderer: renderer);
+    public DrawingArea (ToolStore tool_store, ToolSelection tool_selection, Engine engine) {
+        Object (tool_store: tool_store, tool_selection: tool_selection, engine: engine);
     }
 
     construct {
-        tool_selection = new ToolSelection (tool_store.tools);
-
-        var canvas = new Canvas (tool_selection, renderer);
-        bind_property ("content", canvas, "content", SYNC_CREATE);
+        var canvas = new Canvas (tool_selection, engine);
 
         var penbar = new Penbar (tool_store, tool_selection) {
             halign = START,

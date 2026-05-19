@@ -22,7 +22,9 @@ public class Quicknote.NoteView : Adw.NavigationPage {
 
             _current_note = value;
 
-            drawing_area.content = _current_note?.content;
+            if (_current_note != null) {
+                engine.load_content (_current_note.content);
+            }
 
             export_button.sensitive = _current_note != null;
             properties_button.sensitive = _current_note != null;
@@ -34,7 +36,8 @@ public class Quicknote.NoteView : Adw.NavigationPage {
     }
 
     private ToolStore tool_store;
-    private Renderer renderer;
+    private ToolSelection tool_selection;
+    private Engine engine;
 
     private Gtk.MenuButton export_button;
     private Gtk.Button properties_button;
@@ -46,8 +49,8 @@ public class Quicknote.NoteView : Adw.NavigationPage {
 
     construct {
         tool_store = new ToolStore ();
-
-        renderer = new Renderer ();
+        tool_selection = new ToolSelection (tool_store.tools);
+        engine = new Engine (tool_selection);
 
         var toggle_notes_list_button = new Gtk.ToggleButton () {
             icon_name = "folder",
@@ -79,7 +82,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         header_bar.pack_start (export_button);
         header_bar.pack_end (properties_button);
 
-        drawing_area = new DrawingArea (tool_store, renderer);
+        drawing_area = new DrawingArea (tool_store, tool_selection, engine);
 
         var notes_list = new NotesList (notebook);
         bind_property ("current-note", notes_list, "selected-note", SYNC_CREATE | BIDIRECTIONAL);
@@ -120,13 +123,21 @@ public class Quicknote.NoteView : Adw.NavigationPage {
             return;
         }
 
-        var exporter = new PdfExporter ((Gtk.Window) get_root (), renderer, current_note);
-
         try {
-            yield exporter.export ();
+            var file = yield select_location (current_note.display_name + ".pdf");
+            yield engine.export_pdf (file);
         } catch (Error e) {
             warning ("Failed to export note: %s", e.message);
         }
+    }
+
+    private async File? select_location (string initial_name) throws Error {
+        var dialog = new Gtk.FileDialog () {
+            title = _("Export Note"),
+            initial_name = initial_name,
+        };
+
+        return yield dialog.save ((Gtk.Window) get_root (), null);
     }
 
     private void on_open_properties () {

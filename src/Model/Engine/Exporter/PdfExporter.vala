@@ -5,20 +5,14 @@
 
 public class Quicknote.PdfExporter : Exporter {
     public Renderer renderer { get; construct; }
-    public Note note { get; construct; }
+    public Content content { get; construct; }
 
-    public PdfExporter (Gtk.Window window, Renderer renderer, Note note) {
-        Object (parent_window: window, renderer: renderer, note: note);
+    public PdfExporter (Renderer renderer, Content content) {
+        Object (renderer: renderer, content: content);
     }
 
-    public async override void export () throws Error {
-        var file = yield select_location (note.display_name + ".pdf");
-
-        if (file == null) {
-            return;
-        }
-
-        var pages = note.content.calculate_pages ();
+    public async override void export (File file) throws Error {
+        var pages = content.calculate_pages ();
 
         var page_size = pages[0].bounds.size;
 
@@ -28,7 +22,7 @@ public class Quicknote.PdfExporter : Exporter {
         foreach (var page in pages) {
             var snapshot = new Gtk.Snapshot ();
 
-            renderer.snapshot_page (note.content, snapshot, page);
+            renderer.snapshot_page (content, snapshot, page);
             var node = snapshot.to_node ();
 
             node.draw (context);

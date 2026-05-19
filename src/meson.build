@@ -2,6 +2,7 @@ files = [
     'Application.vala',
     'Model' / 'Notebook.vala',
     'Model' / 'NotebookManager.vala',
+    'Model' / 'Engine' / 'Engine.vala',
     'Model' / 'Engine' / 'Viewport.vala',
     'Model' / 'Engine' / 'Content' / 'Background.vala',
     'Model' / 'Engine' / 'Content' / 'Content.vala',

@@ -4,16 +4,5 @@
 */
 
 public abstract class Quicknote.Exporter : Object {
-    public Gtk.Window parent_window { get; construct; }
-
-    public async abstract void export () throws Error;
-
-    protected async File? select_location (string initial_name) throws Error {
-        var dialog = new Gtk.FileDialog () {
-            title = _("Export Note"),
-            initial_name = initial_name,
-        };
-
-        return yield dialog.save (parent_window, null);
-    }
+    public async abstract void export (File file) throws Error;
 }
