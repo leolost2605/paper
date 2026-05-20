@@ -4,32 +4,38 @@
  */
 
 public class Quicknote.Eraser : Quicknote.Tool {
-    private Point? last_point;
+    public float radius { get; set; default = 4.0f; }
 
     public override void start (Content content, float x, float y) {
         // Nothing to do here
     }
 
     public override void motion (Content content, float x, float y, Graphene.Point[] backlog) {
-        var point = new Point (x, y);
-
-        if (last_point == null) {
-            last_point = point;
-            return;
+        foreach (var point in backlog) {
+            remove_close_items (content, point.x, point.y);
         }
 
-        var line = new Line ({ point, last_point });
+        remove_close_items (content, x, y);
+    }
 
-        var hit = content.get_items_intersecting_line (line);
+    private void remove_close_items (Content content, float x, float y) {
+        var candidates = get_candidates (content, x, y);
+        var point = Graphene.Point ().init (x, y);
 
-        foreach (var item in hit) {
-            content.remove_item (item);
+        foreach (var candidate in candidates) {
+            if (candidate.is_near (point, radius)) {
+                content.remove_item (candidate);
+            }
         }
+    }
 
-        last_point = point;
+    private Gee.Collection<Item> get_candidates (Content content, float x, float y) {
+        var bounds = Graphene.Rect ().init (x - radius, y - radius, radius * 2, radius * 2);
+
+        return content.get_items_intersecting_rect (bounds);
     }
 
     public override void commit (Content content, float x, float y) {
-        last_point = null;
+        // Nothing to do here
     }
 }

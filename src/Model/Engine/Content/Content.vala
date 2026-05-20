@@ -47,10 +47,6 @@ public class Quicknote.Content : Object {
         return items.get_intersecting_rect (rect);
     }
 
-    public Gee.Collection<Item> get_items_intersecting_line (Line line) {
-        return items.get_intersecting_line (line);
-    }
-
     public void add_item (Item item) {
         items.add (item);
         emit_changed ();

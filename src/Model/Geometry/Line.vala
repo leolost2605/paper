@@ -34,6 +34,29 @@ public class Quicknote.Line : Object {
         return path_builder.to_path ();
     }
 
+    public bool is_near (Graphene.Point point, float epsilon) {
+        for (int i = 0; i < points.size - 1; i++) {
+            var p1 = Graphene.Point ().init (points[i].x, points[i].y);
+            var p2 = Graphene.Point ().init (points[i + 1].x, points[i + 1].y);
+
+            if (point_to_segment_distance (point, p1, p2) <= epsilon) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private float point_to_segment_distance (Graphene.Point p, Graphene.Point v, Graphene.Point w) {
+        float l2 = (w.x - v.x) * (w.x - v.x) + (w.y - v.y) * (w.y - v.y);
+        if (l2 == 0) {
+            return p.distance (v, null, null); // v == w case
+        }
+
+        float t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+        t = float.max (0, float.min (1, t));
+        return p.distance (Graphene.Point () { x = v.x + t * (w.x - v.x), y = v.y + t * (w.y - v.y) }, null, null);
+    }
+
     public bool intersects (Line other) {
         for (int i = 0; i < points.size - 1; i++) {
             var p1 = points[i];

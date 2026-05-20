@@ -40,8 +40,8 @@ public class Quicknote.Stroke : Item {
         return bounds;
     }
 
-    public override bool intersects (Line line) {
-        return this.line.intersects (line);
+    public override bool is_near (Graphene.Point point, float epsilon) {
+        return this.line.is_near (point, epsilon);
     }
 
     public override Item copy_transformed (Gsk.Transform transform) {

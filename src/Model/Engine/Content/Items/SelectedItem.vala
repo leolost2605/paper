@@ -38,8 +38,9 @@ public class Quicknote.SelectedItem : Item {
         return item.get_bounds ();
     }
 
-    public override bool intersects (Line line) {
-        return item.intersects (line);
+    public override bool is_near (Graphene.Point point, float epsilon) {
+        var transformed = transform.transform_point (point);
+        return item.is_near (transformed, epsilon);
     }
 
     public override Item copy_transformed (Gsk.Transform transform) {

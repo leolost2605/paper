@@ -103,18 +103,6 @@ internal class Quicknote.ItemStore : Object {
         return results;
     }
 
-    public Gee.Collection<Item> get_intersecting_line (Line line) {
-        var result = new Gee.ArrayList<Item> ();
-
-        foreach (var item in get_intersecting_rect (line.bounds)) {
-            if (item.intersects (line)) {
-                result.add (item);
-            }
-        }
-
-        return result;
-    }
-
     public void select (Gee.Collection<Item> items) {
         selection.select (items);
     }
