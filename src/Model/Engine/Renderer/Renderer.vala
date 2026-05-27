@@ -23,6 +23,7 @@ public class Quicknote.Renderer : Object {
 
         content.pattern.snapshot (snapshot, transformed_bounds);
         content.page_format.snapshot (snapshot, transformed_bounds);
+        content.origin_indicator.snapshot (snapshot, transformed_bounds);
 
         foreach (var item in content.get_items_intersecting_rect (transformed_bounds)) {
             snapshot_item (snapshot, item);

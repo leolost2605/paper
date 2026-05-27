@@ -11,10 +11,11 @@ public class Quicknote.Content : Object {
 
     public Database database { get; construct; }
 
-    public ViewMode view_mode { get; construct set; }
-    public Background background { get; construct set; }
-    public Pattern pattern { get; construct set; }
-    public PageFormat page_format { get; construct set; }
+    public ViewMode view_mode { get; private set; }
+    public Background background { get; private set; }
+    public Pattern pattern { get; private set; }
+    public PageFormat page_format { get; private set; }
+    public OriginIndicator origin_indicator { get; private set; }
 
     private ItemStore items;
 
@@ -31,6 +32,9 @@ public class Quicknote.Content : Object {
 
         page_format = new PageFormat ();
         page_format.notify.connect (emit_changed);
+
+        origin_indicator = new OriginIndicator (database);
+        origin_indicator.notify.connect (emit_changed);
 
         items = new ItemStore (database);
     }

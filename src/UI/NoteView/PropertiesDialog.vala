@@ -142,6 +142,22 @@ public class Quicknote.PropertiesDialog : Gtk.Window {
         pattern_box.append (pattern_header_grid);
         pattern_box.append (pattern_revealer);
 
+        var origin_indicator_label = new Granite.HeaderLabel (_("Show Origin Indicator")) {
+            secondary_text = _("Show a small indicator at the origin of the note."),
+            hexpand = true
+        };
+
+        var origin_indicator_switch = new Gtk.Switch () {
+            valign = CENTER
+        };
+        content.origin_indicator.bind_property ("active", origin_indicator_switch, "active", SYNC_CREATE | BIDIRECTIONAL);
+        content.origin_indicator.bind_property ("active", origin_indicator_switch, "state", SYNC_CREATE);
+
+        var origin_indicator_grid = new Gtk.Grid ();
+        origin_indicator_grid.add_css_class ("preferences-grid");
+        origin_indicator_grid.attach (origin_indicator_label, 0, 0);
+        origin_indicator_grid.attach (origin_indicator_switch, 1, 0);
+
         var main_box = new Granite.Box (VERTICAL, DOUBLE) {
             margin_start = 12,
             margin_end = 12,
@@ -151,6 +167,7 @@ public class Quicknote.PropertiesDialog : Gtk.Window {
         main_box.append (page_format_box);
         main_box.append (view_mode_grid);
         main_box.append (pattern_box);
+        main_box.append (origin_indicator_grid);
 
         var scrolled_window = new Gtk.ScrolledWindow () {
             child = main_box,

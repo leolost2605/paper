@@ -23,6 +23,11 @@ public class Quicknote.Database : Object {
             color_a REAL
         );
 
+        CREATE TABLE IF NOT EXISTS origin_indicator (
+            id INTEGER PRIMARY KEY,
+            active INTEGER
+        );
+
         CREATE TABLE IF NOT EXISTS note_item (
             id INTEGER PRIMARY KEY,
             type TEXT,
@@ -68,6 +73,21 @@ public class Quicknote.Database : Object {
             color_g=excluded.color_g,
             color_b=excluded.color_b,
             color_a=excluded.color_a
+    """;
+
+    private const string HAS_ORIGIN_INDICATOR_QUERY = "SELECT COUNT(*) FROM origin_indicator WHERE id = 0";
+
+    private const string GET_ORIGIN_INDICATOR_QUERY = """
+        SELECT active
+        FROM origin_indicator
+        WHERE id = 0
+    """;
+
+    private const string SET_ORIGIN_INDICATOR_QUERY = """
+        INSERT INTO origin_indicator (id, active)
+        VALUES (0, ?)
+        ON CONFLICT(id) DO UPDATE SET
+            active=excluded.active
     """;
 
     private const string ALL_ITEMS_QUERY = "SELECT id FROM note_item";
@@ -205,6 +225,51 @@ public class Quicknote.Database : Object {
 
         if (stmt.step () != Sqlite.DONE) {
             throw new IOError.FAILED ("Failed to set pattern: %s".printf (db.errmsg ()));
+        }
+    }
+
+    public bool has_origin_indicator () throws Error {
+        Sqlite.Statement stmt;
+        var ec = db.prepare_v2 (HAS_ORIGIN_INDICATOR_QUERY, HAS_ORIGIN_INDICATOR_QUERY.length, out stmt);
+
+        if (ec != Sqlite.OK) {
+            throw new IOError.FAILED ("Failed to prepare statement: %s".printf (db.errmsg ()));
+        }
+
+        if (stmt.step () != Sqlite.ROW) {
+            throw new IOError.FAILED ("Failed to check for origin indicator: %s".printf (db.errmsg ()));
+        }
+
+        return stmt.column_int (0) > 0;
+    }
+
+    public void get_origin_indicator (out bool active) throws Error {
+        Sqlite.Statement stmt;
+        var ec = db.prepare_v2 (GET_ORIGIN_INDICATOR_QUERY, GET_ORIGIN_INDICATOR_QUERY.length, out stmt);
+
+        if (ec != Sqlite.OK) {
+            throw new IOError.FAILED ("Failed to prepare statement: %s".printf (db.errmsg ()));
+        }
+
+        if (stmt.step () != Sqlite.ROW) {
+            throw new IOError.FAILED ("Failed to get origin indicator: %s".printf (db.errmsg ()));
+        }
+
+        active = stmt.column_int (0) != 0;
+    }
+
+    public void set_origin_indicator (bool active) throws Error {
+        Sqlite.Statement stmt;
+        var ec = db.prepare_v2 (SET_ORIGIN_INDICATOR_QUERY, SET_ORIGIN_INDICATOR_QUERY.length, out stmt);
+
+        if (ec != Sqlite.OK) {
+            throw new IOError.FAILED ("Failed to prepare statement: %s".printf (db.errmsg ()));
+        }
+
+        stmt.bind_int (1, active ? 1 : 0);
+
+        if (stmt.step () != Sqlite.DONE) {
+            throw new IOError.FAILED ("Failed to set origin indicator: %s".printf (db.errmsg ()));
         }
     }
 

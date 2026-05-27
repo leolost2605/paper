@@ -7,6 +7,7 @@ files = [
     'Model' / 'Engine' / 'Content' / 'Background.vala',
     'Model' / 'Engine' / 'Content' / 'Content.vala',
     'Model' / 'Engine' / 'Content' / 'Item.vala',
+    'Model' / 'Engine' / 'Content' / 'OriginIndicator.vala',
     'Model' / 'Engine' / 'Content' / 'Page.vala',
     'Model' / 'Engine' / 'Content' / 'PageFormat.vala',
     'Model' / 'Engine' / 'Content' / 'Pattern.vala',
