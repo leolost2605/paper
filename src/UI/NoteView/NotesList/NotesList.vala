@@ -95,11 +95,20 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         };
         create_folder_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
 
+        var main_menu = new Menu ();
+
+        var menu_button = new Gtk.MenuButton () {
+            icon_name = "open-menu",
+            menu_model = main_menu
+        };
+        menu_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
+
         var header_bar = new Adw.HeaderBar () {
             show_title = false
         };
         header_bar.pack_start (create_note_button);
         header_bar.pack_start (create_folder_button);
+        header_bar.pack_end (menu_button);
 
         var toolbar_view = new Adw.ToolbarView () {
             content = scrolled_window,
