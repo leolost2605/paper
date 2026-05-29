@@ -21,6 +21,9 @@ public class Quicknote.Canvas : Granite.Bin {
         move_handler = new MoveHandler (picture, engine);
 
         child = picture;
-        set_cursor (new Gdk.Cursor.from_name ("none", null));
+
+        var texture = Gdk.Texture.from_resource ("/io/github/leolost2605/quicknote/cursor-dot-small");
+        var cursor = new Gdk.Cursor.from_texture (texture, 32, 32, null);
+        set_cursor (cursor);
     }
 }
