@@ -50,7 +50,7 @@ public class Quicknote.Renderer : Object {
             snapshot_item (snapshot, item);
         }
 
-        snapshot.pop (); /* page.bounds */
+        snapshot.pop (); /* clip page.bounds */
 
         snapshot.restore ();
     }

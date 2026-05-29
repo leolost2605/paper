@@ -43,10 +43,6 @@ public class Quicknote.Content : Object {
         changed ();
     }
 
-    public Gee.Collection<Item> get_all_items () {
-        return items.get_all ();
-    }
-
     public Gee.Collection<Item> get_items_intersecting_rect (Graphene.Rect rect) {
         return items.get_intersecting_rect (rect);
     }
@@ -62,19 +58,9 @@ public class Quicknote.Content : Object {
     }
 
     public Gee.List<Page> calculate_pages () {
-        var full_bounds = calculate_full_bounds ();
+        var all_items = items.get_all ();
+        var full_bounds = get_item_bounds (all_items);
         return page_format.calculate_pages (full_bounds);
-    }
-
-    private Graphene.Rect calculate_full_bounds () {
-        var items = get_all_items ();
-
-        Graphene.Rect full_bounds = { { 0, 0 }, { 0, 0} };
-        foreach (var item in items) {
-            full_bounds = full_bounds.union (item.get_bounds ());
-        }
-
-        return full_bounds;
     }
 
     public Graphene.Rect get_item_bounds (Gee.Collection<Item> items) requires (!items.is_empty) {

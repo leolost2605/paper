@@ -15,6 +15,6 @@ public class Quicknote.Page : Object {
             x = bounds.origin.x,
             y = bounds.origin.y
         };
-        return new Gsk.Transform ().translate (point);
+        return new Gsk.Transform ().translate (point).invert ();
     }
 }
