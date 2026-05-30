@@ -17,6 +17,9 @@ public class Quicknote.InputHandler : Object {
     }
 
     construct {
+        var legacy = new Gtk.EventControllerLegacy ();
+        legacy.event.connect (on_legacy_event);
+
         stylus_gesture = new Gtk.GestureStylus () {
             stylus_only = false
         };
@@ -24,7 +27,19 @@ public class Quicknote.InputHandler : Object {
         stylus_gesture.motion.connect (on_motion);
         stylus_gesture.up.connect (on_up);
         stylus_gesture.proximity.connect (on_proximity);
+
+        target.add_controller (legacy);
         target.add_controller (stylus_gesture);
+    }
+
+    private bool on_legacy_event (Gdk.Event event) {
+        if (event.get_event_type () == BUTTON_PRESS || event.get_event_type () == BUTTON_RELEASE) {
+            var button_event = (Gdk.ButtonEvent) event;
+            var button = button_event.get_button ();
+            warning ("Button in legacy: %u", button);
+        }
+
+        return false;
     }
 
     private Graphene.Point get_point (double x, double y) {
