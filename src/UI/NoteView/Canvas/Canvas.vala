@@ -15,15 +15,16 @@ public class Quicknote.Canvas : Granite.Bin {
     }
 
     construct {
-        var picture = new Gtk.Picture.for_paintable (engine);
+        var texture = Gdk.Texture.from_resource ("/io/github/leolost2605/quicknote/cursor-dot-small");
+        var drawing_cursor = new Gdk.Cursor.from_texture (texture, 32, 32, null);
+
+        var picture = new Gtk.Picture.for_paintable (engine) {
+            cursor = drawing_cursor
+        };
 
         input_handler = new InputHandler (picture, tool_selection, engine);
         move_handler = new MoveHandler (picture, engine);
 
         child = picture;
-
-        var texture = Gdk.Texture.from_resource ("/io/github/leolost2605/quicknote/cursor-dot-small");
-        var cursor = new Gdk.Cursor.from_texture (texture, 32, 32, null);
-        set_cursor (cursor);
     }
 }
