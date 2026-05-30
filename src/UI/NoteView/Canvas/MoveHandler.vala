@@ -41,13 +41,16 @@ public class Quicknote.MoveHandler : Object {
         zoom_gesture.begin.connect (on_zoom_begin);
         zoom_gesture.scale_changed.connect (on_zoom);
 
+        /* Need to add zoom gesture first otherwise drag will claim all events */
+        target.add_controller (zoom_gesture);
         target.add_controller (drag_gesture);
         target.add_controller (swipe_gesture);
         target.add_controller (scroll_controller);
-        target.add_controller (zoom_gesture);
     }
 
     private void on_drag_begin (Gtk.GestureDrag drag, double x, double y) {
+        drag.set_state (CLAIMED);
+
         last_x = 0;
         last_y = 0;
         stop_kinetic ();
