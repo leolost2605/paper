@@ -6,10 +6,26 @@
 public class Quicknote.Directory : FileBase {
     public FileModel children { get; construct; }
 
+    public bool expanded {
+        get { return expanded_directories.contains (uri) && expanded_directories[uri]; }
+        set {
+            expanded_directories[uri] = value;
+            settings.set_value ("expanded-directories", expanded_directories);
+        }
+    }
+
+    private static Settings settings;
+    private static HashTable<string, bool> expanded_directories;
+
     private FileMonitor? monitor;
 
     public Directory (File file, FileInfo info) {
         Object (file: file, info: info);
+    }
+
+    static construct {
+        settings = new Settings ("io.github.leolost2605.quicknote");
+        expanded_directories = (HashTable<string, bool>) settings.get_value ("expanded-directories");
     }
 
     construct {

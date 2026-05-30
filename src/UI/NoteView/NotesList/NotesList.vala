@@ -148,6 +148,10 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         var file = (FileBase) tree_row.item;
         file.load ();
 
+        if (file is Directory) {
+            file.bind_property ("expanded", tree_row, "expanded", SYNC_CREATE | BIDIRECTIONAL);
+        }
+
         var notes_list_item = (NotesListItem) item.child;
         notes_list_item.row = tree_row;
     }

@@ -21,5 +21,10 @@
       <summary>List of notebooks.</summary>
       <description>A list of uris to the root folders of notebooks.</description>
     </key>
+    <key name="expanded-directories" type="a{sb}">
+      <default>[]</default>
+      <summary>List of expanded directories.</summary>
+      <description>A list of uris to the directories that are currently expanded.</description>
+    </key>
   </schema>
 </schemalist>
