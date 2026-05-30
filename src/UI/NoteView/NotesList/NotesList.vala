@@ -13,9 +13,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
 
     public Notebook notebook { get; construct; }
 
-    public Note? selected_note { get; set; }
-
-    private FileBase? selected_file { get { return (selection_model.selected_item as Gtk.TreeListRow)?.item as FileBase; } }
+    public FileBase? selected_file { get { return (FileBase?) ((Gtk.TreeListRow?) selection_model.selected_item)?.item; } }
 
     private Gtk.SingleSelection selection_model;
     private OperationManager operation_manager;
@@ -31,44 +29,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         selection_model = new Gtk.SingleSelection (tree_model) {
             autoselect = true
         };
-        bind_property (
-            "selected-note", selection_model, "selected", SYNC_CREATE | BIDIRECTIONAL,
-            (binding, from_val, ref to_val) => {
-                var note = (Note?) from_val.get_object ();
-
-                if (note == null) {
-                    to_val.set_uint (Gtk.INVALID_LIST_POSITION);
-                    return true;
-                }
-
-                for (uint i = 0; i < tree_model.n_items; i++) {
-                    var row = (Gtk.TreeListRow) tree_model.get_item (i);
-
-                    if (row.item == note) {
-                        to_val.set_uint (i);
-                        return true;
-                    }
-                }
-
-                return false;
-            }, (binding, from_val, ref to_val) => {
-                var index = from_val.get_uint ();
-
-                if (index == Gtk.INVALID_LIST_POSITION) {
-                    to_val.set_object (null);
-                    return true;
-                }
-
-                var row = (Gtk.TreeListRow) tree_model.get_item (index);
-
-                if (row.item is Note) {
-                    to_val.set_object ((Note) row.item);
-                    return true;
-                }
-
-                return false;
-            }
-        );
+        selection_model.selection_changed.connect (on_selection_changed);
 
         var factory = new Gtk.SignalListItemFactory ();
         factory.setup.connect (on_setup);
@@ -135,6 +96,10 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         action_group.add_action (delete_action);
         action_group.add_action (rename_action);
         insert_action_group (ACTION_GROUP_NAME, action_group);
+    }
+
+    private void on_selection_changed () {
+        notify_property ("selected-file");
     }
 
     private ListModel? create_child_model_func (Object item) {
@@ -242,7 +207,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         }
 
         var message_dialog = new Granite.MessageDialog (
-            _("Delete “%s”?").printf (selected_note.display_name),
+            _("Delete “%s”?").printf (selected_file.display_name),
             _("This can't be undone"),
             new ThemedIcon ("edit-delete"),
             NONE

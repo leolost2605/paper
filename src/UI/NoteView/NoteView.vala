@@ -13,26 +13,8 @@ public class Quicknote.NoteView : Adw.NavigationPage {
     public Notebook notebook { get; construct; }
 
     private Note? _current_note;
-    public Note? current_note {
+    private Note? current_note {
         get { return _current_note; }
-        set {
-            if (_current_note != null) {
-                _current_note.close ();
-            }
-
-            _current_note = value;
-
-            if (_current_note != null) {
-                engine.load_content (_current_note.content);
-            }
-
-            export_button.sensitive = _current_note != null;
-            properties_button.sensitive = _current_note != null;
-
-            if (_current_note != null) {
-                _current_note.open.begin ();
-            }
-        }
     }
 
     private ToolStore tool_store;
@@ -85,7 +67,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         drawing_area = new DrawingArea (tool_store, tool_selection, engine);
 
         var notes_list = new NotesList (notebook);
-        bind_property ("current-note", notes_list, "selected-note", SYNC_CREATE | BIDIRECTIONAL);
+        notes_list.notify["selected-file"].connect (on_selected_file_changed);
 
         var content_view = new Adw.ToolbarView () {
             content = drawing_area,
@@ -116,6 +98,31 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         action_group.add_action (export_pdf_action);
         action_group.add_action (open_properties_action);
         insert_action_group (ACTION_GROUP_PREFIX, action_group);
+    }
+
+    private void on_selected_file_changed (Object obj, ParamSpec pspec) {
+        var notes_list = (NotesList) obj;
+
+        if (!(notes_list.selected_file is Note)) {
+            return;
+        }
+
+        if (_current_note != null) {
+            _current_note.close ();
+        }
+
+        _current_note = (Note) notes_list.selected_file;
+
+        if (_current_note != null) {
+            engine.load_content (_current_note.content);
+        }
+
+        export_button.sensitive = _current_note != null;
+        properties_button.sensitive = _current_note != null;
+
+        if (_current_note != null) {
+            _current_note.open.begin ();
+        }
     }
 
     private async void on_export_pdf () {
