@@ -26,5 +26,10 @@
       <summary>List of expanded directories.</summary>
       <description>A list of uris to the directories that are currently expanded.</description>
     </key>
+    <key name="selected-notes-by-notebook" type="a{ss}">
+      <default>[]</default>
+      <summary>List of selected notes by notebook.</summary>
+      <description>A list of uris to the selected notes for each notebook.</description>
+    </key>
   </schema>
 </schemalist>

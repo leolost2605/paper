@@ -12,14 +12,39 @@ public class Quicknote.NoteView : Adw.NavigationPage {
 
     public Notebook notebook { get; construct; }
 
+    private static Settings settings;
+    private static HashTable<string, string> selected_notes_by_notebook;
+
     private Note? _current_note;
     private Note? current_note {
         get { return _current_note; }
+        set {
+            if (_current_note != null) {
+                _current_note.close ();
+            }
+
+            _current_note = value;
+
+            if (_current_note != null) {
+                selected_notes_by_notebook[notebook.uri] = _current_note.uri;
+                engine.load_content (_current_note.content);
+                _current_note.open.begin ();
+
+                if (_current_note != notes_list.selected_file) {
+                    notes_list.selected_file = _current_note;
+                }
+            }
+
+            export_button.sensitive = _current_note != null;
+            properties_button.sensitive = _current_note != null;
+        }
     }
 
     private ToolStore tool_store;
     private ToolSelection tool_selection;
     private Engine engine;
+
+    private NotesList notes_list;
 
     private Gtk.MenuButton export_button;
     private Gtk.Button properties_button;
@@ -27,6 +52,11 @@ public class Quicknote.NoteView : Adw.NavigationPage {
 
     public NoteView (Notebook notebook) {
         Object (notebook: notebook);
+    }
+
+    static construct {
+        settings = new Settings ("io.github.leolost2605.quicknote");
+        selected_notes_by_notebook = (HashTable<string, string>) settings.get_value ("selected-notes-by-notebook");
     }
 
     construct {
@@ -66,7 +96,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
 
         drawing_area = new DrawingArea (tool_store, tool_selection, engine);
 
-        var notes_list = new NotesList (notebook);
+        notes_list = new NotesList (notebook);
         notes_list.notify["selected-file"].connect (on_selected_file_changed);
 
         var content_view = new Adw.ToolbarView () {
@@ -98,6 +128,8 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         action_group.add_action (export_pdf_action);
         action_group.add_action (open_properties_action);
         insert_action_group (ACTION_GROUP_PREFIX, action_group);
+
+        open_last_note.begin ();
     }
 
     private void on_selected_file_changed (Object obj, ParamSpec pspec) {
@@ -107,22 +139,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
             return;
         }
 
-        if (_current_note != null) {
-            _current_note.close ();
-        }
-
-        _current_note = (Note) notes_list.selected_file;
-
-        if (_current_note != null) {
-            engine.load_content (_current_note.content);
-        }
-
-        export_button.sensitive = _current_note != null;
-        properties_button.sensitive = _current_note != null;
-
-        if (_current_note != null) {
-            _current_note.open.begin ();
-        }
+        current_note = (Note) notes_list.selected_file;
     }
 
     private async void on_export_pdf () {
@@ -156,5 +173,19 @@ public class Quicknote.NoteView : Adw.NavigationPage {
             transient_for = (Gtk.Window) get_root (),
         };
         dialog.present ();
+    }
+
+    private async void open_last_note () {
+        if (!selected_notes_by_notebook.contains (notebook.uri)) {
+            return;
+        }
+
+        var uri = selected_notes_by_notebook[notebook.uri];
+
+        var note = yield FileBase.get_for_uri (uri);
+
+        if (note is Note) {
+            current_note = (Note) note;
+        }
     }
 }

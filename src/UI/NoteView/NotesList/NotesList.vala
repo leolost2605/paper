@@ -13,7 +13,21 @@ public class Quicknote.NotesList : Adw.NavigationPage {
 
     public Notebook notebook { get; construct; }
 
-    public FileBase? selected_file { get { return (FileBase?) ((Gtk.TreeListRow?) selection_model.selected_item)?.item; } }
+    public FileBase? selected_file {
+        get { return (FileBase?) ((Gtk.TreeListRow?) selection_model.selected_item)?.item; }
+        set {
+            for (uint i = 0; i < selection_model.n_items; i++) {
+                var row = (Gtk.TreeListRow) selection_model.get_item (i);
+
+                if ((FileBase) row.item == value) {
+                    selection_model.selected = i;
+                    return;
+                }
+            }
+
+            selection_model.unselect_all ();
+        }
+    }
 
     private Gtk.SingleSelection selection_model;
     private OperationManager operation_manager;
@@ -26,9 +40,7 @@ public class Quicknote.NotesList : Adw.NavigationPage {
         var sorted_children = create_sort_model (notebook.root.children);
         var tree_model = new Gtk.TreeListModel (sorted_children, false, false, create_child_model_func);
 
-        selection_model = new Gtk.SingleSelection (tree_model) {
-            autoselect = true
-        };
+        selection_model = new Gtk.SingleSelection (tree_model);
         selection_model.selection_changed.connect (on_selection_changed);
 
         var factory = new Gtk.SignalListItemFactory ();
