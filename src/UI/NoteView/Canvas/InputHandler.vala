@@ -21,7 +21,8 @@ public class Quicknote.InputHandler : Object {
         legacy.event.connect (on_legacy_event);
 
         stylus_gesture = new Gtk.GestureStylus () {
-            stylus_only = false
+            stylus_only = false,
+            button = 1
         };
         stylus_gesture.down.connect (on_down);
         stylus_gesture.motion.connect (on_motion);
