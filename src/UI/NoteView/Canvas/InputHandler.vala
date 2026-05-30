@@ -35,6 +35,14 @@ public class Quicknote.InputHandler : Object {
     }
 
     private void on_down (double x, double y) {
+        if (((Gdk.ButtonEvent) stylus_gesture.get_current_event ()).get_button () != 1) {
+            /* With styluses button 1 means touching the screen. However due to a bug in gtk
+               it will send up and down on any buttons press/release so also on other buttons like the
+               side buttons on the pen. However motion is only sent for button 1 so this early return is not
+               needed there */
+            return;
+        }
+
         stylus_gesture.set_state (CLAIMED);
         engine.start_event (get_point (x, y));
     }
@@ -56,6 +64,11 @@ public class Quicknote.InputHandler : Object {
     }
 
     private void on_up (double x, double y) {
+        if (((Gdk.ButtonEvent) stylus_gesture.get_current_event ()).get_button () != 1) {
+            /* See comment in on_down */
+            return;
+        }
+
         engine.commit_event (get_point (x, y));
     }
 
