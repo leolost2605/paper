@@ -91,8 +91,8 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         var header_bar = new Adw.HeaderBar ();
         header_bar.add_css_class (Granite.STYLE_CLASS_FLAT);
         header_bar.pack_start (toggle_notes_list_button);
-        header_bar.pack_start (export_button);
         header_bar.pack_end (properties_button);
+        header_bar.pack_end (export_button);
 
         drawing_area = new DrawingArea (tool_store, tool_selection, engine);
 
