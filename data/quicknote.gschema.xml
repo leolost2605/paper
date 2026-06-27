@@ -36,5 +36,10 @@
       <summary>List of tools by notebook IDs.</summary>
       <description>A list of tool IDs for each notebook.</description>
     </key>
+    <key name="viewport-by-state-ids" type="a{sv}">
+      <default>[]</default>
+      <summary>List of viewports by state IDs.</summary>
+      <description>A list of viewport states for each state ID.</description>
+    </key>
   </schema>
 </schemalist>

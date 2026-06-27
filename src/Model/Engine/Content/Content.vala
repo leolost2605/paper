@@ -11,6 +11,8 @@ public class Quicknote.Content : Object {
 
     public Database database { get; construct; }
 
+    public string id { get; private set; }
+
     public ViewMode view_mode { get; private set; }
     public Background background { get; private set; }
     public Pattern pattern { get; private set; }
@@ -24,6 +26,8 @@ public class Quicknote.Content : Object {
     }
 
     construct {
+        id = database.path;
+
         view_mode = new InfiniteViewMode ();
         background = new WhiteBackground ();
 

@@ -8,6 +8,48 @@ public class Quicknote.Viewport : Object {
     public float y { get; private set; default = 0.0f; }
     public float zoom { get; private set; default = 1.0f; }
 
+    private static Settings settings;
+    private static HashTable<string, Variant> viewport_by_state_ids;
+
+    private string? current_state_id;
+
+    static construct {
+        settings = new Settings ("io.github.leolost2605.quicknote");
+        viewport_by_state_ids = (HashTable<string, Variant>) settings.get_value ("viewport-by-state-ids");
+    }
+
+    construct {
+        notify.connect (on_notify);
+    }
+
+    private void on_notify () {
+        if (current_state_id == null) {
+            return;
+        }
+
+        viewport_by_state_ids[current_state_id] = new double[] { x, y, zoom };
+        settings.set_value ("viewport-by-state-ids", viewport_by_state_ids);
+    }
+
+    public void load_and_set_state_id (string state_id, Graphene.Size widget_size) {
+        current_state_id = state_id;
+
+        if (!viewport_by_state_ids.contains (state_id)) {
+            go_to_origin (widget_size);
+            return;
+        }
+
+        var viewport_state = (double[]) viewport_by_state_ids[state_id];
+
+        freeze_notify ();
+
+        x = (float) viewport_state[0];
+        y = (float) viewport_state[1];
+        zoom = (float) viewport_state[2];
+
+        thaw_notify ();
+    }
+
     public Gsk.Transform get_transform () {
         var point = Graphene.Point () {
             x = x,

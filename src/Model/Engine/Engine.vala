@@ -25,6 +25,8 @@ public class Quicknote.Engine : Object, Gdk.Paintable {
     public void load_content (Content content) {
         this.content = content;
 
+        viewport.load_and_set_state_id (content.id, last_snapshot_size);
+
         invalidate_contents ();
     }
 
