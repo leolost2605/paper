@@ -4,6 +4,10 @@
 */
 
 public class Quicknote.DrawingArea : Granite.Bin {
+    public const string ACTION_GROUP_PREFIX = "drawing-area";
+    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
+    public const string GO_TO_ORIGIN_ACTION = "go-to-origin";
+
     public ToolStore tool_store { private get; construct; }
     public ToolSelection tool_selection { private get; construct; }
     public Engine engine { private get; construct; }
@@ -26,5 +30,16 @@ public class Quicknote.DrawingArea : Granite.Bin {
         overlay.add_overlay (penbar);
 
         child = overlay;
+
+        var go_to_origin_action = new SimpleAction (GO_TO_ORIGIN_ACTION, null);
+        go_to_origin_action.activate.connect (go_to_origin);
+
+        var action_group = new SimpleActionGroup ();
+        action_group.add_action (go_to_origin_action);
+        insert_action_group (ACTION_GROUP_PREFIX, action_group);
+    }
+
+    private void go_to_origin () {
+        engine.go_to_origin ();
     }
 }

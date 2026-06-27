@@ -11,6 +11,8 @@ public class Quicknote.Engine : Object, Gdk.Paintable {
 
     private Content? content;
 
+    private Graphene.Size last_snapshot_size = { 0, 0 };
+
     public Engine (ToolSelection tool_selection) {
         Object (tool_selection: tool_selection);
     }
@@ -27,13 +29,11 @@ public class Quicknote.Engine : Object, Gdk.Paintable {
     }
 
     public void snapshot (Gdk.Snapshot snapshot, double width, double height) {
-        var size = Graphene.Size () {
-            width = (float) width,
-            height = (float) height,
-        };
+        last_snapshot_size.width = (float) width;
+        last_snapshot_size.height = (float) height;
 
         var bounds = Graphene.Rect () {
-            size = size
+            size = last_snapshot_size
         };
 
         renderer.snapshot (content, viewport, (Gtk.Snapshot) snapshot, bounds);
@@ -51,6 +51,12 @@ public class Quicknote.Engine : Object, Gdk.Paintable {
 
     public void zoom_view (float scale, Graphene.Point center) {
         viewport.zoom_with_center (scale, center);
+
+        invalidate_contents ();
+    }
+
+    public void go_to_origin () {
+        viewport.go_to_origin (last_snapshot_size);
 
         invalidate_contents ();
     }

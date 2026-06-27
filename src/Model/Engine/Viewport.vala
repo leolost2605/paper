@@ -41,4 +41,11 @@ public class Quicknote.Viewport : Object {
         x += diff.get_x ();
         y += diff.get_y ();
     }
+
+    public void go_to_origin (Graphene.Size widget_size) {
+        /* Since we reset zoom to 1.0f we can use widget_size without translation */
+        x = widget_size.width / 2.0f;
+        y = widget_size.height / 2.0f;
+        zoom = 1.0f;
+    }
 }

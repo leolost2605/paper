@@ -24,11 +24,18 @@ public class Quicknote.Penbar : Granite.Bin {
         menu.append (_("Eraser"), "penbar.add-eraser");
         menu.append (_("Select"), "penbar.add-select");
 
-        var popover = new Gtk.PopoverMenu.from_model (menu);
-
         var add_button = new Gtk.MenuButton () {
             icon_name = "list-add-symbolic",
-            popover = popover,
+            menu_model = menu,
+            direction = RIGHT
+        };
+
+        var misc_menu = new Menu ();
+        misc_menu.append (_("Go to Origin"), DrawingArea.ACTION_PREFIX + DrawingArea.GO_TO_ORIGIN_ACTION);
+
+        var misc_menu_button = new Gtk.MenuButton () {
+            icon_name = "open-menu-symbolic",
+            menu_model = misc_menu,
             direction = RIGHT
         };
 
@@ -37,6 +44,8 @@ public class Quicknote.Penbar : Granite.Bin {
         box.append (list_view);
         box.append (new Gtk.Separator (HORIZONTAL));
         box.append (add_button);
+        box.append (new Gtk.Separator (HORIZONTAL));
+        box.append (misc_menu_button);
 
         child = box;
         add_css_class ("penbar");
