@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.NotesListItem : Granite.ListItem {
+public class Quicknote.NotesListItem : Granite.Bin {
     public Gtk.SingleSelection selection { get; construct; }
 
     public Gtk.TreeListRow? row {
@@ -17,38 +17,32 @@ public class Quicknote.NotesListItem : Granite.ListItem {
 
             var file = (FileBase) value.item;
 
-            label.label = file.display_name;
+            list_item.text = file.display_name;
         }
     }
+
+    private Gtk.TreeExpander expander;
+    private Granite.ListItem list_item;
 
     public NotesListItem (Gtk.SingleSelection selection) {
         Object (selection: selection);
     }
 
-    private Gtk.TreeExpander expander;
-    private Gtk.Label label;
-
-    class construct {
-        set_css_name ("noteslistitem");
-    }
-
     construct {
-        label = new Gtk.Label (null) {
-            margin_start = 3,
-            ellipsize = END
-        };
-
-        expander = new Gtk.TreeExpander () {
-            child = label,
-        };
-
-        child = expander;
-
         var menu = new Menu ();
         menu.append (_("Delete"), NotesList.ACTION_PREFIX + NotesList.DELETE_ACTION);
         menu.append (_("Rename"), NotesList.ACTION_PREFIX + NotesList.RENAME_ACTION);
-
-        menu_model = menu;
         // TODO: Select item on menu popup
+
+        list_item = new Granite.ListItem () {
+            menu_model = menu,
+        };
+        ((Gtk.Label) list_item.child.get_first_child ()).ellipsize = END;
+
+        expander = new Gtk.TreeExpander () {
+            child = list_item,
+        };
+
+        child = expander;
     }
 }

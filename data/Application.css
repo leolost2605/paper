@@ -5,17 +5,11 @@ grid.preferences-grid {
 listview.navigation-sidebar {
     background: none;
     box-shadow: none;
-    margin: 0.5rem;
-}
-
-noteslistitem {
-    padding: 0.5rem;
-    min-width: 12rem;
 }
 
 listview.navigation-sidebar > row {
     padding: 0rem;
-    border-radius: 4px;
+    padding-left: 0.5rem;
 }
 
 listview.navigation-sidebar > row:active {
@@ -40,5 +34,3 @@ listview.navigation-sidebar > row:selected {
 .penbar {
     margin: 1rem;
 }
-
-
