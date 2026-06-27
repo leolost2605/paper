@@ -60,7 +60,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
     }
 
     construct {
-        tool_store = new ToolStore ();
+        tool_store = new ToolStore (notebook.uri);
         tool_selection = new ToolSelection (tool_store.tools);
         engine = new Engine (tool_selection);
 

@@ -84,14 +84,14 @@ public class Quicknote.Penbar : Granite.Bin {
     }
 
     private void add_pen () {
-        tool_store.add_tool (new Pen ());
+        tool_store.create_tool (typeof (Pen));
     }
 
     private void add_eraser () {
-        tool_store.add_tool (new Eraser ());
+        tool_store.create_tool (typeof (Eraser));
     }
 
     private void add_select () {
-        tool_store.add_tool (new RectangleSelector ());
+        tool_store.create_tool (typeof (RectangleSelector));
     }
 }

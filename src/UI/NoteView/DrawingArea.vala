@@ -26,9 +26,5 @@ public class Quicknote.DrawingArea : Granite.Bin {
         overlay.add_overlay (penbar);
 
         child = overlay;
-
-        tool_store.add_tool (new Pen ());
-        tool_store.add_tool (new Eraser ());
-        tool_store.add_tool (new RectangleSelector ());
     }
 }
