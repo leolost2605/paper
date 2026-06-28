@@ -12,6 +12,9 @@ public abstract class Quicknote.Tool : Object {
 
     public string id { get; construct; }
 
+    public virtual void activate (Content content) {}
+    public virtual void deactivate (Content content) {}
+
     public abstract void start (Content content, float x, float y);
     public abstract void motion (Content content, float x, float y, Graphene.Point[] backlog);
     public abstract void commit (Content content, float x, float y);

@@ -4,18 +4,13 @@
  */
 
 public class Quicknote.Engine : Object, Gdk.Paintable {
-    public ToolSelection tool_selection { private get; construct; }
-
     private Renderer renderer;
     private Viewport viewport;
 
     private Content? content;
+    private Tool? tool;
 
     private Graphene.Size last_snapshot_size = { 0, 0 };
-
-    public Engine (ToolSelection tool_selection) {
-        Object (tool_selection: tool_selection);
-    }
 
     construct {
         renderer = new Renderer ();
@@ -23,9 +18,31 @@ public class Quicknote.Engine : Object, Gdk.Paintable {
     }
 
     public void load_content (Content content) {
+        if (tool != null && this.content != null) {
+            tool.deactivate (this.content);
+        }
+
         this.content = content;
 
+        if (tool != null && this.content != null) {
+            tool.activate (this.content);
+        }
+
         viewport.load_and_set_state_id (content.id, last_snapshot_size);
+
+        invalidate_contents ();
+    }
+
+    public void load_tool (Tool? tool) {
+        if (this.tool != null && content != null) {
+            this.tool.deactivate (content);
+        }
+
+        this.tool = tool;
+
+        if (this.tool != null && content != null) {
+            this.tool.activate (content);
+        }
 
         invalidate_contents ();
     }
@@ -40,8 +57,8 @@ public class Quicknote.Engine : Object, Gdk.Paintable {
 
         renderer.snapshot (content, viewport, (Gtk.Snapshot) snapshot, bounds);
 
-        if (tool_selection.active_tool != null) {
-            renderer.snapshot_tool (tool_selection.active_tool, viewport, (Gtk.Snapshot) snapshot);
+        if (tool != null) {
+            renderer.snapshot_tool (tool, viewport, (Gtk.Snapshot) snapshot);
         }
     }
 
@@ -65,7 +82,7 @@ public class Quicknote.Engine : Object, Gdk.Paintable {
 
     public void start_event (Graphene.Point point) {
         var transformed = viewport.widget_to_content_coords (point);
-        tool_selection.active_tool?.start (content, transformed.x, transformed.y);
+        tool?.start (content, transformed.x, transformed.y);
 
         invalidate_contents ();
     }
@@ -78,14 +95,14 @@ public class Quicknote.Engine : Object, Gdk.Paintable {
             transformed_backlog[i] = viewport.widget_to_content_coords (backlog[i]);
         }
 
-        tool_selection.active_tool?.motion (content, transformed.x, transformed.y, transformed_backlog);
+        tool?.motion (content, transformed.x, transformed.y, transformed_backlog);
 
         invalidate_contents ();
     }
 
     public void commit_event (Graphene.Point point) {
         var transformed = viewport.widget_to_content_coords (point);
-        tool_selection.active_tool?.commit (content, transformed.x, transformed.y);
+        tool?.commit (content, transformed.x, transformed.y);
 
         invalidate_contents ();
     }

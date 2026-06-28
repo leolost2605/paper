@@ -9,6 +9,13 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
     private Graphene.Point? start_point;
     private Graphene.Point? current_point;
 
+    public override void deactivate (Content content) {
+        if (selection != null) {
+            content.commit_selection ();
+            selection = null;
+        }
+    }
+
     public override void start (Content content, float x, float y) {
         start_point = Graphene.Point () {
             x = x,

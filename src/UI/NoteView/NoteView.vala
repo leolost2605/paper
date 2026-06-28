@@ -60,9 +60,12 @@ public class Quicknote.NoteView : Adw.NavigationPage {
     }
 
     construct {
+        engine = new Engine ();
+
         tool_store = new ToolStore (notebook.uri);
         tool_selection = new ToolSelection (tool_store.tools);
-        engine = new Engine (tool_selection);
+        tool_selection.notify["active-tool"].connect (() => engine.load_tool (tool_selection.active_tool));
+        engine.load_tool (tool_selection.active_tool);
 
         var toggle_notes_list_button = new Gtk.ToggleButton () {
             icon_name = "folder",
