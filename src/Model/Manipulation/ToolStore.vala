@@ -79,7 +79,7 @@ public class Quicknote.ToolStore : Object {
         add_tool (tool);
     }
 
-    public void delete_tool (uint index) {
-        tool_store.remove (index);
+    public void delete_tool (uint position) {
+        tool_store.remove (position);
     }
 }

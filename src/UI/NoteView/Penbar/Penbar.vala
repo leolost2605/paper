@@ -60,10 +60,14 @@ public class Quicknote.Penbar : Granite.Bin {
         var add_select_action = new SimpleAction ("add-select", null);
         add_select_action.activate.connect (add_select);
 
+        var delete_tool_action = new SimpleAction ("delete-tool", VariantType.UINT32);
+        delete_tool_action.activate.connect (delete_tool);
+
         var action_group = new SimpleActionGroup ();
         action_group.add_action (add_pen_action);
         action_group.add_action (add_eraser_action);
         action_group.add_action (add_select_action);
+        action_group.add_action (delete_tool_action);
         insert_action_group ("penbar", action_group);
     }
 
@@ -73,7 +77,10 @@ public class Quicknote.Penbar : Granite.Bin {
         var tool = (Tool) list_item.item;
 
         if (tool is Pen) {
-            list_item.child = new PenButton ((Pen) tool);
+            var pen_button = new PenButton ((Pen) tool);
+            list_item.bind_property ("position", pen_button, "position", SYNC_CREATE);
+
+            list_item.child = pen_button;
             return;
         }
 
@@ -102,5 +109,10 @@ public class Quicknote.Penbar : Granite.Bin {
 
     private void add_select () {
         tool_store.create_tool (typeof (RectangleSelector));
+    }
+
+    private void delete_tool (SimpleAction action, Variant? param) {
+        var tool_pos = param.get_uint32 ();
+        tool_store.delete_tool (tool_pos);
     }
 }

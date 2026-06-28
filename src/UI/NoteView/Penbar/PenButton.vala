@@ -6,6 +6,8 @@
 public class Quicknote.PenButton : Granite.Bin {
     public Pen pen { get; construct; }
 
+    public uint position { get; set; }
+
     private PenPopover popover;
 
     public PenButton (Pen pen) {
@@ -19,12 +21,17 @@ public class Quicknote.PenButton : Granite.Bin {
 
         popover = new PenPopover (pen);
         popover.set_parent (this);
+        bind_property ("position", popover, "tool-position", SYNC_CREATE);
 
         var gesture_click = new Gtk.GestureClick () {
             button = Gdk.BUTTON_SECONDARY
         };
         gesture_click.released.connect (popover.popup);
         add_controller (gesture_click);
+
+        var gesture_long_press = new Gtk.GestureLongPress ();
+        gesture_long_press.pressed.connect (popover.popup);
+        add_controller (gesture_long_press);
     }
 
     ~PenButton () {
