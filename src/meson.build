@@ -55,6 +55,7 @@ files = [
     'UI' / 'NoteView' / 'NotesList' / 'NotesListItem.vala',
     'UI' / 'NoteView' / 'NotesList' / 'NotesList.vala',
     'UI' / 'NoteView' / 'NotesList' / 'RenameDialog.vala',
+    'UI' / 'NoteView' / 'Penbar' / 'ColorCircle.vala',
     'UI' / 'NoteView' / 'Penbar' / 'Penbar.vala',
     'UI' / 'NoteView' / 'Penbar' / 'PenButton.vala',
     'UI' / 'NoteView' / 'Penbar' / 'PenPopover.vala',

@@ -92,7 +92,7 @@ public class Quicknote.Penbar : Granite.Bin {
         }
 
         if (tool is RectangleSelector) {
-            list_item.child = new Gtk.Image.from_icon_name ("edit-select") {
+            list_item.child = new Gtk.Image.from_icon_name ("edit-select-all-symbolic") {
                 pixel_size = ICON_SIZE,
             };
             return;

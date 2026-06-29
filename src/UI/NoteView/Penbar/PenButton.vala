@@ -15,9 +15,11 @@ public class Quicknote.PenButton : Granite.Bin {
     }
 
     construct {
-        child = new Gtk.Image.from_icon_name ("edit") {
-            pixel_size = Penbar.ICON_SIZE,
+        child = new ColorCircle () {
+            width_request = Penbar.ICON_SIZE,
+            height_request = Penbar.ICON_SIZE,
         };
+        pen.bind_property ("color", child, "color", SYNC_CREATE);
 
         popover = new PenPopover (pen);
         popover.set_parent (this);

@@ -34,3 +34,7 @@ listview.navigation-sidebar > row:selected {
 .penbar {
     margin: 1rem;
 }
+
+colorcircle {
+    border-radius: 50%;
+}
