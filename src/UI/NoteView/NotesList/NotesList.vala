@@ -56,17 +56,19 @@ public class Quicknote.NotesList : Adw.NavigationPage {
             hscrollbar_policy = NEVER,
         };
 
+        var header_bar = new Adw.HeaderBar () {
+            show_title = false,
+        };
+
         var create_note_button = new Gtk.Button.from_icon_name ("document-new") {
             action_name = ACTION_PREFIX + CREATE_NOTE_ACTION,
             action_target = new Variant.maybe (VariantType.STRING, null)
         };
-        create_note_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
 
         var create_folder_button = new Gtk.Button.from_icon_name ("folder-new") {
             action_name = ACTION_PREFIX + CREATE_FOLDER_ACTION,
             action_target = new Variant.maybe (VariantType.STRING, null)
         };
-        create_folder_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
 
         var main_menu = new Menu ();
 
@@ -74,19 +76,18 @@ public class Quicknote.NotesList : Adw.NavigationPage {
             icon_name = "open-menu",
             menu_model = main_menu
         };
-        menu_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
 
-        var header_bar = new Adw.HeaderBar () {
-            show_title = false
-        };
-        header_bar.pack_start (create_note_button);
-        header_bar.pack_start (create_folder_button);
-        header_bar.pack_end (menu_button);
+        var action_bar = new Gtk.ActionBar ();
+        action_bar.pack_start (create_note_button);
+        action_bar.pack_start (create_folder_button);
+        action_bar.pack_end (menu_button);
 
         var toolbar_view = new Adw.ToolbarView () {
             content = scrolled_window,
+            bottom_bar_style = RAISED,
         };
         toolbar_view.add_top_bar (header_bar);
+        toolbar_view.add_bottom_bar (action_bar);
 
         child = toolbar_view;
         title = _("Notes");
