@@ -8,16 +8,13 @@
  * once selector is implemented.
  */
 public abstract class Quicknote.Tool : Object {
-    public signal void changed ();
-
     public string id { get; construct; }
 
     public virtual void activate (Content content) {}
     public virtual void deactivate (Content content) {}
 
-    public abstract void start (Content content, float x, float y);
-    public abstract void motion (Content content, float x, float y, Graphene.Point[] backlog);
-    public abstract void commit (Content content, float x, float y);
-    public virtual void cancel (Content content) {}
+    public abstract RenderFlags start (Content content, float x, float y);
+    public abstract RenderFlags motion (Content content, float x, float y, Graphene.Point[] backlog);
+    public abstract RenderFlags commit (Content content, float x, float y);
     public virtual void snapshot_transformed (Gtk.Snapshot snapshot) {}
 }

@@ -10,7 +10,7 @@ public class Quicknote.Pen : Quicknote.Tool {
     private Gee.ArrayList<Point>? points;
     private Gee.ArrayList<Gsk.RenderNode>? render_nodes;
 
-    public override void start (Content content, float x, float y) {
+    public override RenderFlags start (Content content, float x, float y) {
         points = new Gee.ArrayList<Point> ();
         points.add (new Point (x, y));
 
@@ -38,9 +38,11 @@ public class Quicknote.Pen : Quicknote.Tool {
         var node = snapshot.to_node ();
 
         render_nodes.add (node);
+
+        return TOOL_CHANGED;
     }
 
-    public override void motion (Content content, float x, float y, Graphene.Point[] backlog) {
+    public override RenderFlags motion (Content content, float x, float y, Graphene.Point[] backlog) {
         var last_point = points[points.size - 1];
 
         var path_builder = new Gsk.PathBuilder ();
@@ -65,10 +67,10 @@ public class Quicknote.Pen : Quicknote.Tool {
 
         render_nodes.add (node);
 
-        changed ();
+        return TOOL_CHANGED;
     }
 
-    public override void commit (Content content, float x, float y) {
+    public override RenderFlags commit (Content content, float x, float y) {
         points.add (new Point (x, y));
 
         var stroke = new Stroke (new Line (points.to_array ()), width, color);
@@ -77,6 +79,8 @@ public class Quicknote.Pen : Quicknote.Tool {
 
         points = null;
         render_nodes = null;
+
+        return TOOL_CHANGED | STROKES_CHANGED;
     }
 
     public override void snapshot_transformed (Gtk.Snapshot snapshot) {

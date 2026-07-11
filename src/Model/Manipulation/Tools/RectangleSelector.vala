@@ -16,7 +16,7 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
         }
     }
 
-    public override void start (Content content, float x, float y) {
+    public override RenderFlags start (Content content, float x, float y) {
         start_point = Graphene.Point () {
             x = x,
             y = y
@@ -25,23 +25,29 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
         if (selection != null && !selection.start (start_point)) {
             content.commit_selection ();
             selection = null;
+            return STROKES_CHANGED;
         }
+
+        return NONE;
     }
 
-    public override void motion (Content content, float x, float y, Graphene.Point[] backlog) {
+    public override RenderFlags motion (Content content, float x, float y, Graphene.Point[] backlog) {
         current_point = Graphene.Point () {
             x = x,
             y = y
         };
 
+        RenderFlags flags = TOOL_CHANGED;
+
         if (selection != null) {
             selection.motion (content, current_point);
+            flags |= STROKES_CHANGED;
         }
 
-        changed ();
+        return flags;
     }
 
-    public override void commit (Content content, float x, float y) {
+    public override RenderFlags commit (Content content, float x, float y) {
         if (selection == null) {
             select_items_in_rectangle (content);
         }
@@ -49,7 +55,7 @@ public class Quicknote.RectangleSelector : Quicknote.Tool {
         start_point = null;
         current_point = null;
 
-        changed ();
+        return TOOL_CHANGED | STROKES_CHANGED;
     }
 
     private void select_items_in_rectangle (Content content) {
