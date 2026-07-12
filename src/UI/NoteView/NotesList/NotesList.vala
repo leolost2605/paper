@@ -56,9 +56,18 @@ public class Quicknote.NotesList : Adw.NavigationPage {
             hscrollbar_policy = NEVER,
         };
 
+        var main_menu = new Menu ();
+
+        var menu_button = new Gtk.MenuButton () {
+            icon_name = "open-menu",
+            menu_model = main_menu
+        };
+        menu_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
+
         var header_bar = new Adw.HeaderBar () {
             show_title = false,
         };
+        header_bar.pack_end (menu_button);
 
         var create_note_button = new Gtk.Button.from_icon_name ("document-new") {
             action_name = ACTION_PREFIX + CREATE_NOTE_ACTION,
@@ -70,17 +79,9 @@ public class Quicknote.NotesList : Adw.NavigationPage {
             action_target = new Variant.maybe (VariantType.STRING, null)
         };
 
-        var main_menu = new Menu ();
-
-        var menu_button = new Gtk.MenuButton () {
-            icon_name = "open-menu",
-            menu_model = main_menu
-        };
-
         var action_bar = new Gtk.ActionBar ();
         action_bar.pack_start (create_note_button);
         action_bar.pack_start (create_folder_button);
-        action_bar.pack_end (menu_button);
 
         var toolbar_view = new Adw.ToolbarView () {
             content = scrolled_window,
