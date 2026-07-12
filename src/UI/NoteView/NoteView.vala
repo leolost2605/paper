@@ -21,6 +21,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         set {
             if (_current_note != null) {
                 _current_note.close ();
+                title_binding.unbind ();
             }
 
             _current_note = value;
@@ -33,6 +34,8 @@ public class Quicknote.NoteView : Adw.NavigationPage {
                 if (_current_note != notes_list.selected_file) {
                     notes_list.selected_file = _current_note;
                 }
+
+                title_binding = _current_note.bind_property ("display-name", this, "title", SYNC_CREATE);
             }
 
             export_button.sensitive = _current_note != null;
@@ -49,6 +52,8 @@ public class Quicknote.NoteView : Adw.NavigationPage {
     private Gtk.MenuButton export_button;
     private Gtk.Button properties_button;
     private DrawingArea drawing_area;
+
+    private Binding? title_binding;
 
     public NoteView (Notebook notebook) {
         Object (notebook: notebook);
@@ -116,7 +121,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
         split_view.bind_property ("show-sidebar", header_bar, "show-back-button", SYNC_CREATE | INVERT_BOOLEAN);
 
         child = split_view;
-        notebook.bind_property ("name", this, "title", SYNC_CREATE);
+        title = _("No open note");
 
         var show_noteslist_action = new PropertyAction (SHOW_NOTESLIST_ACTION, split_view, "show-sidebar");
 
