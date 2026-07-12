@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.WelcomeView : Adw.NavigationPage {
+public class Paper.WelcomeView : Adw.NavigationPage {
     public NotebookManager notebook_manager { get; construct; }
 
     public WelcomeView (NotebookManager notebook_manager) {

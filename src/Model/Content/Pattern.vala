@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.Pattern : Object {
+public class Paper.Pattern : Object {
     public enum Style {
         GRID,
     }

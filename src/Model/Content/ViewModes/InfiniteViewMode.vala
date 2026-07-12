@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.InfiniteViewMode : ViewMode {
+public class Paper.InfiniteViewMode : ViewMode {
     public override void push_clip (Gtk.Snapshot snapshot, Graphene.Rect bounds, PageFormat? page_format) {
         /* We don't want to clip anything in infinite view mode so no op */
     }

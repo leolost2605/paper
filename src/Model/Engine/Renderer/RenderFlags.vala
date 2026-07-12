@@ -4,7 +4,7 @@
  */
 
 [Flags]
-public enum Quicknote.RenderFlags {
+public enum Paper.RenderFlags {
     NONE,
     TOOL_CHANGED,
     ZOOM_CHANGED,

@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.InputHandler : Object {
+public class Paper.InputHandler : Object {
     public Gtk.Widget target { private get; construct; }
     public ToolSelection tool_selection { private get; construct; }
     public Engine engine { private get; construct; }

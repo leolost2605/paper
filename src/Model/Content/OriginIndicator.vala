@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.OriginIndicator : Object {
+public class Paper.OriginIndicator : Object {
     public Database database { private get; construct; }
 
     public bool active { get; set; default = true; }

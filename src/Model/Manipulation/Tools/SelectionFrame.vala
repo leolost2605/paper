@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.SelectionFrame : Object {
+public class Paper.SelectionFrame : Object {
     public Graphene.Rect item_bounds { get; construct; }
 
     public SelectionFrame (Graphene.Rect item_bounds) {

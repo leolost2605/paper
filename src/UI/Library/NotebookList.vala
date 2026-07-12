@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.NotebookList : Granite.Bin {
+public class Paper.NotebookList : Granite.Bin {
     public ListModel notebooks { get; construct; }
 
     private Gtk.MultiSelection selection_model;

@@ -6,7 +6,7 @@
 /**
  * Wrapper around the database for caching and some convenience methods.
  */
-internal class Quicknote.ItemStore : Object {
+internal class Paper.ItemStore : Object {
     public Database database { get; construct; }
 
     private HashTable<int, Item> items;

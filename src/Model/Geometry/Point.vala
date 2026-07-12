@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.Point : Object {
+public class Paper.Point : Object {
     public float x { get; construct; }
     public float y { get; construct; }
 

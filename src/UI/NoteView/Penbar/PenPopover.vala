@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.PenPopover : Gtk.Popover {
+public class Paper.PenPopover : Gtk.Popover {
     public Pen pen { get; construct; }
 
     public uint32 tool_position { get; set; }

@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: {{YEAR}} {{DEVELOPER_NAME}} <{{DEVELOPER_EMAIL}}>
 */
 
-public class Quicknote.MainWindow : Adw.ApplicationWindow {
+public class Paper.MainWindow : Adw.ApplicationWindow {
     public const string ACTION_PREFIX = "win.";
     public const string CREATE_NOTEBOOK_ACTION = "create-notebook";
     public const string OPEN_NOTEBOOK_ACTION = "open-notebook";
@@ -16,14 +16,14 @@ public class Quicknote.MainWindow : Adw.ApplicationWindow {
             application: application,
             default_height: 300,
             default_width: 300,
-            icon_name: "io.github.leolost2605.quicknote",
+            icon_name: "io.github.leolost2605.paper",
             title: _("My App Name")
         );
     }
 
     static construct {
 		weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_for_display (Gdk.Display.get_default ());
-		default_theme.add_resource_path ("io/github/leolost2605/quicknote/");
+		default_theme.add_resource_path ("io/github/leolost2605/paper/");
 	}
 
     construct {

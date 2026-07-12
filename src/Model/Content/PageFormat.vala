@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.PageFormat : Object {
+public class Paper.PageFormat : Object {
     public bool active { get; construct set; default = false; }
 
     public float width { get; construct set; default = 100; }

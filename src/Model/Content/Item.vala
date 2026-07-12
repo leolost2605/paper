@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public abstract class Quicknote.Item : Object {
+public abstract class Paper.Item : Object {
     public abstract void snapshot (Gtk.Snapshot snapshot);
     public abstract void snapshot_selected (Gtk.Snapshot snapshot);
     public abstract Graphene.Rect get_bounds ();

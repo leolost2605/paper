@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.PropertiesDialog : Gtk.Window {
+public class Paper.PropertiesDialog : Gtk.Window {
     public Content content { get; construct; }
 
     public PropertiesDialog (Content content) {

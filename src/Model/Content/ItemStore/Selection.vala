@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.Selection : Object {
+public class Paper.Selection : Object {
     private Gee.HashMap<Item, SelectedItem> selected_items = new Gee.HashMap<Item, SelectedItem> ();
 
     public void select (Gee.Collection<Item> items) {

@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.ToolSelection : Object {
+public class Paper.ToolSelection : Object {
     public ListModel tool_store { private get; construct; }
     public Gtk.SingleSelection tools { get; private set; }
 

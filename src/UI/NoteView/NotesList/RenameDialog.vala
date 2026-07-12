@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.RenameDialog : Gtk.Window {
+public class Paper.RenameDialog : Gtk.Window {
     public FileBase file { get; construct; }
     public OperationManager operation_manager { get; construct; }
 

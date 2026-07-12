@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.Pen : Quicknote.Tool {
+public class Paper.Pen : Paper.Tool {
     public Gdk.RGBA color { get; set; default = { 0, 0, 0, 1 }; }
     public float width { get; set; default = 2.0f; }
 

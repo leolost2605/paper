@@ -13,7 +13,7 @@
  * Some properties are always valid (like of course the file, uri and also basename) while some
  * are only valid after the file has been loaded with {@link load}.
  */
-public abstract class Quicknote.FileBase : Object {
+public abstract class Paper.FileBase : Object {
     private static HashTable<string, unowned FileBase> known_files;
 
     public static void init () {

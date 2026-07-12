@@ -3,12 +3,12 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.Application : Gtk.Application {
+public class Paper.Application : Gtk.Application {
     private MainWindow main_window;
 
     public Application () {
         Object (
-            application_id: "io.github.leolost2605.quicknote",
+            application_id: "io.github.leolost2605.paper",
             flags: ApplicationFlags.FLAGS_NONE
         );
     }
@@ -45,7 +45,7 @@ public class Quicknote.Application : Gtk.Application {
         * Set maximize after height/width else window is min size on unmaximize
         * Bind maximize as SET else get get bad sizes
         */
-        var settings = new Settings ("io.github.leolost2605.quicknote");
+        var settings = new Settings ("io.github.leolost2605.paper");
         settings.bind ("window-height", main_window, "default-height", SettingsBindFlags.DEFAULT);
         settings.bind ("window-width", main_window, "default-width", SettingsBindFlags.DEFAULT);
 
@@ -57,7 +57,7 @@ public class Quicknote.Application : Gtk.Application {
 
         // Use Css
         var provider = new Gtk.CssProvider ();
-        provider.load_from_resource ("/io/github/leolost2605/quicknote/Application.css");
+        provider.load_from_resource ("/io/github/leolost2605/paper/Application.css");
 
         Gtk.StyleContext.add_provider_for_display (
             Gdk.Display.get_default (),

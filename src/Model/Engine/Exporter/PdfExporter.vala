@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.PdfExporter : Exporter {
+public class Paper.PdfExporter : Exporter {
     public Renderer renderer { get; construct; }
     public Content content { get; construct; }
 

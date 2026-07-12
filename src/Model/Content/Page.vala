@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.Page : Object {
+public class Paper.Page : Object {
     public Graphene.Rect bounds { get; construct; }
 
     public Page (Graphene.Rect bounds) {

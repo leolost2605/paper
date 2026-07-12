@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.Renderer : Object {
+public class Paper.Renderer : Object {
     private const RenderFlags TOOL_CHANGED_MASK = TOOL_CHANGED;
     private const RenderFlags CONTENT_CHANGED_MASK = ZOOM_CHANGED | TRANSLATION_CHANGED | STROKES_CHANGED;
 

@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.SelectionManager : Object {
+public class Paper.SelectionManager : Object {
     public enum Operation {
         TRANSLATE,
         RESIZE,

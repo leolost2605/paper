@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.OperationManager : Object {
+public class Paper.OperationManager : Object {
     public Gtk.SingleSelection selection_model { get; construct; }
 
     private string? uri_to_select = null;

@@ -1,6 +1,6 @@
 # project name and programming language
 project(
-  'io.github.leolost2605.quicknote',
+  'io.github.leolost2605.paper',
   'vala', 'c',
   version: '0.1'
 )
@@ -26,7 +26,7 @@ config_file = configure_file(
 
 gresource = gnome.compile_resources(
     'as-resources',
-    'data' / 'quicknote.gresource.xml',
+    'data' / 'paper.gresource.xml',
     source_dir: 'data',
     c_name: 'as'
 )

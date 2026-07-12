@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.ResizeNode : Object {
+public class Paper.ResizeNode : Object {
     public enum Position {
         TOP_LEFT,
         TOP_RIGHT,

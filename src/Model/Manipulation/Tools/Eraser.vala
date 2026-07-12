@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.Eraser : Quicknote.Tool {
+public class Paper.Eraser : Paper.Tool {
     public float radius { get; set; default = 4.0f; }
 
     public override RenderFlags start (Content content, float x, float y) {

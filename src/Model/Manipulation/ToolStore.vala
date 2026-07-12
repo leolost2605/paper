@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.ToolStore : Object {
+public class Paper.ToolStore : Object {
     public string notebook_id { private get; construct; }
 
     public ListModel tools { get { return tool_store; } }
@@ -22,7 +22,7 @@ public class Quicknote.ToolStore : Object {
         typeof (Eraser).ensure ();
         typeof (RectangleSelector).ensure ();
 
-        settings = new Settings ("io.github.leolost2605.quicknote");
+        settings = new Settings ("io.github.leolost2605.paper");
         tools_by_notebook_ids = (HashTable<string, Variant>) settings.get_value ("tools-by-notebook-ids");
     }
 

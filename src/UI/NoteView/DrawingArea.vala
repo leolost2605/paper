@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.DrawingArea : Granite.Bin {
+public class Paper.DrawingArea : Granite.Bin {
     public const string ACTION_GROUP_PREFIX = "drawing-area";
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
     public const string GO_TO_ORIGIN_ACTION = "go-to-origin";

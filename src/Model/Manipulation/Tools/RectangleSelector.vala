@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.RectangleSelector : Quicknote.Tool {
+public class Paper.RectangleSelector : Paper.Tool {
     private SelectionManager? selection;
 
     private Graphene.Point? start_point;

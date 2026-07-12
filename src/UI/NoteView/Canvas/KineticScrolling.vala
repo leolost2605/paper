@@ -7,7 +7,7 @@
  * Adapted from GTK 4's kinetic scrolling implementation, see:
  * https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gtk/gtkkineticscrolling.c
  */
-public class Quicknote.KineticScrolling : Object {
+public class Paper.KineticScrolling : Object {
     private const double USEC_PER_SEC = 1000000.0;
 
     public int64 frame_time { get; construct; }

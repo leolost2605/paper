@@ -6,7 +6,7 @@
 /**
  * This is the facade of the note model.
  */
-public class Quicknote.Content : Object {
+public class Paper.Content : Object {
     public signal void changed ();
 
     public Database database { get; construct; }

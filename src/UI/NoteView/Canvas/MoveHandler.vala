@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.MoveHandler : Object {
+public class Paper.MoveHandler : Object {
     private const double FRICTION = 4.0;
 
     public Gtk.Widget target { get; construct; }

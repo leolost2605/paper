@@ -7,7 +7,7 @@
  * Wrapper around an item if it is currently selected for rendering purposes.
  * TODO: Let's see if the performance holds up
  */
-public class Quicknote.SelectedItem : Item {
+public class Paper.SelectedItem : Item {
     public const Gdk.RGBA SELECTION_COLOR = { 0.2f, 0.4f, 0.8f, 0.5f };
 
     public Item item { get; construct; }

@@ -2,10 +2,10 @@
 Version=1.0
 Type=Application
 
-Name=quicknote
+Name=paper
 Comment=Proves that we can use Vala and Gtk
 Categories=Development;Education;
 
-Icon=io.github.leolost2605.quicknote
-Exec=io.github.leolost2605.quicknote
+Icon=io.github.leolost2605.paper
+Exec=io.github.leolost2605.paper
 Terminal=false

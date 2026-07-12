@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.ColorCircle : Gtk.Widget {
+public class Paper.ColorCircle : Gtk.Widget {
     public Gdk.RGBA color { get; set; }
 
     class construct {

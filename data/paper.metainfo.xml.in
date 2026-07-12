@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>io.github.leolost2605.quicknote</id>
-  <launchable type="desktop-id">io.github.leolost2605.quicknote.desktop</launchable>
-  <translation type="gettext">io.github.leolost2605.quicknote</translation>
+  <id>io.github.leolost2605.paper</id>
+  <launchable type="desktop-id">io.github.leolost2605.paper.desktop</launchable>
+  <translation type="gettext">io.github.leolost2605.paper</translation>
   <metadata_license>CC-BY-4.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  
-  <name>quicknote</name>
+
+  <name>paper</name>
   <summary>Proves that we can use Vala and Gtk</summary>
   <description>
     <p>
@@ -23,7 +23,7 @@
   <content_rating type="oars-1.1" />
 
   <provides>
-    <binary>io.github.leolost2605.quicknote</binary>
+    <binary>io.github.leolost2605.paper</binary>
   </provides>
 
   <url type="homepage"></url>

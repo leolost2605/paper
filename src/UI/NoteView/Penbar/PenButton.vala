@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.PenButton : Granite.Bin {
+public class Paper.PenButton : Granite.Bin {
     public Pen pen { get; construct; }
 
     public uint position { get; set; }

@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.WhiteBackground : Background {
+public class Paper.WhiteBackground : Background {
     private static Gdk.RGBA color;
 
     static construct {

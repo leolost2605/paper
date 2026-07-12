@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.Viewport : Object {
+public class Paper.Viewport : Object {
     public float x { get; private set; default = 0.0f; }
     public float y { get; private set; default = 0.0f; }
     public float zoom { get; private set; default = 1.0f; }
@@ -14,7 +14,7 @@ public class Quicknote.Viewport : Object {
     private string? current_state_id;
 
     static construct {
-        settings = new Settings ("io.github.leolost2605.quicknote");
+        settings = new Settings ("io.github.leolost2605.paper");
         viewport_by_state_ids = (HashTable<string, Variant>) settings.get_value ("viewport-by-state-ids");
     }
 

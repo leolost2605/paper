@@ -3,8 +3,8 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.NotebookManager : Object {
-    private Settings settings = new Settings ("io.github.leolost2605.quicknote");
+public class Paper.NotebookManager : Object {
+    private Settings settings = new Settings ("io.github.leolost2605.paper");
 
     private ListStore notebook_store;
     public ListModel notebooks { get { return notebook_store; } }

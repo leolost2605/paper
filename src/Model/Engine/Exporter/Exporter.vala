@@ -3,6 +3,6 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public abstract class Quicknote.Exporter : Object {
+public abstract class Paper.Exporter : Object {
     public async abstract void export (File file) throws Error;
 }

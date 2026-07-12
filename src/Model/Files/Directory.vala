@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.Directory : FileBase {
+public class Paper.Directory : FileBase {
     public FileModel children { get; construct; }
 
     public bool expanded {
@@ -24,7 +24,7 @@ public class Quicknote.Directory : FileBase {
     }
 
     static construct {
-        settings = new Settings ("io.github.leolost2605.quicknote");
+        settings = new Settings ("io.github.leolost2605.paper");
         expanded_directories = (HashTable<string, bool>) settings.get_value ("expanded-directories");
     }
 

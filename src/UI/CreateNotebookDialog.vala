@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.CreateNotebookDialog : Gtk.Window {
+public class Paper.CreateNotebookDialog : Gtk.Window {
     public NotebookManager notebook_manager { get; construct; }
 
     private Gtk.Entry name_entry;

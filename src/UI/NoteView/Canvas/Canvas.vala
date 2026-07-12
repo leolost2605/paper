@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.Canvas : Granite.Bin {
+public class Paper.Canvas : Granite.Bin {
     public ToolSelection tool_selection { private get; construct; }
     public Engine engine { private get; construct; }
 
@@ -15,7 +15,7 @@ public class Quicknote.Canvas : Granite.Bin {
     }
 
     construct {
-        var texture = Gdk.Texture.from_resource ("/io/github/leolost2605/quicknote/cursor-dot-small");
+        var texture = Gdk.Texture.from_resource ("/io/github/leolost2605/paper/cursor-dot-small");
         var drawing_cursor = new Gdk.Cursor.from_texture (texture, 32, 32, null);
 
         var picture = new Gtk.Picture.for_paintable (engine) {

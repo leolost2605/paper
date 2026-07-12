@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.NoteView : Adw.NavigationPage {
+public class Paper.NoteView : Adw.NavigationPage {
     public const string ACTION_GROUP_PREFIX = "note-view";
     public const string ACTION_PREFIX = "note-view.";
     public const string SHOW_NOTESLIST_ACTION = "show-notes-list";
@@ -60,7 +60,7 @@ public class Quicknote.NoteView : Adw.NavigationPage {
     }
 
     static construct {
-        settings = new Settings ("io.github.leolost2605.quicknote");
+        settings = new Settings ("io.github.leolost2605.paper");
         selected_notes_by_notebook = (HashTable<string, string>) settings.get_value ("selected-notes-by-notebook");
     }
 

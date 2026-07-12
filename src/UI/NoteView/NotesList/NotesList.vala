@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.NotesList : Adw.NavigationPage {
+public class Paper.NotesList : Adw.NavigationPage {
     private const string ACTION_GROUP_NAME = "notes_list";
     public const string ACTION_PREFIX = "notes_list.";
     private const string CREATE_NOTE_ACTION = "create_note";

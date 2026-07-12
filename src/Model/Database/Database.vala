@@ -4,7 +4,7 @@
  */
 
 
-public class Quicknote.Database : Object {
+public class Paper.Database : Object {
     private const string SETUP_QUERY = """
         CREATE TABLE IF NOT EXISTS note (
             id INTEGER PRIMARY KEY,

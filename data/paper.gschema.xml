@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema path="/io/github/leolost2605/quicknote/" id="io.github.leolost2605.quicknote">
+  <schema path="/io/github/leolost2605/paper/" id="io.github.leolost2605.paper">
     <key name="window-height" type="i">
       <default>700</default>
       <summary>Most recent window height</summary>

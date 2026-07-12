@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.Penbar : Granite.Bin {
+public class Paper.Penbar : Granite.Bin {
     public const int ICON_SIZE = 32;
 
     public ToolStore tool_store { get; construct; }

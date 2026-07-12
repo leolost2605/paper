@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.Engine : Object, Gdk.Paintable {
+public class Paper.Engine : Object, Gdk.Paintable {
     private Renderer renderer;
     private Viewport viewport;
 

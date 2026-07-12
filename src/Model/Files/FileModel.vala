@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.FileModel : Object, ListModel {
+public class Paper.FileModel : Object, ListModel {
     public uint n_items { get; protected set; }
 
     private Gee.HashSet<string> uris;

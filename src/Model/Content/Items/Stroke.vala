@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.Stroke : Item {
+public class Paper.Stroke : Item {
     public Line line { get; construct; }
     public float width { get; construct; }
     public Gdk.RGBA color { get; construct; }

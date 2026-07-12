@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/io/github/leolost2605/quicknote/">
+  <gresource prefix="/io/github/leolost2605/paper/">
     <file alias="Application.css">Application.css</file>
     <file alias="cursor-dot-small">icons/cursor-dot-small.svg</file>
   </gresource>

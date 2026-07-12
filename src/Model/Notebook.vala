@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.Notebook : Object {
+public class Paper.Notebook : Object {
     public string uri { get; construct; }
 
     public Directory? root { get; private set; }

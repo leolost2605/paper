@@ -3,7 +3,7 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-public class Quicknote.NotesListItem : Granite.Bin {
+public class Paper.NotesListItem : Granite.Bin {
     public Gtk.SingleSelection selection { get; construct; }
 
     public Gtk.TreeListRow? row {

@@ -7,7 +7,7 @@
  * TODO: All of the logic here could also be in tool holder. Reevaluate requirements
  * once selector is implemented.
  */
-public abstract class Quicknote.Tool : Object {
+public abstract class Paper.Tool : Object {
     public string id { get; construct; }
 
     public virtual void activate (Content content) {}

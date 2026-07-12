@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Quicknote.Note : FileBase {
+public class Paper.Note : FileBase {
     public Content content { get; private set; }
 
     private Database database;
