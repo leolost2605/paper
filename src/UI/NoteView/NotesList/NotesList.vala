@@ -69,12 +69,12 @@ public class Paper.NotesList : Adw.NavigationPage {
         };
         header_bar.pack_end (menu_button);
 
-        var create_note_button = new Gtk.Button.from_icon_name ("document-new") {
+        var create_note_button = new Gtk.Button.from_icon_name ("document-new-symbolic") {
             action_name = ACTION_PREFIX + CREATE_NOTE_ACTION,
             action_target = new Variant.maybe (VariantType.STRING, null)
         };
 
-        var create_folder_button = new Gtk.Button.from_icon_name ("folder-new") {
+        var create_folder_button = new Gtk.Button.from_icon_name ("folder-new-symbolic") {
             action_name = ACTION_PREFIX + CREATE_FOLDER_ACTION,
             action_target = new Variant.maybe (VariantType.STRING, null)
         };
@@ -91,7 +91,7 @@ public class Paper.NotesList : Adw.NavigationPage {
         toolbar_view.add_bottom_bar (action_bar);
 
         child = toolbar_view;
-        title = _("Notes");
+        notebook.bind_property ("name", this, "title", SYNC_CREATE);
 
         operation_manager = new OperationManager (selection_model);
 
