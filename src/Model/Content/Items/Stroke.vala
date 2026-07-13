@@ -23,6 +23,13 @@ public class Paper.Stroke : Item {
 
         path = line.to_path ();
         path.get_bounds (out bounds);
+
+        /* We want the full extents of the rendered stroke to be within
+           the bounds so compensate for the width */
+        bounds.origin.x -= width;
+        bounds.origin.y -= width;
+        bounds.size.width += 2 * width;
+        bounds.size.height += 2 * width;
     }
 
     public override void snapshot (Gtk.Snapshot snapshot) {
