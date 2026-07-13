@@ -23,6 +23,7 @@ files = [
     'Model' / 'Engine' / 'Viewport.vala',
     'Model' / 'Engine' / 'Exporter' / 'Exporter.vala',
     'Model' / 'Engine' / 'Exporter' / 'PdfExporter.vala',
+    'Model' / 'Engine' / 'Renderer' / 'ItemRenderer.vala',
     'Model' / 'Engine' / 'Renderer' / 'Renderer.vala',
     'Model' / 'Engine' / 'Renderer' / 'RenderFlags.vala',
     'Model' / 'Files' / 'Directory.vala',

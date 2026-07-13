@@ -7,12 +7,15 @@ public class Paper.Renderer : Object {
     private const RenderFlags TOOL_CHANGED_MASK = TOOL_CHANGED;
     private const RenderFlags CONTENT_CHANGED_MASK = ZOOM_CHANGED | TRANSLATION_CHANGED | STROKES_CHANGED;
 
+    private ItemRenderer item_renderer;
+
     private HashTable<Item, Gsk.RenderNode> render_nodes;
 
     private Gsk.RenderNode? content_node;
     private Gsk.RenderNode? tool_node;
 
     construct {
+        item_renderer = new ItemRenderer ();
         render_nodes = new HashTable<Item, Gsk.RenderNode> (null, null);
     }
 
@@ -74,16 +77,10 @@ public class Paper.Renderer : Object {
 
     private void snapshot_item (Gtk.Snapshot snapshot, Item item) {
         if (!render_nodes.contains (item)) {
-            render_nodes[item] = create_render_node_for_item (item);
+            render_nodes[item] = item_renderer.render_item (item);
         }
 
         snapshot.append_node (render_nodes[item]);
-    }
-
-    private Gsk.RenderNode create_render_node_for_item (Item item) {
-        var snapshot = new Gtk.Snapshot ();
-        item.snapshot (snapshot);
-        return snapshot.to_node ();
     }
 
     // Currently completely separate from the content methods but we might want to optimize some stuff here
