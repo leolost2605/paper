@@ -7,16 +7,15 @@ public class Paper.Renderer : Object {
     private const RenderFlags TOOL_CHANGED_MASK = TOOL_CHANGED;
     private const RenderFlags CONTENT_CHANGED_MASK = ZOOM_CHANGED | TRANSLATION_CHANGED | STROKES_CHANGED;
 
+    private RenderNodeCache cache;
     private ItemRenderer item_renderer;
-
-    private HashTable<Item, Gsk.RenderNode> render_nodes;
 
     private Gsk.RenderNode? content_node;
     private Gsk.RenderNode? tool_node;
 
     construct {
+        cache = new RenderNodeCache ();
         item_renderer = new ItemRenderer ();
-        render_nodes = new HashTable<Item, Gsk.RenderNode> (null, null);
     }
 
     public void snapshot (Content content, Viewport viewport, Gtk.Snapshot snapshot, Graphene.Rect bounds, RenderFlags flags) {
@@ -29,6 +28,7 @@ public class Paper.Renderer : Object {
 
     private Gsk.RenderNode create_content_node (Content content, Viewport viewport, Graphene.Rect bounds) {
         var transform = viewport.get_transform ();
+        var scale = viewport.zoom;
 
         var snapshot = new Gtk.Snapshot ();
         snapshot.save ();
@@ -44,7 +44,7 @@ public class Paper.Renderer : Object {
         content.origin_indicator.snapshot (snapshot, transformed_bounds);
 
         foreach (var item in content.get_items_intersecting_rect (transformed_bounds)) {
-            snapshot_item (snapshot, item);
+            snapshot_item (snapshot, item, scale);
         }
 
         content.view_mode.pop_clip (snapshot);
@@ -67,7 +67,7 @@ public class Paper.Renderer : Object {
         content.page_format.snapshot (snapshot, page.bounds);
 
         foreach (var item in content.get_items_intersecting_rect (page.bounds)) {
-            snapshot_item (snapshot, item);
+            snapshot_item (snapshot, item, 1.0f);
         }
 
         snapshot.pop (); /* clip page.bounds */
@@ -75,12 +75,19 @@ public class Paper.Renderer : Object {
         snapshot.restore ();
     }
 
-    private void snapshot_item (Gtk.Snapshot snapshot, Item item) {
-        if (!render_nodes.contains (item)) {
-            render_nodes[item] = item_renderer.render_item (item);
+    private void snapshot_item (Gtk.Snapshot snapshot, Item item, float scale) {
+        var item_bounds = item.get_bounds ();
+
+        if (((int) (item_bounds.size.width * scale)) == 0 || ((int) (item_bounds.size.height * scale)) == 0) {
+            return;
         }
 
-        snapshot.append_node (render_nodes[item]);
+        if (!cache.has_node (item, scale)) {
+            var node = item_renderer.render_item (item, scale);
+            cache.cache_node (item, scale, node);
+        }
+
+        snapshot.append_node (cache.get_node (item, scale));
     }
 
     // Currently completely separate from the content methods but we might want to optimize some stuff here

@@ -26,6 +26,7 @@ files = [
     'Model' / 'Engine' / 'Renderer' / 'ItemRenderer.vala',
     'Model' / 'Engine' / 'Renderer' / 'Renderer.vala',
     'Model' / 'Engine' / 'Renderer' / 'RenderFlags.vala',
+    'Model' / 'Engine' / 'Renderer' / 'RenderNodeCache.vala',
     'Model' / 'Files' / 'Directory.vala',
     'Model' / 'Files' / 'FileBase.vala',
     'Model' / 'Files' / 'FileModel.vala',

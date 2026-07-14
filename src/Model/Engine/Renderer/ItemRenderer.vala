@@ -4,13 +4,18 @@
  */
 
 public class Paper.ItemRenderer : Object {
-    public Gsk.RenderNode render_item (Item item) {
+    public Gsk.RenderNode render_item (Item item, float scale) {
         var bounds = item.get_bounds ();
-        var surface = new Cairo.ImageSurface (ARGB32, (int) bounds.size.width, (int) bounds.size.height);
+        var scaled_width = (int) Math.ceilf (bounds.size.width * scale);
+        var scaled_height = (int) Math.ceilf (bounds.size.height * scale);
+
+        var surface = new Cairo.ImageSurface (ARGB32, scaled_width, scaled_height);
         var ctx = new Cairo.Context (surface);
 
         var snapshot = new Gtk.Snapshot ();
-        snapshot.transform (new Gsk.Transform ().translate (bounds.origin).invert ());
+        snapshot.translate ({ -bounds.origin.x * scale, -bounds.origin.y * scale });
+        snapshot.scale (scale, scale);
+
         item.snapshot (snapshot);
 
         var node = snapshot.free_to_node ();
@@ -25,7 +30,7 @@ public class Paper.ItemRenderer : Object {
         var mem_texture = new Gdk.MemoryTexture (surface.get_width (), surface.get_height (), B8G8R8A8, bytes, surface.get_stride ());
 
         var texture_node = new Gsk.TextureNode (mem_texture, bounds);
-        warning ("Created texture node");
+
         return texture_node;
     }
 }
