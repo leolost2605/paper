@@ -22,12 +22,18 @@ public class Paper.NotebookList : Granite.Bin {
         var list_view = new Gtk.ListView (selection_model, factory) {
             single_click_activate = true,
         };
+        list_view.add_css_class ("background");
         list_view.activate.connect (on_activate);
 
-        var scrolled_window = new Gtk.ScrolledWindow () {
+        var clamp = new Adw.ClampScrollable () {
             child = list_view,
+            maximum_size = 800,
+            tightening_threshold = 600,
+        };
+
+        var scrolled_window = new Gtk.ScrolledWindow () {
+            child = clamp,
             propagate_natural_height = true,
-            has_frame = true,
         };
 
         child = scrolled_window;
