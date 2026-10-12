@@ -5,7 +5,7 @@ template ListItem {
     child: Granite.ListItem {
         text: bind template.item as <$PaperNotebook>.name;
         description: bind template.item as <$PaperNotebook>.uri;
-        // menu_model: edit_menu; TODO: Seems this isn't in the API yet?
+        menu-model: edit_menu;
     };
 }
 
