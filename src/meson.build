@@ -46,7 +46,6 @@ files = [
     'UI' / 'CreateNotebookDialog.vala',
     'UI' / 'MainWindow.vala',
     'UI' / 'Library' / 'NotebookList.vala',
-    'UI' / 'Library' / 'NotebookListItem.vala',
     'UI' / 'Library' / 'WelcomeView.vala',
     'UI' / 'NoteView' / 'DrawingArea.vala',
     'UI' / 'NoteView' / 'NoteView.vala',

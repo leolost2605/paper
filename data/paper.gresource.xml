@@ -7,5 +7,6 @@
 
   <gresource prefix="/io/github/leolost2605/paper/">
     <file>ui/main-window.ui</file>
+    <file>ui/notebook-list-item.ui</file>
   </gresource>
 </gresources>
