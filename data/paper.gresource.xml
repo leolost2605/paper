@@ -9,5 +9,6 @@
     <file>ui/main-window.ui</file>
     <file>ui/notebook-list-item.ui</file>
     <file>ui/notebook-list.ui</file>
+    <file>ui/welcome-view.ui</file>
   </gresource>
 </gresources>

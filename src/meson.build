@@ -45,7 +45,6 @@ files = [
     'Model' / 'Manipulation' / 'Tools' / 'SelectionManager.vala',
     'UI' / 'CreateNotebookDialog.vala',
     'UI' / 'MainWindow.vala',
-    'UI' / 'Library' / 'NotebookList.vala',
     'UI' / 'Library' / 'WelcomeView.vala',
     'UI' / 'NoteView' / 'DrawingArea.vala',
     'UI' / 'NoteView' / 'NoteView.vala',
