@@ -24,13 +24,6 @@ config_file = configure_file(
     configuration: config_data
 )
 
-gresource = gnome.compile_resources(
-    'as-resources',
-    'data' / 'paper.gresource.xml',
-    source_dir: 'data',
-    c_name: 'as'
-)
-
 # List the dependencies we need
 deps = [
     dependency('granite-7'),
@@ -41,8 +34,8 @@ deps = [
     dependency('sqlite3'),
 ]
 
-subdir('src')
 subdir('data')
+subdir('src')
 subdir('po')
 
 gnome.post_install(

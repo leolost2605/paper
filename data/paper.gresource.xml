@@ -4,4 +4,8 @@
     <file alias="Application.css">Application.css</file>
     <file alias="cursor-dot-small">icons/cursor-dot-small.svg</file>
   </gresource>
+
+  <gresource prefix="/io/github/leolost2605/paper/">
+    <file>ui/main-window.ui</file>
+  </gresource>
 </gresources>

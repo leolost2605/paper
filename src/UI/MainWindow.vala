@@ -3,6 +3,7 @@
 * SPDX-FileCopyrightText: {{YEAR}} {{DEVELOPER_NAME}} <{{DEVELOPER_EMAIL}}>
 */
 
+[GtkTemplate (ui = "/io/github/leolost2605/paper/ui/main-window.ui")]
 public class Paper.MainWindow : Adw.ApplicationWindow {
     public const string ACTION_PREFIX = "win.";
     public const string CREATE_NOTEBOOK_ACTION = "create-notebook";
