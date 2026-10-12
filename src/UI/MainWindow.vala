@@ -10,7 +10,9 @@ public class Paper.MainWindow : Adw.ApplicationWindow {
     public const string OPEN_NOTEBOOK_ACTION = "open-notebook";
 
     private NotebookManager notebook_manager;
-    private Adw.NavigationView navigation_view;
+
+    [GtkChild]
+    private unowned Adw.NavigationView navigation_view;
 
     public MainWindow (Gtk.Application application) {
         Object (
@@ -25,15 +27,14 @@ public class Paper.MainWindow : Adw.ApplicationWindow {
     static construct {
 		weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_for_display (Gdk.Display.get_default ());
 		default_theme.add_resource_path ("io/github/leolost2605/paper/");
+
+        typeof (WelcomeView).ensure ();
 	}
 
     construct {
         notebook_manager = new NotebookManager ();
 
-        navigation_view = new Adw.NavigationView ();
         navigation_view.add (new WelcomeView (notebook_manager));
-
-        content = navigation_view;
 
         var create_notebook_action = new SimpleAction (CREATE_NOTEBOOK_ACTION, null);
         create_notebook_action.activate.connect (on_create_notebook);
