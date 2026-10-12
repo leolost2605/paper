@@ -1,48 +1,52 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $PaperWelcomeView : Adw.NavigationPage {
-    title: _("Home");
+template $PaperWelcomeView: Adw.NavigationPage {
+  title: _("Home");
 
-    Adw.ToolbarView {
-        bottom-bar-style: raised;
+  Adw.ToolbarView {
+    bottom-bar-style: raised;
 
-        Gtk.ScrolledWindow {
-            propagate-natural-height: true;
+    Gtk.ScrolledWindow {
+      propagate-natural-height: true;
 
-            Adw.ClampScrollable {
+      Adw.ClampScrollable {
+        Gtk.ListView {
+          single-click-activate: true;
 
-                Gtk.ListView {
-                    single-click-activate: true;
+          model: Gtk.MultiSelection {
+            model: bind template.notebook_manager as <$PaperNotebookManager>.notebooks;
+          };
 
-                    model: Gtk.MultiSelection {
-                        model: bind template.notebook_manager as <$PaperNotebookManager>.notebooks;
-                    };
+          factory: Gtk.BuilderListItemFactory {
+            resource: "/io/github/leolost2605/paper/ui/notebook-list-item.ui";
+          };
 
-                    factory: Gtk.BuilderListItemFactory {
-                        resource: "/io/github/leolost2605/paper/ui/notebook-list-item.ui";
-                    };
-
-                    activate => $on_activate();
-                }
-            }
+          activate => $on_activate();
         }
-
-        [top]
-        Adw.HeaderBar {
-            styles [ "flat" ]
-        }
-
-        [bottom]
-        Adw.Clamp {
-            Gtk.ActionBar {
-                [start]
-                Gtk.Button {
-                    label: _("New Notebook…");
-                    action-name: "win.create-notebook";
-                    styles [ "flat" ]
-                }
-            }
-        }
+      }
     }
+
+    [top]
+    Adw.HeaderBar {
+      styles [
+        "flat",
+      ]
+    }
+
+    [bottom]
+    Adw.Clamp {
+      Gtk.ActionBar {
+        [start]
+        Gtk.Button {
+          label: _("New Notebook…");
+          action-name: "win.create-notebook";
+
+          styles [
+            "flat",
+          ]
+        }
+      }
+    }
+  }
 }
