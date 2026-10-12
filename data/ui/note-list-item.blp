@@ -1,0 +1,21 @@
+using Gtk 4.0;
+using Granite 9.0;
+
+template ListItem {
+    child: Granite.ListItem {
+        menu-model: edit_menu;
+
+        Gtk.TreeExpander {
+            list-row: bind template.item as <Gtk.TreeListRow>;
+
+            Gtk.Label {
+                label: bind template.item as <Gtk.TreeListRow>.item as <$PaperFileBase>.display-name;
+            }
+        }
+    };
+}
+
+menu edit_menu {
+    item (_("Delete"), "notes_list.delete")
+    item (_("Rename"), "notes_list.rename")
+}

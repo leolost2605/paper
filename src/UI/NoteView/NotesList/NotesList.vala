@@ -43,10 +43,7 @@ public class Paper.NotesList : Adw.NavigationPage {
         selection_model = new Gtk.SingleSelection (tree_model);
         selection_model.selection_changed.connect (on_selection_changed);
 
-        var factory = new Gtk.SignalListItemFactory ();
-        factory.setup.connect (on_setup);
-        factory.bind.connect (on_bind);
-        factory.unbind.connect (on_unbind);
+        var factory = new Gtk.BuilderListItemFactory.from_resource (null, "/io/github/leolost2605/paper/ui/note-list-item.ui");
 
         var list_view = new Gtk.ListView (selection_model, factory);
         list_view.add_css_class ("navigation-sidebar");
@@ -148,37 +145,6 @@ public class Paper.NotesList : Adw.NavigationPage {
         } else {
             return 0;
         }
-    }
-
-    private void on_setup (Object obj) {
-        var item = (Gtk.ListItem) obj;
-        item.child = new NotesListItem (selection_model);
-    }
-
-    private void on_bind (Object obj) {
-        var item = (Gtk.ListItem) obj;
-        var tree_row = (Gtk.TreeListRow) item.item;
-
-        var file = (FileBase) tree_row.item;
-        file.load ();
-
-        if (file is Directory) {
-            file.bind_property ("expanded", tree_row, "expanded", SYNC_CREATE | BIDIRECTIONAL);
-        }
-
-        var notes_list_item = (NotesListItem) item.child;
-        notes_list_item.row = tree_row;
-    }
-
-    private void on_unbind (Object obj) {
-        var item = (Gtk.ListItem) obj;
-        var tree_row = (Gtk.TreeListRow) item.item;
-
-        var file = (FileBase) tree_row.item;
-        file.queue_unload ();
-
-        var notes_list_item = (NotesListItem) item.child;
-        notes_list_item.row = null;
     }
 
     private void create_new_note (Variant? param) requires (param != null) {

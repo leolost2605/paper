@@ -53,7 +53,6 @@ files = [
     'UI' / 'NoteView' / 'Canvas' / 'InputHandler.vala',
     'UI' / 'NoteView' / 'Canvas' / 'KineticScrolling.vala',
     'UI' / 'NoteView' / 'Canvas' / 'MoveHandler.vala',
-    'UI' / 'NoteView' / 'NotesList' / 'NotesListItem.vala',
     'UI' / 'NoteView' / 'NotesList' / 'NotesList.vala',
     'UI' / 'NoteView' / 'NotesList' / 'RenameDialog.vala',
     'UI' / 'NoteView' / 'Penbar' / 'ColorCircle.vala',
