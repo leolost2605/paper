@@ -17,13 +17,7 @@ public class Paper.MainWindow : Adw.ApplicationWindow {
     private NoteView note_view;
 
     public MainWindow (Gtk.Application application) {
-        Object (
-            application: application,
-            default_height: 300,
-            default_width: 300,
-            icon_name: "io.github.leolost2605.paper",
-            title: _("My App Name")
-        );
+        Object (application: application);
     }
 
     static construct {
