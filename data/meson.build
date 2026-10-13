@@ -4,6 +4,7 @@ blueprint_files = files(
     'ui' / 'note-list-item.blp',
     'ui' / 'note-view.blp',
     'ui' / 'notebook-list-item.blp',
+    'ui' / 'pen-list-item.blp',
 )
 
 blueprints = custom_target(

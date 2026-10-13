@@ -56,8 +56,7 @@ files = [
     'UI' / 'NoteView' / 'Canvas' / 'MoveHandler.vala',
     'UI' / 'NoteView' / 'Penbar' / 'ColorCircle.vala',
     'UI' / 'NoteView' / 'Penbar' / 'Penbar.vala',
-    'UI' / 'NoteView' / 'Penbar' / 'PenButton.vala',
-    'UI' / 'NoteView' / 'Penbar' / 'PenPopover.vala',
+    'UI' / 'NoteView' / 'Penbar' / 'PenListItem.vala',
 ]
 
 # Create a new executable, list the files we want to compile, and install
