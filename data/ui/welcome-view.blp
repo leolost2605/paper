@@ -4,54 +4,114 @@ using Adw 1;
 template $PaperWelcomeView: Adw.NavigationPage {
   title: _("Home");
 
-  Adw.ToolbarView {
-    bottom-bar-style: raised;
+  Adw.NavigationSplitView {
+    sidebar: Adw.NavigationPage {
+      title: _("Notebooks");
 
-    Gtk.ScrolledWindow {
-      propagate-natural-height: true;
+      Adw.ToolbarView {
+        bottom-bar-style: raised;
 
-      Adw.ClampScrollable {
-        Gtk.ListView {
-          single-click-activate: true;
-          valign: start;
+        Gtk.ScrolledWindow {
+          propagate-natural-height: true;
 
-          model: Gtk.MultiSelection {
-            model: bind template.notebook_manager as <$PaperNotebookManager>.notebooks;
-          };
+          Adw.ClampScrollable {
+            Gtk.ListView {
+              model: Gtk.SingleSelection notebook_selection {
+                model: bind template.notebook_manager as <$PaperNotebookManager>.notebooks;
+                autoselect: true;
+              };
 
-          factory: Gtk.BuilderListItemFactory {
-            resource: "/io/github/leolost2605/paper/ui/notebook-list-item.ui";
-          };
-
-          activate => $on_activate();
-
-          styles [
-            "card"
-          ]
+              factory: Gtk.BuilderListItemFactory {
+                resource: "/io/github/leolost2605/paper/ui/notebook-list-item.ui";
+              };
+            }
+          }
         }
-      }
-    }
 
-    [top]
-    Adw.HeaderBar {
-      styles [
-        "flat",
-      ]
-    }
-
-    [bottom]
-    Adw.Clamp {
-      Gtk.ActionBar {
-        [start]
-        Gtk.Button {
-          label: _("New Notebook…");
-          action-name: "win.create-notebook";
+        [top]
+        Adw.HeaderBar {
+          show-title: false;
 
           styles [
             "flat",
           ]
         }
+
+        [bottom]
+        Adw.Clamp {
+          Gtk.ActionBar {
+            [start]
+            Gtk.Button {
+              label: _("New Notebook…");
+              action-name: "win.create-notebook";
+
+              styles [
+                "flat",
+              ]
+            }
+          }
+        }
       }
-    }
+    };
+
+    content: Adw.NavigationPage {
+      title: bind notebook_selection.selected-item as <$PaperNotebook>.name;
+
+      Adw.ToolbarView {
+        bottom-bar-style: raised;
+
+        Gtk.ScrolledWindow {
+          propagate-natural-height: true;
+
+          Gtk.ListView {
+            activate => $on_activate();
+
+            single-click-activate: true;
+
+            model: Gtk.MultiSelection selection_model {
+              model: Gtk.SortListModel {
+                model: bind $create_tree_model(notebook_selection.selected-item as <$PaperNotebook>);
+
+                sorter: Gtk.TreeListRowSorter {
+                    sorter: Gtk.MultiSorter {
+                        Gtk.StringSorter {
+                            expression: expr item as <$PaperFileBase>.display-name;
+                        }
+                    };
+                };
+              };
+            };
+
+            factory: Gtk.BuilderListItemFactory {
+              resource: "/io/github/leolost2605/paper/ui/note-list-item.ui";
+            };
+
+            styles [
+              "background"
+            ]
+          }
+        }
+
+        [top]
+        Adw.HeaderBar { }
+
+        [bottom]
+        Gtk.ActionBar {
+          [start]
+          Gtk.Button {
+            icon-name: "document-new-symbolic";
+            action-name: "library.create-note";
+            action-target: "@ms nothing";
+          }
+
+          [start]
+          Gtk.Button {
+            icon-name: "folder-new-symbolic";
+            action-name: "library.create-folder";
+            action-target: "@ms nothing";
+          }
+        }
+      }
+    };
   }
 }

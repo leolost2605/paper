@@ -4,11 +4,11 @@
  */
 
 public class Paper.OperationManager : Object {
-    public Gtk.SingleSelection selection_model { get; construct; }
+    public Gtk.SelectionModel selection_model { get; construct; }
 
     private string? uri_to_select = null;
 
-    public OperationManager (Gtk.SingleSelection selection_model) {
+    public OperationManager (Gtk.SelectionModel selection_model) {
         Object (selection_model: selection_model);
     }
 
@@ -27,7 +27,7 @@ public class Paper.OperationManager : Object {
             var file_base = (FileBase) row.item;
 
             if (file_base.uri == uri_to_select) {
-                ((Gtk.SingleSelection) model).selected = i;
+                ((Gtk.SelectionModel) model).select_item (i, true);
                 uri_to_select = null;
                 break;
             }

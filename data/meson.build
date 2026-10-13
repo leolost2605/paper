@@ -1,8 +1,7 @@
 blueprint_files = files(
     'ui' / 'main-window.blp',
-    'ui' / 'notebook-list-item.blp',
-    'ui' / 'note-list.blp',
     'ui' / 'note-list-item.blp',
+    'ui' / 'notebook-list-item.blp',
     'ui' / 'welcome-view.blp',
 )
 

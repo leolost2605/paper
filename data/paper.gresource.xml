@@ -7,10 +7,8 @@
 
   <gresource prefix="/io/github/leolost2605/paper/">
     <file>ui/main-window.ui</file>
-    <file>ui/notebook-list-item.ui</file>
     <file>ui/note-list-item.ui</file>
-    <file>ui/note-list.ui</file>
-    <file>ui/notebook-list.ui</file>
+    <file>ui/notebook-list-item.ui</file>
     <file>ui/welcome-view.ui</file>
   </gresource>
 </gresources>
