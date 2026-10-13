@@ -1,0 +1,44 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PaperNoteView: Adw.NavigationPage {
+  title: bind template.current-note as <$PaperNote>.display-name;
+
+  Adw.ToolbarView toolbar_view {
+
+    [top]
+    Adw.HeaderBar {
+
+      [end]
+      Gtk.Button {
+        icon-name: "document-properties";
+        tooltip-text: _("Properties");
+        action-name: "note-view.open-properties";
+
+        styles [
+          "large-icons",
+        ]
+      }
+
+      [end]
+      Gtk.MenuButton {
+        icon-name: "document-export";
+        tooltip-text: _("Export");
+        menu-model: export_menu;
+
+        styles [
+          "large-icons",
+        ]
+      }
+    }
+
+    [top]
+    Gtk.Separator {
+      orientation: horizontal;
+    }
+  }
+}
+
+menu export_menu {
+  item (_("Export PDF"), "note-view.export-pdf")
+}
