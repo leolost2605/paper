@@ -3,8 +3,8 @@
 * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
 */
 
-[GtkTemplate (ui = "/io/github/leolost2605/paper/ui/welcome-view.ui")]
-public class Paper.WelcomeView : Adw.NavigationPage {
+[GtkTemplate (ui = "/io/github/leolost2605/paper/ui/library-view.ui")]
+public class Paper.LibraryView : Adw.NavigationPage {
     public NotebookManager notebook_manager { get; construct; }
 
     [GtkChild]
@@ -14,7 +14,7 @@ public class Paper.WelcomeView : Adw.NavigationPage {
 
     private OperationManager operation_manager;
 
-    public WelcomeView (NotebookManager notebook_manager) {
+    public LibraryView (NotebookManager notebook_manager) {
         Object (notebook_manager: notebook_manager);
     }
 

@@ -34,7 +34,7 @@ public class Paper.MainWindow : Adw.ApplicationWindow {
     construct {
         notebook_manager = new NotebookManager ();
 
-        navigation_view.add (new WelcomeView (notebook_manager));
+        navigation_view.add (new LibraryView (notebook_manager));
 
         note_view = new NoteView ();
 
