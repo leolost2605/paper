@@ -8,9 +8,9 @@ template ListItem {
         Gtk.TreeExpander {
             list-row: bind template.item as <Gtk.TreeListRow>;
 
-            Gtk.Label {
+            child: Gtk.Label {
                 label: bind template.item as <Gtk.TreeListRow>.item as <$PaperFileBase>.display-name;
-            }
+            };
         }
     };
 }

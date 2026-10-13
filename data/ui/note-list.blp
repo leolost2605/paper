@@ -1,0 +1,66 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PaperNotesList : Adw.NavigationPage {
+    title: bind template.notebook as <$PaperNotebook>.name;
+
+    Adw.ToolbarView {
+        bottom-bar-style: raised;
+
+        Gtk.ScrolledWindow {
+            hscrollbar-policy: never;
+
+            Gtk.ListView {
+                model: Gtk.SingleSelection selection_model {
+                    model: bind $create_tree_model(template.notebook);
+
+                    selection-changed => $on_selection_changed();
+                };
+
+                factory: Gtk.BuilderListItemFactory {
+                    resource: "/io/github/leolost2605/paper/ui/note-list-item.ui";
+                };
+
+                styles [
+                    "navigation-sidebar",
+                ]
+            }
+        }
+
+        [top]
+        Adw.HeaderBar {
+            show-title: false;
+
+            [end]
+            Gtk.MenuButton {
+                icon-name: "open-menu";
+                menu-model: main_menu;
+
+                styles [
+                    "large-icons",
+                ]
+            }
+        }
+
+        [bottom]
+        Gtk.ActionBar {
+            [start]
+            Gtk.Button {
+                icon-name: "document-new-symbolic";
+                action-name: "notes_list.create_note";
+                action-target: "@ms nothing";
+            }
+
+            [start]
+            Gtk.Button {
+                icon-name: "folder-new-symbolic";
+                action-name: "notes_list.create_folder";
+                action-target: "@ms nothing";
+            }
+        }
+    }
+}
+
+menu main_menu {
+    item (_("Test"), "test")
+}

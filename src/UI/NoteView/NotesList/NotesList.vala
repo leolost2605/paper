@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
+[GtkTemplate (ui = "/io/github/leolost2605/paper/ui/note-list.ui")]
 public class Paper.NotesList : Adw.NavigationPage {
     private const string ACTION_GROUP_NAME = "notes_list";
     public const string ACTION_PREFIX = "notes_list.";
@@ -29,7 +30,8 @@ public class Paper.NotesList : Adw.NavigationPage {
         }
     }
 
-    private Gtk.SingleSelection selection_model;
+    [GtkChild]
+    private unowned Gtk.SingleSelection selection_model;
     private OperationManager operation_manager;
 
     public NotesList (Notebook notebook) {
@@ -37,59 +39,6 @@ public class Paper.NotesList : Adw.NavigationPage {
     }
 
     construct {
-        var sorted_children = create_sort_model (notebook.root.children);
-        var tree_model = new Gtk.TreeListModel (sorted_children, false, false, create_child_model_func);
-
-        selection_model = new Gtk.SingleSelection (tree_model);
-        selection_model.selection_changed.connect (on_selection_changed);
-
-        var factory = new Gtk.BuilderListItemFactory.from_resource (null, "/io/github/leolost2605/paper/ui/note-list-item.ui");
-
-        var list_view = new Gtk.ListView (selection_model, factory);
-        list_view.add_css_class ("navigation-sidebar");
-
-        var scrolled_window = new Gtk.ScrolledWindow () {
-            child = list_view,
-            hscrollbar_policy = NEVER,
-        };
-
-        var main_menu = new Menu ();
-
-        var menu_button = new Gtk.MenuButton () {
-            icon_name = "open-menu",
-            menu_model = main_menu
-        };
-        menu_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
-
-        var header_bar = new Adw.HeaderBar () {
-            show_title = false,
-        };
-        header_bar.pack_end (menu_button);
-
-        var create_note_button = new Gtk.Button.from_icon_name ("document-new-symbolic") {
-            action_name = ACTION_PREFIX + CREATE_NOTE_ACTION,
-            action_target = new Variant.maybe (VariantType.STRING, null)
-        };
-
-        var create_folder_button = new Gtk.Button.from_icon_name ("folder-new-symbolic") {
-            action_name = ACTION_PREFIX + CREATE_FOLDER_ACTION,
-            action_target = new Variant.maybe (VariantType.STRING, null)
-        };
-
-        var action_bar = new Gtk.ActionBar ();
-        action_bar.pack_start (create_note_button);
-        action_bar.pack_start (create_folder_button);
-
-        var toolbar_view = new Adw.ToolbarView () {
-            content = scrolled_window,
-            bottom_bar_style = RAISED,
-        };
-        toolbar_view.add_top_bar (header_bar);
-        toolbar_view.add_bottom_bar (action_bar);
-
-        child = toolbar_view;
-        notebook.bind_property ("name", this, "title", SYNC_CREATE);
-
         operation_manager = new OperationManager (selection_model);
 
         var create_note_action = new SimpleAction (CREATE_NOTE_ACTION, new VariantType.maybe (VariantType.STRING));
@@ -109,8 +58,20 @@ public class Paper.NotesList : Adw.NavigationPage {
         insert_action_group (ACTION_GROUP_NAME, action_group);
     }
 
+    [GtkCallback]
     private void on_selection_changed () {
         notify_property ("selected-file");
+    }
+
+    [GtkCallback]
+    private Gtk.TreeListModel? create_tree_model (Notebook? notebook) {
+        if (notebook == null || notebook.root == null) {
+            return null;
+        }
+
+        var sorted_children = create_sort_model (notebook.root.children);
+        var tree_model = new Gtk.TreeListModel (sorted_children, false, false, create_child_model_func);
+        return tree_model;
     }
 
     private ListModel? create_child_model_func (Object item) {
@@ -118,7 +79,10 @@ public class Paper.NotesList : Adw.NavigationPage {
             return null;
         }
 
-        return create_sort_model (((Directory) item).children);
+        var directory = (Directory) item;
+        directory.load ();
+
+        return create_sort_model (directory.children);
     }
 
     private static Gtk.SortListModel create_sort_model (ListModel model) {
