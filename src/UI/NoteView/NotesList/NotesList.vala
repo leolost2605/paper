@@ -69,8 +69,7 @@ public class Paper.NotesList : Adw.NavigationPage {
             return null;
         }
 
-        var sorted_children = create_sort_model (notebook.root.children);
-        var tree_model = new Gtk.TreeListModel (sorted_children, false, false, create_child_model_func);
+        var tree_model = new Gtk.TreeListModel (notebook.root.children, false, false, create_child_model_func);
         return tree_model;
     }
 
@@ -82,20 +81,7 @@ public class Paper.NotesList : Adw.NavigationPage {
         var directory = (Directory) item;
         directory.load ();
 
-        return create_sort_model (directory.children);
-    }
-
-    private static Gtk.SortListModel create_sort_model (ListModel model) {
-        var folder_before_files_sorter = new Gtk.CustomSorter (folder_before_files_sort_func);
-
-        var name_expression = new Gtk.PropertyExpression (typeof (FileBase), null, "display-name");
-        var name_sorter = new Gtk.StringSorter (name_expression);
-
-        var multi_sorter = new Gtk.MultiSorter ();
-        multi_sorter.append (folder_before_files_sorter);
-        multi_sorter.append (name_sorter);
-
-        return new Gtk.SortListModel (model, multi_sorter);
+        return directory.children;
     }
 
     private static int folder_before_files_sort_func (Object? a, Object? b) {

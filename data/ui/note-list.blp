@@ -12,7 +12,18 @@ template $PaperNotesList: Adw.NavigationPage {
 
       Gtk.ListView {
         model: Gtk.SingleSelection selection_model {
-          model: bind $create_tree_model(template.notebook);
+          model: Gtk.SortListModel {
+            model: bind $create_tree_model(template.notebook);
+
+            sorter: Gtk.TreeListRowSorter {
+                sorter: Gtk.MultiSorter {
+                    Gtk.StringSorter {
+                        expression: expr item as <$PaperFileBase>.display-name;
+                    }
+                };
+            };
+          };
+
           selection-changed => $on_selection_changed();
         };
 
