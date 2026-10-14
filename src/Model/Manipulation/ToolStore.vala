@@ -9,7 +9,7 @@ public class Paper.ToolStore : Object {
     public ListModel tools { get { return tool_store; } }
 
     private static Settings settings;
-    private static HashTable<string, Variant> tools_by_notebook_ids;
+    private static HashTable<string, HashTable<string, Variant>> tools_by_notebook_ids;
 
     private ListStore tool_store;
 
@@ -23,7 +23,7 @@ public class Paper.ToolStore : Object {
         typeof (RectangleSelector).ensure ();
 
         settings = new Settings ("io.github.leolost2605.paper");
-        tools_by_notebook_ids = (HashTable<string, Variant>) settings.get_value ("tools-by-notebook-ids");
+        tools_by_notebook_ids = (HashTable<string, HashTable<string, Variant>>) settings.get_value ("tools-by-notebook-ids");
     }
 
     construct {
@@ -40,13 +40,19 @@ public class Paper.ToolStore : Object {
             return;
         }
 
-        var last_tools = (string[]) tools_by_notebook_ids[notebook_id];
-        for (uint i = 0; i < last_tools.length; i += 2) {
-            var tool_type_name = last_tools[i];
+        var last_tools = tools_by_notebook_ids[notebook_id];
+        foreach (var tool_id in last_tools.get_keys ()) {
+            var tool_info = last_tools[tool_id];
+
+            var tool_type_name = (string) tool_info.get_child_value (0);
             var tool_type = Type.from_name (tool_type_name);
 
-            var tool_id = last_tools[i + 1];
+            var tool_data = tool_info.get_child_value (1);
+
             var tool = (Tool) Object.new (tool_type, id: tool_id);
+
+            tool.load (tool_data);
+
             add_tool (tool);
         }
     }
@@ -62,12 +68,14 @@ public class Paper.ToolStore : Object {
     }
 
     private void on_tools_changed () {
-        var last_tools = new string[tool_store.n_items * 2];
+        var last_tools = new HashTable<string, Variant> (str_hash, str_equal);
 
         for (uint i = 0; i < tool_store.n_items; i++) {
             var tool = (Tool) tool_store.get_item (i);
-            last_tools[i * 2] = tool.get_type ().name ();
-            last_tools[i * 2 + 1] = tool.id;
+            var tool_data = tool.save ();
+            var tool_info = new Variant.tuple ({ tool.get_type ().name (), tool_data });
+
+            last_tools[tool.id] = tool_info;
         }
 
         tools_by_notebook_ids[notebook_id] = last_tools;

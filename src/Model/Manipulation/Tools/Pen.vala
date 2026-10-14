@@ -10,6 +10,23 @@ public class Paper.Pen : Paper.Tool {
     private Gee.ArrayList<Point>? points;
     private Gee.ArrayList<Gsk.RenderNode>? render_nodes;
 
+    public override void load (Variant variant) {
+        var color_str = (string) variant.get_child_value (0);
+        var stored_color  = Gdk.RGBA ();
+        stored_color.parse (color_str);
+
+        color = stored_color;
+
+        width = (float) (double) variant.get_child_value (1);
+    }
+
+    public override Variant save () {
+        var color_str = color.to_string ();
+
+        var variant_array = new Variant[] { color_str, (double) width };
+        return new Variant.tuple (variant_array);
+    }
+
     public override RenderFlags start (Content content, float x, float y) {
         points = new Gee.ArrayList<Point> ();
         points.add (new Point (x, y));
