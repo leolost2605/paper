@@ -1,0 +1,52 @@
+using Gtk 4.0;
+using Granite 9.0;
+
+template $PaperPenbar: Granite.Bin {
+    styles [
+        "penbar",
+        "card",
+    ]
+
+    Granite.Box {
+        child-spacing: single;
+        orientation: vertical;
+
+        styles [
+            "content-margin",
+        ]
+
+        Gtk.ListView list_view {
+            model: bind template.tool-selection as <$PaperToolSelection>.tools;
+        }
+
+        Gtk.Separator {
+            orientation: horizontal;
+        }
+
+        Gtk.MenuButton {
+            icon-name: "list-add-symbolic";
+            direction: right;
+            menu-model: add_menu;
+        }
+
+        Gtk.Separator {
+            orientation: horizontal;
+        }
+
+        Gtk.MenuButton {
+            icon-name: "open-menu-symbolic";
+            direction: right;
+            menu-model: misc_menu;
+        }
+    }
+}
+
+menu add_menu {
+    item (_("Pen"), "penbar.add-pen")
+    item (_("Eraser"), "penbar.add-eraser")
+    item (_("Select"), "penbar.add-select")
+}
+
+menu misc_menu {
+    item (_("Go to Origin"), "drawing-area.go-to-origin")
+}

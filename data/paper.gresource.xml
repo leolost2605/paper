@@ -12,5 +12,6 @@
     <file>ui/note-view.ui</file>
     <file>ui/notebook-list-item.ui</file>
     <file>ui/pen-list-item.ui</file>
+    <file>ui/penbar.ui</file>
   </gresource>
 </gresources>

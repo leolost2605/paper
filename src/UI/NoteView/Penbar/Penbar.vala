@@ -3,11 +3,15 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
+[GtkTemplate (ui = "/io/github/leolost2605/paper/ui/penbar.ui")]
 public class Paper.Penbar : Granite.Bin {
     public const int ICON_SIZE = 32;
 
     public ToolStore tool_store { get; construct; }
     public ToolSelection tool_selection { get; construct; }
+
+    [GtkChild]
+    private unowned Gtk.ListView list_view;
 
     public Penbar (ToolStore tool_store, ToolSelection tool_selection) {
         Object (tool_store: tool_store, tool_selection: tool_selection);
@@ -17,39 +21,7 @@ public class Paper.Penbar : Granite.Bin {
         var factory = new Gtk.SignalListItemFactory ();
         factory.bind.connect (on_bind);
 
-        var list_view = new Gtk.ListView (tool_selection.tools, factory);
-
-        var menu = new Menu ();
-        menu.append (_("Pen"), "penbar.add-pen");
-        menu.append (_("Eraser"), "penbar.add-eraser");
-        menu.append (_("Select"), "penbar.add-select");
-
-        var add_button = new Gtk.MenuButton () {
-            icon_name = "list-add-symbolic",
-            menu_model = menu,
-            direction = RIGHT
-        };
-
-        var misc_menu = new Menu ();
-        misc_menu.append (_("Go to Origin"), DrawingArea.ACTION_PREFIX + DrawingArea.GO_TO_ORIGIN_ACTION);
-
-        var misc_menu_button = new Gtk.MenuButton () {
-            icon_name = "open-menu-symbolic",
-            menu_model = misc_menu,
-            direction = RIGHT
-        };
-
-        var box = new Granite.Box (VERTICAL);
-        box.add_css_class ("content-margin");
-        box.append (list_view);
-        box.append (new Gtk.Separator (HORIZONTAL));
-        box.append (add_button);
-        box.append (new Gtk.Separator (HORIZONTAL));
-        box.append (misc_menu_button);
-
-        child = box;
-        add_css_class ("penbar");
-        add_css_class (Granite.CssClass.CARD);
+        list_view.factory = factory;
 
         var add_pen_action = new SimpleAction ("add-pen", null);
         add_pen_action.activate.connect (add_pen);
