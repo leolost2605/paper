@@ -32,7 +32,7 @@ public class Paper.Penbar : Granite.Bin {
         var add_select_action = new SimpleAction ("add-select", null);
         add_select_action.activate.connect (add_select);
 
-        var delete_tool_action = new SimpleAction ("delete-tool", VariantType.UINT32);
+        var delete_tool_action = new SimpleAction ("delete-tool", VariantType.STRING);
         delete_tool_action.activate.connect (delete_tool);
 
         var action_group = new SimpleActionGroup ();
@@ -49,10 +49,7 @@ public class Paper.Penbar : Granite.Bin {
         var tool = (Tool) list_item.item;
 
         if (tool is Pen) {
-            var pen_button = new PenListItem ((Pen) tool);
-            list_item.bind_property ("position", pen_button, "position", SYNC_CREATE);
-
-            list_item.child = pen_button;
+            list_item.child = new PenListItem ((Pen) tool);;
             return;
         }
 
@@ -84,7 +81,7 @@ public class Paper.Penbar : Granite.Bin {
     }
 
     private void delete_tool (SimpleAction action, Variant? param) {
-        var tool_pos = param.get_uint32 ();
-        tool_store.delete_tool (tool_pos);
+        var tool_id = param.get_string ();
+        tool_store.delete_tool (tool_id);
     }
 }

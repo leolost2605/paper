@@ -87,7 +87,16 @@ public class Paper.ToolStore : Object {
         add_tool (tool);
     }
 
-    public void delete_tool (uint position) {
-        tool_store.remove (position);
+    public void delete_tool (string tool_id) {
+        for (uint i = 0; i < tool_store.n_items; i++) {
+            var tool = (Tool) tool_store.get_item (i);
+
+            if (tool.id == tool_id) {
+                tool_store.remove (i);
+                return;
+            }
+        }
+
+        warning ("Tool with id %s not found", tool_id);
     }
 }

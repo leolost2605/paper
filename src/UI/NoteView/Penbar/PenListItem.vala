@@ -7,8 +7,6 @@
 public class Paper.PenListItem : Granite.Bin {
     public Pen pen { get; construct; }
 
-    public uint position { get; set; }
-
     public PenListItem (Pen pen) {
         typeof (ColorCircle).ensure ();
 
@@ -16,7 +14,11 @@ public class Paper.PenListItem : Granite.Bin {
     }
 
     [GtkCallback]
-    private static Variant uint_to_variant (uint value) {
-        return new Variant.uint32 (value);
+    private Variant? string_to_variant (string? value) {
+        if (value == null) {
+            return null;
+        }
+
+        return new Variant.string (value);
     }
 }

@@ -49,7 +49,7 @@ template $PaperPenListItem: Granite.Bin {
         Gtk.Button {
           label: _("Remove");
           action-name: "penbar.delete-tool";
-          action-target: bind $uint_to_variant(template.position);
+          action-target: bind $string_to_variant(template.pen as <$PaperPen>.id);
 
           styles [
             "destructive",
