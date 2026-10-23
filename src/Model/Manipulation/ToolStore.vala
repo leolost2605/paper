@@ -65,6 +65,7 @@ public class Paper.ToolStore : Object {
 
     private void add_tool (Tool tool) {
         tool_store.append (tool);
+        tool.notify.connect (on_tools_changed);
     }
 
     private void on_tools_changed () {
