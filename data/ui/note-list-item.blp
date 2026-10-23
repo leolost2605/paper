@@ -8,8 +8,17 @@ template ListItem {
         Gtk.TreeExpander {
             list-row: bind template.item as <Gtk.TreeListRow>;
 
-            child: Gtk.Label {
-                label: bind template.item as <Gtk.TreeListRow>.item as <$PaperFileBase>.display-name;
+            child: Granite.Box {
+                child-spacing: single;
+
+                Gtk.Image {
+                  gicon: bind template.item as <Gtk.TreeListRow>.item as <$PaperFileBase>.icon;
+                  pixel-size: 24;
+                }
+
+                Gtk.Label {
+                  label: bind template.item as <Gtk.TreeListRow>.item as <$PaperFileBase>.display-name;
+                }
             };
         }
     };
