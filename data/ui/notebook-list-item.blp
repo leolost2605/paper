@@ -1,11 +1,9 @@
 using Gtk 4.0;
-using Granite 9.0;
 
 template ListItem {
-    child: Granite.ListItem {
-        text: bind template.item as <$PaperNotebook>.name;
-        description: bind template.item as <$PaperNotebook>.uri;
-        menu-model: edit_menu;
+    child: Gtk.Label {
+        label: bind template.item as <$PaperNotebook>.name;
+        xalign: 0;
     };
 }
 
