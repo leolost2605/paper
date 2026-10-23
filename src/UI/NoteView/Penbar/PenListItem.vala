@@ -5,13 +5,21 @@
 
 [GtkTemplate (ui = "/io/github/leolost2605/paper/ui/pen-list-item.ui")]
 public class Paper.PenListItem : Granite.Bin {
-    public Pen pen { get; construct; }
+    private Pen _pen;
+    public Pen pen {
+        get { return _pen; }
+        set {
+            _pen = value;
 
-    public PenListItem (Pen pen) {
-        typeof (ColorCircle).ensure ();
-
-        Object (pen: pen);
+            value.bind_property ("color", color_button, "rgba", SYNC_CREATE | BIDIRECTIONAL);
+            value.bind_property ("width", width_adjustment, "value", SYNC_CREATE | BIDIRECTIONAL);
+        }
     }
+
+    [GtkChild]
+    private unowned Gtk.ColorDialogButton color_button;
+    [GtkChild]
+    private unowned Gtk.Adjustment width_adjustment;
 
     [GtkCallback]
     private Variant? string_to_variant (string? value) {

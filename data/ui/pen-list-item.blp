@@ -23,9 +23,7 @@ template $PaperPenListItem: Granite.Bin {
         margin-top: 12;
         margin-start: 12;
 
-        Gtk.ColorDialogButton {
-          rgba: bind template.pen as <$PaperPen>.color; // TODO: Bidirectional
-
+        Gtk.ColorDialogButton color_button {
           dialog: Gtk.ColorDialog {};
         }
 
@@ -38,10 +36,10 @@ template $PaperPenListItem: Granite.Bin {
           }
 
           Gtk.Scale {
-            adjustment: Gtk.Adjustment {
+            adjustment: Gtk.Adjustment width_adjustment {
               lower: 1;
               upper: 10;
-              value: bind template.pen as <$PaperPen>.width; // TODO: Bidirectional
+              value: 1;
             };
           }
         }

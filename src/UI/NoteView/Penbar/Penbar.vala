@@ -49,7 +49,9 @@ public class Paper.Penbar : Granite.Bin {
         var tool = (Tool) list_item.item;
 
         if (tool is Pen) {
-            list_item.child = new PenListItem ((Pen) tool);;
+            var pen_list_item = new PenListItem ();
+            pen_list_item.pen = (Pen) tool;
+            list_item.child = pen_list_item;
             return;
         }
 

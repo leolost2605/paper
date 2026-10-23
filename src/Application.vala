@@ -16,6 +16,9 @@ public class Paper.Application : Gtk.Application {
     protected override void startup () {
         base.startup ();
 
+        /* Ensure some types needed for blp construction */
+        typeof (ColorCircle).ensure ();
+
         Granite.init ();
         FileBase.init ();
 
