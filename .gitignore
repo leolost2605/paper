@@ -5,3 +5,5 @@
 *~
 build/*
 .flatpak-builder/*
+
+/subprojects/blueprint-compiler

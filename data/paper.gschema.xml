@@ -31,7 +31,7 @@
       <summary>List of selected notes by notebook.</summary>
       <description>A list of uris to the selected notes for each notebook.</description>
     </key>
-    <key name="tools-by-notebook-ids" type="a{sv}">
+    <key name="tools-by-notebook-ids" type="a{sa{sv}}">
       <default>[]</default>
       <summary>List of tools by notebook IDs.</summary>
       <description>A list of tool IDs for each notebook.</description>

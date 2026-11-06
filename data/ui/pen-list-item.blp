@@ -1,0 +1,59 @@
+using Gtk 4.0;
+using Granite 9.0;
+
+template $PaperPenListItem: Granite.Bin {
+  child: Gtk.PopoverBin popover_bin {
+    handle-input: true;
+
+    child: $PaperColorCircle {
+      color: bind template.pen as <$PaperPen>.color;
+      width-request: 32;
+      height-request: 32;
+    };
+
+    popover: Gtk.Popover {
+      has-arrow: false;
+      halign: start;
+
+      Granite.Box {
+        orientation: vertical;
+        child-spacing: single;
+        margin-bottom: 12;
+        margin-end: 12;
+        margin-top: 12;
+        margin-start: 12;
+
+        Gtk.ColorDialogButton color_button {
+          dialog: Gtk.ColorDialog {};
+        }
+
+        Granite.Box {
+          orientation: vertical;
+          child-spacing: half;
+
+          Granite.HeaderLabel {
+            label: _("Width");
+          }
+
+          Gtk.Scale {
+            adjustment: Gtk.Adjustment width_adjustment {
+              lower: 1;
+              upper: 10;
+              value: 1;
+            };
+          }
+        }
+
+        Gtk.Button {
+          label: _("Remove");
+          action-name: "penbar.delete-tool";
+          action-target: bind $string_to_variant(template.pen as <$PaperPen>.id);
+
+          styles [
+            "destructive",
+          ]
+        }
+      }
+    };
+  };
+}

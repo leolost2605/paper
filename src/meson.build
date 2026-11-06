@@ -45,9 +45,8 @@ files = [
     'Model' / 'Manipulation' / 'Tools' / 'SelectionManager.vala',
     'UI' / 'CreateNotebookDialog.vala',
     'UI' / 'MainWindow.vala',
-    'UI' / 'Library' / 'NotebookList.vala',
-    'UI' / 'Library' / 'NotebookListItem.vala',
-    'UI' / 'Library' / 'WelcomeView.vala',
+    'UI' / 'Library' / 'LibraryView.vala',
+    'UI' / 'Library' / 'RenameDialog.vala',
     'UI' / 'NoteView' / 'DrawingArea.vala',
     'UI' / 'NoteView' / 'NoteView.vala',
     'UI' / 'NoteView' / 'PropertiesDialog.vala',
@@ -55,13 +54,9 @@ files = [
     'UI' / 'NoteView' / 'Canvas' / 'InputHandler.vala',
     'UI' / 'NoteView' / 'Canvas' / 'KineticScrolling.vala',
     'UI' / 'NoteView' / 'Canvas' / 'MoveHandler.vala',
-    'UI' / 'NoteView' / 'NotesList' / 'NotesListItem.vala',
-    'UI' / 'NoteView' / 'NotesList' / 'NotesList.vala',
-    'UI' / 'NoteView' / 'NotesList' / 'RenameDialog.vala',
     'UI' / 'NoteView' / 'Penbar' / 'ColorCircle.vala',
     'UI' / 'NoteView' / 'Penbar' / 'Penbar.vala',
-    'UI' / 'NoteView' / 'Penbar' / 'PenButton.vala',
-    'UI' / 'NoteView' / 'Penbar' / 'PenPopover.vala',
+    'UI' / 'NoteView' / 'Penbar' / 'PenListItem.vala',
 ]
 
 # Create a new executable, list the files we want to compile, and install

@@ -6,6 +6,15 @@
 public class Paper.Eraser : Paper.Tool {
     public float radius { get; set; default = 4.0f; }
 
+    public override void load (Variant variant) {
+        /* We currently don't store anything */
+    }
+
+    public override Variant save () {
+        /* We currently don't store anything */
+        return new Variant.boolean (false);
+    }
+
     public override RenderFlags start (Content content, float x, float y) {
         // Nothing to do here
         return NONE;

@@ -1,0 +1,12 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PaperMainWindow : Adw.ApplicationWindow {
+    title: "Paper";
+    icon-name: "io.github.leolost2605.paper";
+    default-height: 500;
+    default-width: 800;
+
+    content: Adw.NavigationView navigation_view {
+    };
+}

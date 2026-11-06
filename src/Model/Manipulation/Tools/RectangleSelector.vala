@@ -9,6 +9,15 @@ public class Paper.RectangleSelector : Paper.Tool {
     private Graphene.Point? start_point;
     private Graphene.Point? current_point;
 
+    public override void load (Variant variant) {
+        /* We currently don't store anything */
+    }
+
+    public override Variant save () {
+        /* We currently don't store anything */
+        return new Variant.boolean (false);
+    }
+
     public override void deactivate (Content content) {
         if (selection != null) {
             content.commit_selection ();

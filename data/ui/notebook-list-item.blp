@@ -1,0 +1,13 @@
+using Gtk 4.0;
+
+template ListItem {
+    child: Gtk.Label {
+        label: bind template.item as <$PaperNotebook>.name;
+        xalign: 0;
+    };
+}
+
+menu edit_menu {
+    item (_("Delete"), "todo")
+    item (_("Rename"), "todo")
+}

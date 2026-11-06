@@ -3,11 +3,15 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
+[GtkTemplate (ui = "/io/github/leolost2605/paper/ui/penbar.ui")]
 public class Paper.Penbar : Granite.Bin {
     public const int ICON_SIZE = 32;
 
     public ToolStore tool_store { get; construct; }
     public ToolSelection tool_selection { get; construct; }
+
+    [GtkChild]
+    private unowned Gtk.ListView list_view;
 
     public Penbar (ToolStore tool_store, ToolSelection tool_selection) {
         Object (tool_store: tool_store, tool_selection: tool_selection);
@@ -17,39 +21,7 @@ public class Paper.Penbar : Granite.Bin {
         var factory = new Gtk.SignalListItemFactory ();
         factory.bind.connect (on_bind);
 
-        var list_view = new Gtk.ListView (tool_selection.tools, factory);
-
-        var menu = new Menu ();
-        menu.append (_("Pen"), "penbar.add-pen");
-        menu.append (_("Eraser"), "penbar.add-eraser");
-        menu.append (_("Select"), "penbar.add-select");
-
-        var add_button = new Gtk.MenuButton () {
-            icon_name = "list-add-symbolic",
-            menu_model = menu,
-            direction = RIGHT
-        };
-
-        var misc_menu = new Menu ();
-        misc_menu.append (_("Go to Origin"), DrawingArea.ACTION_PREFIX + DrawingArea.GO_TO_ORIGIN_ACTION);
-
-        var misc_menu_button = new Gtk.MenuButton () {
-            icon_name = "open-menu-symbolic",
-            menu_model = misc_menu,
-            direction = RIGHT
-        };
-
-        var box = new Granite.Box (VERTICAL);
-        box.add_css_class ("content-margin");
-        box.append (list_view);
-        box.append (new Gtk.Separator (HORIZONTAL));
-        box.append (add_button);
-        box.append (new Gtk.Separator (HORIZONTAL));
-        box.append (misc_menu_button);
-
-        child = box;
-        add_css_class ("penbar");
-        add_css_class (Granite.CssClass.CARD);
+        list_view.factory = factory;
 
         var add_pen_action = new SimpleAction ("add-pen", null);
         add_pen_action.activate.connect (add_pen);
@@ -60,7 +32,7 @@ public class Paper.Penbar : Granite.Bin {
         var add_select_action = new SimpleAction ("add-select", null);
         add_select_action.activate.connect (add_select);
 
-        var delete_tool_action = new SimpleAction ("delete-tool", VariantType.UINT32);
+        var delete_tool_action = new SimpleAction ("delete-tool", VariantType.STRING);
         delete_tool_action.activate.connect (delete_tool);
 
         var action_group = new SimpleActionGroup ();
@@ -77,10 +49,9 @@ public class Paper.Penbar : Granite.Bin {
         var tool = (Tool) list_item.item;
 
         if (tool is Pen) {
-            var pen_button = new PenButton ((Pen) tool);
-            list_item.bind_property ("position", pen_button, "position", SYNC_CREATE);
-
-            list_item.child = pen_button;
+            var pen_list_item = new PenListItem ();
+            pen_list_item.pen = (Pen) tool;
+            list_item.child = pen_list_item;
             return;
         }
 
@@ -112,7 +83,7 @@ public class Paper.Penbar : Granite.Bin {
     }
 
     private void delete_tool (SimpleAction action, Variant? param) {
-        var tool_pos = param.get_uint32 ();
-        tool_store.delete_tool (tool_pos);
+        var tool_id = param.get_string ();
+        tool_store.delete_tool (tool_id);
     }
 }

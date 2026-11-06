@@ -1,3 +1,28 @@
+blueprint_files = files(
+    'ui' / 'library-view.blp',
+    'ui' / 'main-window.blp',
+    'ui' / 'note-list-item.blp',
+    'ui' / 'note-view.blp',
+    'ui' / 'notebook-list-item.blp',
+    'ui' / 'pen-list-item.blp',
+    'ui' / 'penbar.blp',
+)
+
+blueprints = custom_target(
+  'blueprints',
+  input: blueprint_files,
+  output: '.',
+  command: [find_program('blueprint-compiler'), 'batch-compile', '--minify', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
+)
+
+gresource = gnome.compile_resources(
+    'as-resources',
+    'paper.gresource.xml',
+    source_dir: meson.current_source_dir(),
+    c_name: 'as',
+    dependencies: blueprints
+)
+
 icon_sizes = ['16', '24', '32', '48', '64', '128']
 
 foreach i : icon_sizes

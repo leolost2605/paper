@@ -35,7 +35,7 @@ public class Paper.SelectedItem : Item {
     }
 
     public override Graphene.Rect get_bounds () {
-        return item.get_bounds ();
+        return transform.transform_bounds (item.get_bounds ());
     }
 
     public override bool is_near (Graphene.Point point, float epsilon) {
