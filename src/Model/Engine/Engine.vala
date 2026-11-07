@@ -144,4 +144,17 @@ public class Paper.Engine : Object, Gdk.Paintable {
         var exporter = new PdfExporter (renderer, content);
         yield exporter.export (target_file);
     }
+
+    public async void import_pdf (File file) throws Error {
+        var document = new Poppler.Document.from_gfile (file, null, null);
+
+        float y = 0;
+        for (int i = 0; i < document.get_n_pages (); i++) {
+            content.add_item (new PdfPage (file, i, { 0, y }));
+
+            double page_height;
+            document.get_page (i).get_size (null, out page_height);
+            y += (float) page_height + 20;
+        }
+    }
 }

@@ -44,6 +44,14 @@ public class Paper.Database : Object {
             width REAL
         );
 
+        CREATE TABLE IF NOT EXISTS pdf_pages (
+            id INTEGER PRIMARY KEY,
+            x REAL,
+            y REAL,
+            uri TEXT,
+            page_index INTEGER
+        );
+
         CREATE VIRTUAL TABLE IF NOT EXISTS item_bounds USING rtree(
             item_id,
             min_x, max_x,
@@ -101,6 +109,8 @@ public class Paper.Database : Object {
 
     private const string GET_STROKE_QUERY = "SELECT coords, r, g, b, a, width FROM strokes WHERE id = ?";
 
+    private const string GET_PDF_PAGE_QUERY = "SELECT x, y, uri, page_index FROM pdf_pages WHERE id = ?";
+
     private const string REMOVE_ITEM_QUERY = "DELETE FROM note_item WHERE id = ?";
 
     private const string REMOVE_ITEM_FROM_TREE_QUERY = "DELETE FROM item_bounds WHERE item_id = ?";
@@ -113,6 +123,8 @@ public class Paper.Database : Object {
     """;
 
     private const string ADD_STROKE_QUERY = "INSERT INTO strokes (coords, r, g, b, a, width) VALUES (?, ?, ?, ?, ?, ?)";
+
+    private const string ADD_PDF_PAGE_QUERY = "INSERT INTO pdf_pages (x, y, uri, page_index) VALUES (?, ?, ?, ?)";
 
     public signal void ready ();
 
@@ -332,6 +344,8 @@ public class Paper.Database : Object {
         switch (type) {
             case "stroke":
                 return get_stroke (type_id);
+            case "pdf-page":
+                return get_pdf_page (type_id);
             default:
                 throw new IOError.FAILED ("Unknown item type '%s' for item with id %d".printf (type, id));
         }
@@ -374,6 +388,30 @@ public class Paper.Database : Object {
         return new Stroke (line, width, color);
     }
 
+    private PdfPage get_pdf_page (int id) throws Error {
+        Sqlite.Statement stmt;
+        var ec = db.prepare_v2 (GET_PDF_PAGE_QUERY, GET_PDF_PAGE_QUERY.length, out stmt);
+
+        if (ec != Sqlite.OK) {
+            throw new IOError.FAILED ("Failed to prepare statement: %s".printf (db.errmsg ()));
+        }
+
+        stmt.bind_int (1, id);
+
+        if (stmt.step () != Sqlite.ROW) {
+            throw new IOError.FAILED ("Failed to get pdf page with id %d: %s".printf (id, db.errmsg ()));
+        }
+
+        var x = stmt.column_double (0);
+        var y = stmt.column_double (1);
+        var uri = stmt.column_text (2);
+        var page_index = stmt.column_int (3);
+
+        var file = File.new_for_uri (uri);
+
+        return new PdfPage (file, page_index, { (float) x, (float) y });
+    }
+
     public void remove_item (int id) throws Error {
         Sqlite.Statement stmt;
         var ec = db.prepare_v2 (REMOVE_ITEM_QUERY, REMOVE_ITEM_QUERY.length, out stmt);
@@ -408,6 +446,9 @@ public class Paper.Database : Object {
         if (item is Stroke) {
             type = "stroke";
             type_id = add_stroke ((Stroke) item);
+        } else if (item is PdfPage) {
+            type = "pdf-page";
+            type_id = add_pdf_page ((PdfPage) item);
         } else {
             throw new IOError.FAILED ("Unknown item type '%s'".printf (item.get_type ().name ()));
         }
@@ -473,6 +514,26 @@ public class Paper.Database : Object {
 
         if (stmt.step () != Sqlite.DONE) {
             throw new IOError.FAILED ("Failed to add stroke: %s".printf (db.errmsg ()));
+        }
+
+        return db.last_insert_rowid ();
+    }
+
+    private int64 add_pdf_page (PdfPage page) throws Error {
+        Sqlite.Statement stmt;
+        var ec = db.prepare_v2 (ADD_PDF_PAGE_QUERY, ADD_PDF_PAGE_QUERY.length, out stmt);
+
+        if (ec != Sqlite.OK) {
+            throw new IOError.FAILED ("Failed to prepare statement: %s".printf (db.errmsg ()));
+        }
+
+        stmt.bind_double (1, page.position.x);
+        stmt.bind_double (2, page.position.y);
+        stmt.bind_text (3, page.file.get_uri ());
+        stmt.bind_int (4, page.page_index);
+
+        if (stmt.step () != Sqlite.DONE) {
+            throw new IOError.FAILED ("Failed to add PDF page: %s".printf (db.errmsg ()));
         }
 
         return db.last_insert_rowid ();
