@@ -4,6 +4,8 @@
 */
 
 public class Paper.Stroke : Item {
+    public const Gdk.RGBA SELECTION_COLOR = { 0.2f, 0.4f, 0.8f, 0.5f };
+
     public Line line { get; construct; }
     public float width { get; construct; }
     public Gdk.RGBA color { get; construct; }
@@ -40,7 +42,7 @@ public class Paper.Stroke : Item {
         this.snapshot (snapshot);
 
         var selection_stroke = new Gsk.Stroke (width + 2.0f);
-        snapshot.append_stroke (path, selection_stroke, SelectedItem.SELECTION_COLOR);
+        snapshot.append_stroke (path, selection_stroke, SELECTION_COLOR);
     }
 
     public override Graphene.Rect get_bounds () {
