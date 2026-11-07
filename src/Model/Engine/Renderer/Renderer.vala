@@ -44,7 +44,7 @@ public class Paper.Renderer : Object {
         content.origin_indicator.snapshot (snapshot, transformed_bounds);
 
         foreach (var item in content.get_items_intersecting_rect (transformed_bounds)) {
-            snapshot_item (snapshot, item, scale);
+            snapshot_item (snapshot, content.selection, item, scale);
         }
 
         content.view_mode.pop_clip (snapshot);
@@ -67,7 +67,7 @@ public class Paper.Renderer : Object {
         content.page_format.snapshot (snapshot, page.bounds);
 
         foreach (var item in content.get_items_intersecting_rect (page.bounds)) {
-            snapshot_item (snapshot, item, 1.0f);
+            snapshot_item (snapshot, null, item, 1.0f);
         }
 
         snapshot.pop (); /* clip page.bounds */
@@ -75,7 +75,7 @@ public class Paper.Renderer : Object {
         snapshot.restore ();
     }
 
-    private void snapshot_item (Gtk.Snapshot snapshot, Item item, float scale) {
+    private void snapshot_item (Gtk.Snapshot snapshot, Selection? selection, Item item, float scale) {
         var item_bounds = item.get_bounds ();
 
         if (((int) (item_bounds.size.width * scale)) == 0 || ((int) (item_bounds.size.height * scale)) == 0) {
@@ -87,7 +87,15 @@ public class Paper.Renderer : Object {
             cache.cache_node (item, scale, node);
         }
 
+        snapshot.save ();
+
+        if (selection != null && selection.is_item_selected (item)) {
+            snapshot.transform (selection.get_current_transform ());
+        }
+
         snapshot.append_node (cache.get_node (item, scale));
+
+        snapshot.restore ();
     }
 
     // Currently completely separate from the content methods but we might want to optimize some stuff here
