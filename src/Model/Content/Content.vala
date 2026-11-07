@@ -19,6 +19,8 @@ public class Paper.Content : Object {
     public PageFormat page_format { get; private set; }
     public OriginIndicator origin_indicator { get; private set; }
 
+    public Selection selection { get; private set; }
+
     private ItemStore items;
 
     public Content (Database database) {
@@ -41,6 +43,7 @@ public class Paper.Content : Object {
         origin_indicator.notify.connect (emit_changed);
 
         items = new ItemStore (database);
+        selection = new Selection (items);
     }
 
     private void emit_changed () {
@@ -80,17 +83,17 @@ public class Paper.Content : Object {
     }
 
     public void select_items (Gee.Collection<Item> to_select) {
-        items.select (to_select);
+        selection.select (to_select);
         emit_changed ();
     }
 
     public void transform_selection (Gsk.Transform transform) {
-        items.transform_selection (transform);
+        selection.transform (transform);
         emit_changed ();
     }
 
     public void commit_selection () {
-        items.commit_selection ();
+        selection.commit ();
         emit_changed ();
     }
 }

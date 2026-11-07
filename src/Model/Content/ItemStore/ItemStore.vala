@@ -6,13 +6,11 @@
 /**
  * Wrapper around the database for caching and some convenience methods.
  */
-internal class Paper.ItemStore : Object {
+public class Paper.ItemStore : Object {
     public Database database { get; construct; }
 
     private HashTable<int, Item> items;
     private HashTable<Item, int> item_ids;
-
-    private Selection selection;
 
     public ItemStore (Database database) {
         Object (database: database);
@@ -21,8 +19,6 @@ internal class Paper.ItemStore : Object {
     construct {
         items = new HashTable<int, Item> (null, null);
         item_ids = new HashTable<Item, int> (null, null);
-
-        selection = new Selection ();
     }
 
     private Item get_item (int id) throws Error {
@@ -30,14 +26,7 @@ internal class Paper.ItemStore : Object {
             cache_item (id, database.get_item (id));
         }
 
-        var item = items[id];
-
-        var selected_item = selection.get_selected_item (item);
-        if (selected_item != null) {
-            return selected_item;
-        }
-
-        return item;
+        return items[id];
     }
 
     private void cache_item (int id, Item item) {
@@ -101,25 +90,5 @@ internal class Paper.ItemStore : Object {
         }
 
         return results;
-    }
-
-    public void select (Gee.Collection<Item> items) {
-        selection.select (items);
-    }
-
-    public void transform_selection (Gsk.Transform transform) {
-        selection.transform (transform);
-    }
-
-    public void commit_selection () {
-        foreach (var entry in selection.get_selected_items ()) {
-            var item = entry.key;
-            var selected_item = entry.value;
-
-            remove (item);
-            add (selected_item.get_transformed_item ());
-        }
-
-        selection.clear ();
     }
 }
