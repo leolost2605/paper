@@ -34,8 +34,12 @@ public class Paper.PdfPage : Item {
     }
 
     public override void snapshot (Gtk.Snapshot snapshot) {
-        var context = snapshot.append_cairo (bounds);
+        var node = new Gsk.CairoNode (bounds);
+        var context = node.get_draw_context ();
+        context.translate (position.x, position.y);
         page.render (context);
+
+        snapshot.append_node (node);
     }
 
     public override void snapshot_selected (Gtk.Snapshot snapshot) {
