@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Paper.Pattern : Object {
+public class Paper.Pattern : Tilable {
     public enum Style {
         GRID,
     }
@@ -68,6 +68,19 @@ public class Paper.Pattern : Object {
         if (!active) {
             return;
         }
+
+        renderers[style].snapshot (width, height, color, snapshot, bounds);
+    }
+
+    public override Graphene.Size get_tile_size () {
+        return { width * 10, height * 10 };
+    }
+
+    public override void snapshot_tile (Gtk.Snapshot snapshot) {
+        var bounds = Graphene.Rect () {
+            origin = { 0, 0 },
+            size = get_tile_size ()
+        };
 
         renderers[style].snapshot (width, height, color, snapshot, bounds);
     }
