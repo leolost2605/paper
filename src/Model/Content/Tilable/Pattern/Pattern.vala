@@ -4,31 +4,26 @@
  */
 
 public class Paper.Pattern : Tilable {
-    public enum Style {
-        GRID,
-    }
-
     public Database database { private get; construct; }
 
     public bool active { get; set; default = false; }
 
-    public Style style { get; set; default = GRID; }
     public float width { get; set; default = 20; }
     public float height { get; set; default = 20; }
     public Gdk.RGBA? color { get; set; default = Gdk.RGBA () { red = 0.26f, green = 0.68f, blue = 0.94f, alpha = 0.5f }; }
 
-    private static HashTable<Style, PatternRenderer> renderers;
+    public Gtk.SingleSelection style { get; private set; }
 
     public Pattern (Database database) {
         Object (database: database);
     }
 
-    static construct {
-        renderers = new HashTable<Style, PatternRenderer> (null, null);
-        renderers[Style.GRID] = new GridRenderer ();
-    }
-
     construct {
+        var style_store = new ListStore (typeof (PatternStyle));
+        style_store.append (new GridStyle ());
+
+        style = new Gtk.SingleSelection (style_store);
+
         database.ready.connect (load_from_database);
         notify.connect (save_to_database);
     }
@@ -40,14 +35,14 @@ public class Paper.Pattern : Tilable {
             }
 
             bool active;
-            Style style;
+            uint style;
             float width, height;
             Gdk.RGBA color;
 
             database.get_pattern (out active, out style, out width, out height, out color);
 
             this.active = active;
-            this.style = style;
+            this.style.selected = style;
             this.width = width;
             this.height = height;
             this.color = color;
@@ -58,7 +53,7 @@ public class Paper.Pattern : Tilable {
 
     private void save_to_database () {
         try {
-            database.set_pattern (active, style, width, height, color);
+            database.set_pattern (active, style.selected, width, height, color);
         } catch (Error e) {
             warning ("Failed to save pattern to database: %s", e.message);
         }
@@ -69,6 +64,6 @@ public class Paper.Pattern : Tilable {
     }
 
     public override void snapshot_tile (Gtk.Snapshot snapshot) {
-        renderers[style].snapshot (width, height, color, snapshot, 10);
+        ((PatternStyle) style.selected_item).snapshot (width, height, color, snapshot, 10);
     }
 }
