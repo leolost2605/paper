@@ -192,7 +192,7 @@ public class Paper.Database : Object {
     }
 
     public void get_pattern (
-        out bool active, out Pattern.Style style, out float width, out float height, out Gdk.RGBA color
+        out bool active, out uint style, out float width, out float height, out Gdk.RGBA color
     ) throws Error {
         Sqlite.Statement stmt;
         var ec = db.prepare_v2 (GET_PATTERN_QUERY, GET_PATTERN_QUERY.length, out stmt);
@@ -206,7 +206,7 @@ public class Paper.Database : Object {
         }
 
         active = stmt.column_int (0) != 0;
-        style = (Pattern.Style) stmt.column_int (1);
+        style = (uint) stmt.column_int (1);
         width = (float) stmt.column_double (2);
         height = (float) stmt.column_double (3);
 
@@ -218,7 +218,7 @@ public class Paper.Database : Object {
         };
     }
 
-    public void set_pattern (bool active, Pattern.Style style, float width, float height, Gdk.RGBA color) throws Error {
+    public void set_pattern (bool active, uint style, float width, float height, Gdk.RGBA color) throws Error {
         Sqlite.Statement stmt;
         var ec = db.prepare_v2 (SET_PATTERN_QUERY, SET_PATTERN_QUERY.length, out stmt);
 
@@ -227,7 +227,7 @@ public class Paper.Database : Object {
         }
 
         stmt.bind_int (1, active ? 1 : 0);
-        stmt.bind_int (2, style);
+        stmt.bind_int (2, (int) style);
         stmt.bind_double (3, width);
         stmt.bind_double (4, height);
         stmt.bind_double (5, color.red);

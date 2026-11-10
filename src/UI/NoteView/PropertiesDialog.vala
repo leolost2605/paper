@@ -95,14 +95,12 @@ public class Paper.PropertiesDialog : Gtk.Window {
             xalign = 0,
         };
 
-        var patterns_model = new Adw.EnumListModel (typeof (Pattern.Style));
+        var name_expression = new Gtk.PropertyExpression (typeof (PatternStyle), null, "name");
 
-        var name_expression = new Gtk.PropertyExpression (typeof (Adw.EnumListItem), null, "nick");
-
-        var pattern_style_dropdown = new Gtk.DropDown (patterns_model, name_expression) {
+        var pattern_style_dropdown = new Gtk.DropDown (content.pattern.style, name_expression) {
             valign = CENTER,
         };
-        content.pattern.bind_property ("style", pattern_style_dropdown, "selected", SYNC_CREATE | BIDIRECTIONAL);
+        content.pattern.style.bind_property ("selected", pattern_style_dropdown, "selected", SYNC_CREATE | BIDIRECTIONAL);
 
         var pattern_width_label = new Gtk.Label (_("Width:")) {
             hexpand = true,
