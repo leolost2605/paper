@@ -10,6 +10,6 @@ public abstract class Paper.PatternRenderer : Object {
         float width, float height,
         Gdk.RGBA color,
         Gtk.Snapshot snapshot,
-        Graphene.Rect bounds
+        int n
     );
 }

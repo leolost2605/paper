@@ -64,24 +64,11 @@ public class Paper.Pattern : Tilable {
         }
     }
 
-    public void snapshot (Gtk.Snapshot snapshot, Graphene.Rect bounds) {
-        if (!active) {
-            return;
-        }
-
-        renderers[style].snapshot (width, height, color, snapshot, bounds);
-    }
-
     public override Graphene.Size get_tile_size () {
         return { width * 10, height * 10 };
     }
 
     public override void snapshot_tile (Gtk.Snapshot snapshot) {
-        var bounds = Graphene.Rect () {
-            origin = { 0, 0 },
-            size = get_tile_size ()
-        };
-
-        renderers[style].snapshot (width, height, color, snapshot, bounds);
+        renderers[style].snapshot (width, height, color, snapshot, 10);
     }
 }

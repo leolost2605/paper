@@ -12,25 +12,23 @@ public class Paper.GridRenderer : Paper.PatternRenderer {
         float width, float height,
         Gdk.RGBA color,
         Gtk.Snapshot snapshot,
-        Graphene.Rect bounds
+        int n
     ) {
-        var n_hidden_vertical_lines = (int) (bounds.origin.x / width);
-        var last_hidden_vertical_line_x = n_hidden_vertical_lines * width;
-        for (var x = last_hidden_vertical_line_x + width; x < bounds.origin.x + bounds.size.width; x += width) {
+        /* Vertical lines */
+        for (int i = 0; i < n; i++) {
             var path_builder = new Gsk.PathBuilder ();
-            path_builder.move_to (x, bounds.origin.y);
-            path_builder.line_to (x, bounds.origin.y + bounds.size.height);
+            path_builder.move_to (width * i, 0);
+            path_builder.line_to (width * i, height * n);
 
             var path = path_builder.to_path ();
             snapshot.append_stroke (path, stroke, color);
         }
 
-        var n_hidden_horizontal_lines = (int) (bounds.origin.y / height);
-        var last_hidden_horizontal_line_y = n_hidden_horizontal_lines * height;
-        for (var y = last_hidden_horizontal_line_y + height; y < bounds.origin.y + bounds.size.height; y += height) {
+        /* Horizontal lines */
+        for (int i = 0; i < n; i++) {
             var path_builder = new Gsk.PathBuilder ();
-            path_builder.move_to (bounds.origin.x, y);
-            path_builder.line_to (bounds.origin.x + bounds.size.width, y);
+            path_builder.move_to (0, height * i);
+            path_builder.line_to (width * n, height * i);
 
             var path = path_builder.to_path ();
             snapshot.append_stroke (path, stroke, color);
