@@ -39,7 +39,7 @@ public class Paper.Renderer : Object {
         content.view_mode.push_clip (snapshot, transformed_bounds, content.page_format);
         content.background.snapshot (snapshot, transformed_bounds);
 
-        content.pattern.snapshot (snapshot, transformed_bounds);
+        snapshot_tilable (snapshot, transformed_bounds, content.pattern, scale);
         content.page_format.snapshot (snapshot, transformed_bounds);
         content.origin_indicator.snapshot (snapshot, transformed_bounds);
 
@@ -63,7 +63,7 @@ public class Paper.Renderer : Object {
         snapshot.push_clip (page.bounds);
 
         content.background.snapshot (snapshot, page.bounds);
-        content.pattern.snapshot (snapshot, page.bounds);
+        snapshot_tilable (snapshot, page.bounds, content.pattern, 1.0f);
         content.page_format.snapshot (snapshot, page.bounds);
 
         foreach (var item in content.get_items_intersecting_rect (page.bounds)) {
@@ -73,6 +73,34 @@ public class Paper.Renderer : Object {
         snapshot.pop (); /* clip page.bounds */
 
         snapshot.restore ();
+    }
+
+    private void snapshot_tilable (Gtk.Snapshot snapshot, Graphene.Rect bounds, Tilable tilable, float scale) {
+        var tile_size = tilable.get_tile_size ();
+
+        if (!cache.has_node (tilable, scale)) {
+            var node = item_renderer.render_tilable (tilable, scale);
+            cache.cache_node (tilable, scale, node);
+        }
+
+        add_tilable_nodes (snapshot, bounds, tile_size, cache.get_node (tilable, scale));
+    }
+
+    private void add_tilable_nodes (Gtk.Snapshot snapshot, Graphene.Rect bounds, Graphene.Size tile_size, Gsk.RenderNode node) {
+        var top_left_x = Math.floorf (bounds.get_x () / tile_size.width) * tile_size.width;
+        var top_left_y = Math.floorf (bounds.get_y () / tile_size.height) * tile_size.height;
+
+        var bottom_right_x = bounds.get_x () + bounds.get_width ();
+        var bottom_right_y = bounds.get_y () + bounds.get_height ();
+
+        for (float x = top_left_x; x < bottom_right_x; x += tile_size.width) {
+            for (float y = top_left_y; y < bottom_right_y; y += tile_size.height) {
+                snapshot.save ();
+                snapshot.translate ({ x, y });
+                snapshot.append_node (node);
+                snapshot.restore ();
+            }
+        }
     }
 
     private void snapshot_item (Gtk.Snapshot snapshot, Selection? selection, Item item, float scale) {
