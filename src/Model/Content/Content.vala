@@ -20,6 +20,7 @@ public class Paper.Content : Object {
     public OriginIndicator origin_indicator { get; private set; }
 
     public Selection selection { get; private set; }
+    public UndoStack undo_stack { get; private set; }
 
     private ItemStore items;
 
@@ -44,6 +45,7 @@ public class Paper.Content : Object {
 
         items = new ItemStore (database);
         selection = new Selection (items);
+        undo_stack = new UndoStack (items);
     }
 
     private void emit_changed () {
@@ -56,11 +58,13 @@ public class Paper.Content : Object {
 
     public void add_item (Item item) {
         items.add (item);
+        undo_stack.notify_item_added (item);
         emit_changed ();
     }
 
     public void remove_item (Item item) {
         items.remove (item);
+        undo_stack.notify_item_removed (item);
         emit_changed ();
     }
 

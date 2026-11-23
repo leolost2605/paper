@@ -7,6 +7,7 @@ files = [
     'Model' / 'Content' / 'Page.vala',
     'Model' / 'Content' / 'PageFormat.vala',
     'Model' / 'Content' / 'Selection.vala',
+    'Model' / 'Content' / 'UndoStack.vala',
     'Model' / 'Content' / 'Item' / 'Item.vala',
     'Model' / 'Content' / 'Item' / 'ItemStore.vala',
     'Model' / 'Content' / 'Item' / 'PdfPage.vala',

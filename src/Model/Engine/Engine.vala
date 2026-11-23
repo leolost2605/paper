@@ -4,6 +4,9 @@
  */
 
 public class Paper.Engine : Object, Gdk.Paintable {
+    public bool can_undo { get { return content != null ? content.undo_stack.can_undo : false; } }
+    public bool can_redo { get { return content != null ? content.undo_stack.can_redo : false; } }
+
     private Renderer renderer;
     private Viewport viewport;
 
@@ -23,7 +26,15 @@ public class Paper.Engine : Object, Gdk.Paintable {
             tool.deactivate (this.content);
         }
 
+        if (this.content != null) {
+            content.undo_stack.notify.disconnect (on_undo_stack_notify);
+        }
+
         this.content = content;
+
+        if (this.content != null) {
+            content.undo_stack.notify.connect (on_undo_stack_notify);
+        }
 
         if (tool != null && this.content != null) {
             tool.activate (this.content);
@@ -32,6 +43,10 @@ public class Paper.Engine : Object, Gdk.Paintable {
         viewport.load_and_set_state_id (content.id, last_snapshot_size);
 
         maybe_queue_render (TOOL_CHANGED | ZOOM_CHANGED | TRANSLATION_CHANGED | STROKES_CHANGED);
+    }
+
+    private void on_undo_stack_notify (ParamSpec pspec) {
+        notify_property (pspec.name);
     }
 
     public void load_tool (Tool? tool) {
@@ -138,6 +153,18 @@ public class Paper.Engine : Object, Gdk.Paintable {
         var flags = tool.commit (content, transformed.x, transformed.y);
 
         maybe_queue_render (flags);
+    }
+
+    public void undo () {
+        content.undo_stack.undo ();
+
+        maybe_queue_render (STROKES_CHANGED);
+    }
+
+    public void redo () {
+        content.undo_stack.redo ();
+
+        maybe_queue_render (STROKES_CHANGED);
     }
 
     public async void export_pdf (File target_file) throws Error {

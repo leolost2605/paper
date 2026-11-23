@@ -33,6 +33,24 @@ template $PaperPenbar: Granite.Bin {
             orientation: horizontal;
         }
 
+        Gtk.Button {
+          icon-name: "edit-undo";
+          action-name: "drawing-area.undo";
+
+          styles ["large-icons"]
+        }
+
+        Gtk.Button {
+          icon-name: "edit-redo";
+          action-name: "drawing-area.redo";
+
+          styles ["large-icons"]
+        }
+
+        Gtk.Separator {
+            orientation: horizontal;
+        }
+
         Gtk.MenuButton {
             icon-name: "open-menu-symbolic";
             direction: right;

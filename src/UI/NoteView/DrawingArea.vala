@@ -4,13 +4,12 @@
 */
 
 public class Paper.DrawingArea : Granite.Bin {
-    public const string ACTION_GROUP_PREFIX = "drawing-area";
-    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
-    public const string GO_TO_ORIGIN_ACTION = "go-to-origin";
-
     public ToolStore tool_store { private get; construct; }
     public ToolSelection tool_selection { private get; construct; }
     public Engine engine { private get; construct; }
+
+    private SimpleAction undo_action;
+    private SimpleAction redo_action;
 
     public DrawingArea (ToolStore tool_store, ToolSelection tool_selection, Engine engine) {
         Object (tool_store: tool_store, tool_selection: tool_selection, engine: engine);
@@ -31,20 +30,40 @@ public class Paper.DrawingArea : Granite.Bin {
 
         child = overlay;
 
-        var go_to_origin_action = new SimpleAction (GO_TO_ORIGIN_ACTION, null);
-        go_to_origin_action.activate.connect (go_to_origin);
+        engine.notify.connect (on_engine_notify);
+
+        undo_action = new SimpleAction ("undo", null);
+        undo_action.set_enabled (engine.can_undo);
+        undo_action.activate.connect (engine.undo);
+
+        redo_action = new SimpleAction ("redo", null);
+        redo_action.set_enabled (engine.can_redo);
+        redo_action.activate.connect (engine.redo);
+
+        var go_to_origin_action = new SimpleAction ("go-to-origin", null);
+        go_to_origin_action.activate.connect (engine.go_to_origin);
 
         var import_pdf_action = new SimpleAction ("import-pdf", null);
         import_pdf_action.activate.connect (import_pdf);
 
         var action_group = new SimpleActionGroup ();
+        action_group.add_action (undo_action);
+        action_group.add_action (redo_action);
         action_group.add_action (go_to_origin_action);
         action_group.add_action (import_pdf_action);
-        insert_action_group (ACTION_GROUP_PREFIX, action_group);
+        insert_action_group ("drawing-area", action_group);
     }
 
-    private void go_to_origin () {
-        engine.go_to_origin ();
+    private void on_engine_notify (ParamSpec pspec) {
+        switch (pspec.name) {
+            case "can-undo":
+                undo_action.set_enabled (engine.can_undo);
+                break;
+
+            case "can-redo":
+                redo_action.set_enabled (engine.can_redo);
+                break;
+        }
     }
 
     private async void import_pdf () {
