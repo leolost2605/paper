@@ -41,7 +41,7 @@ public class Paper.Eraser : Paper.Tool {
 
         var removed = 0;
         foreach (var candidate in candidates) {
-            if (candidate.is_near (point, radius)) {
+            if (candidate.layer == FOREGROUND && candidate.is_near (point, radius)) {
                 content.remove_item (candidate);
                 removed++;
             }

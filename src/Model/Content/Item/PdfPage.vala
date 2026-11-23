@@ -13,7 +13,7 @@ public class Paper.PdfPage : Item {
     private Graphene.Rect bounds;
 
     public PdfPage (File file, int page_index, Graphene.Point position) {
-        Object (file: file, page_index: page_index, position: position);
+        Object (file: file, page_index: page_index, position: position, layer: Layer.BACKGROUND);
     }
 
     construct {

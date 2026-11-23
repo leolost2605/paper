@@ -15,7 +15,7 @@ public class Paper.Stroke : Item {
     private Graphene.Rect bounds;
 
     public Stroke (Line line, float width, Gdk.RGBA color) {
-        Object (line: line, width: width, color: color);
+        Object (line: line, width: width, color: color, layer: Layer.FOREGROUND);
     }
 
     construct {

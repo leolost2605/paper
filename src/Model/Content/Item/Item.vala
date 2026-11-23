@@ -12,6 +12,13 @@
  * and the snapshot passed to snapshot is already transformed to "real" coordinates.
  */
 public abstract class Paper.Item : Object {
+    public enum Layer {
+        BACKGROUND, // E.g. pdf pages
+        FOREGROUND // E.g. strokes
+    }
+
+    public Layer layer { get; construct; }
+
     public abstract void snapshot (Gtk.Snapshot snapshot);
     public abstract void snapshot_selected (Gtk.Snapshot snapshot);
     public abstract Graphene.Rect get_bounds ();
