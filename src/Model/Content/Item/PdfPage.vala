@@ -39,6 +39,7 @@ public class Paper.PdfPage : Item {
         context.translate (position.x, position.y);
         page.render (context);
 
+        snapshot.append_color ({ 1.0f, 1.0f, 1.0f, 1.0f }, get_bounds ());
         snapshot.append_node (node);
     }
 
