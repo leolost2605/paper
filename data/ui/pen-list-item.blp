@@ -5,10 +5,13 @@ template $PaperPenListItem: Granite.Bin {
   child: Gtk.PopoverBin popover_bin {
     handle-input: true;
 
-    child: $PaperColorCircle {
-      color: bind template.pen as <$PaperPen>.color;
-      width-request: 32;
-      height-request: 32;
+    child: Gtk.AspectFrame {
+      ratio: 1.0;
+      child: $PaperColorCircle {
+        color: bind template.pen as <$PaperPen>.color;
+        width-request: 32;
+        height-request: 32;
+      };
     };
 
     popover: Gtk.Popover {
