@@ -35,10 +35,18 @@ public class Paper.Selection : Object {
         return selected_items.contains (item);
     }
 
-    public void commit () {
+    public void commit (out Gee.Collection<Item> removed_items, out Gee.Collection<Item> added_items) {
+        removed_items = new Gee.ArrayList<Item> ();
+        added_items = new Gee.ArrayList<Item> ();
+
         foreach (var item in selected_items) {
+            var transformed_item = item.copy_transformed (current_transform);
+
             items.remove (item);
-            items.add (item.copy_transformed (current_transform));
+            items.add (transformed_item);
+
+            removed_items.add (item);
+            added_items.add (transformed_item);
         }
 
         selected_items.clear ();

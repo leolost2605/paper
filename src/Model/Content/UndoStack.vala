@@ -5,16 +5,23 @@
 
 public class Paper.UndoStack : Object {
     private class Operation : Object {
-        public enum Type {
-            ADD,
-            REMOVE
+        public Gee.Collection<Item> removed_items { get; construct; }
+        public Gee.Collection<Item> added_items { get; construct; }
+
+        public Operation.add (Item item) {
+            Object (removed_items: new Gee.ArrayList<Item> (), added_items: new Gee.ArrayList<Item> ());
+
+            added_items.add (item);
         }
 
-        public Type operation_type { get; construct; }
-        public Item item { get; construct; }
+        public Operation.remove (Item item) {
+            Object (removed_items: new Gee.ArrayList<Item> (), added_items: new Gee.ArrayList<Item> ());
 
-        public Operation (Type type, Item item) {
-            Object (operation_type: type, item: item);
+            removed_items.add (item);
+        }
+
+        public Operation.selection_committed (Gee.Collection<Item> removed_items, Gee.Collection<Item> added_items) {
+            Object (removed_items: removed_items, added_items: added_items);
         }
     }
 
@@ -49,21 +56,42 @@ public class Paper.UndoStack : Object {
     }
 
     public void notify_item_added (Item item) {
-        iterator = null;
+        clear_ops_above_iterator ();
 
-        stack.add (new Operation (ADD, item));
+        stack.add (new Operation.add (item));
 
         notify_property ("can-undo");
         notify_property ("can-redo");
     }
 
     public void notify_item_removed (Item item) {
-        iterator = null;
+        clear_ops_above_iterator ();
 
-        stack.add (new Operation (REMOVE, item));
+        stack.add (new Operation.remove (item));
 
         notify_property ("can-undo");
         notify_property ("can-redo");
+    }
+
+    public void notify_selection_committed (Gee.Collection<Item> removed_items, Gee.Collection<Item> added_items) {
+        clear_ops_above_iterator ();
+
+        stack.add (new Operation.selection_committed (removed_items, added_items));
+
+        notify_property ("can-undo");
+        notify_property ("can-redo");
+    }
+
+    private void clear_ops_above_iterator () {
+        if (iterator == null) {
+            return;
+        }
+
+        do {
+            iterator.remove ();
+        } while (iterator.next ());
+
+        iterator = null;
     }
 
     public void undo () {
@@ -87,13 +115,12 @@ public class Paper.UndoStack : Object {
     }
 
     private void undo_op (Operation op) {
-        switch (op.operation_type) {
-            case ADD:
-                store.remove (op.item);
-                break;
-            case REMOVE:
-                store.add (op.item);
-                break;
+        foreach (var item in op.removed_items) {
+            store.add (item);
+        }
+
+        foreach (var item in op.added_items) {
+            store.remove (item);
         }
     }
 
@@ -114,13 +141,12 @@ public class Paper.UndoStack : Object {
     }
 
     private void redo_op (Operation op) {
-        switch (op.operation_type) {
-            case ADD:
-                store.add (op.item);
-                break;
-            case REMOVE:
-                store.remove (op.item);
-                break;
+        foreach (var item in op.removed_items) {
+            store.remove (item);
+        }
+
+        foreach (var item in op.added_items) {
+            store.add (item);
         }
     }
 }
