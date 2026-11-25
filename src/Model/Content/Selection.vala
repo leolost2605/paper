@@ -75,7 +75,12 @@ public class Paper.Selection : Object {
         notify_property ("is-empty");
     }
 
-    public Gee.Collection<Item> get_selected_items () {
-        return selected_items;
+    public Graphene.Rect? get_bounds () {
+        if (selected_items.is_empty) {
+            return null;
+        }
+
+        var original_bounds = Item.compute_bounds (selected_items);
+        return current_transform.transform_bounds (original_bounds);
     }
 }

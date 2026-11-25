@@ -4,11 +4,7 @@
  */
 
 public class Paper.SelectionFrame : Object {
-    public Graphene.Rect item_bounds { get; construct; }
-
-    public SelectionFrame (Graphene.Rect item_bounds) {
-        Object (item_bounds: item_bounds);
-    }
+    public Graphene.Rect item_bounds { get; set; }
 
     public bool contains (Graphene.Point point) {
         return item_bounds.contains_point (point);

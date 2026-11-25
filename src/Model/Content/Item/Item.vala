@@ -24,4 +24,16 @@ public abstract class Paper.Item : Object {
     public abstract Graphene.Rect get_bounds ();
     public abstract bool is_near (Graphene.Point point, float epsilon);
     public abstract Item copy_transformed (Gsk.Transform transform);
+
+    public static Graphene.Rect compute_bounds (Gee.Collection<Item> items) requires (!items.is_empty) {
+        Graphene.Rect? bounds = null;
+        foreach (var item in items) {
+            if (bounds == null) {
+                bounds = item.get_bounds ();
+            } else {
+                bounds = bounds.union (item.get_bounds ());
+            }
+        }
+        return bounds;
+    }
 }

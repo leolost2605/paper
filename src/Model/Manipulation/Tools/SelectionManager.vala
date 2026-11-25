@@ -10,10 +10,9 @@ public class Paper.SelectionManager : Object {
         ROTATE
     }
 
-    public Graphene.Rect item_bounds { get; construct; }
+    public Content content { get; construct; }
 
-    // Translation and rotation
-    private Gsk.Transform current_transform;
+    public bool active { get { return !content.selection.is_empty; } }
 
     private ResizeNode[] resize_nodes;
     private SelectionFrame selection_frame;
@@ -22,8 +21,8 @@ public class Paper.SelectionManager : Object {
     private Operation? current_operation;
     private ResizeNode.Position? current_resize_node_position;
 
-    public SelectionManager (Graphene.Rect item_bounds) {
-        Object (item_bounds: item_bounds);
+    public SelectionManager (Content content) {
+        Object (content: content);
     }
 
     construct {
@@ -34,45 +33,32 @@ public class Paper.SelectionManager : Object {
             new ResizeNode (BOTTOM_RIGHT)
         };
 
-        selection_frame = new SelectionFrame (item_bounds);
-
-        foreach (var node in resize_nodes) {
-            node.update_position (item_bounds);
-        }
-
-        current_transform = new Gsk.Transform ();
+        selection_frame = new SelectionFrame ();
     }
 
     public void snapshot (Gtk.Snapshot snapshot) {
-        snapshot.save ();
-        snapshot.transform (current_transform);
+        selection_frame.snapshot (snapshot);
 
         foreach (var node in resize_nodes) {
             node.snapshot (snapshot);
         }
-
-        selection_frame.snapshot (snapshot);
-
-        snapshot.restore ();
     }
 
     public bool start (Graphene.Point point) {
+        /* Update bounds to make sure we select the correct operation */
+        update_bounds ();
+
         current_point = point;
 
-        /* We need to copy current_transform because invert consumes the transform */
-        Gsk.Transform transform = current_transform;
-        transform = transform.invert ();
-        var transformed_point = transform.transform_point (point);
-
         foreach (var node in resize_nodes) {
-            if (node.contains (transformed_point)) {
+            if (node.contains (point)) {
                 current_operation = RESIZE;
                 current_resize_node_position = node.position;
                 return true;
             }
         }
 
-        if (selection_frame.contains (transformed_point)) {
+        if (selection_frame.contains (point)) {
             current_operation = TRANSLATE;
             return true;
         }
@@ -103,13 +89,27 @@ public class Paper.SelectionManager : Object {
     }
 
     private void translate (Content content, Graphene.Point delta) {
-        current_transform = current_transform.translate (delta);
-
         var transform = new Gsk.Transform ().translate (delta);
         content.transform_selection (transform);
+
+        update_bounds ();
     }
 
     private void resize (Content content, ResizeNode.Position position, Graphene.Point delta) {
         // TODO: Adjust selection frame scaling and update resize nodes position
+    }
+
+    public void update_bounds () {
+        var bounds = content.selection.get_bounds ();
+
+        if (bounds == null) {
+            return;
+        }
+
+        selection_frame.item_bounds = bounds;
+
+        foreach (var node in resize_nodes) {
+            node.update_position (bounds);
+        }
     }
 }
