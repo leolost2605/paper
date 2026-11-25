@@ -1,9 +1,10 @@
 blueprint_files = files(
+    'ui' / 'library-sidebar-child.blp',
+    'ui' / 'library-sidebar.blp',
     'ui' / 'library-view.blp',
     'ui' / 'main-window.blp',
     'ui' / 'note-list-item.blp',
     'ui' / 'note-view.blp',
-    'ui' / 'notebook-list-item.blp',
     'ui' / 'pen-list-item.blp',
     'ui' / 'penbar.blp',
 )

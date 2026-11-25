@@ -17,7 +17,10 @@ public class Paper.Application : Gtk.Application {
         base.startup ();
 
         /* Ensure some types needed for blp construction */
+        typeof (FileBase).ensure ();
         typeof (ColorCircle).ensure ();
+        typeof (LibrarySidebar).ensure ();
+        typeof (LibrarySidebarItem).ensure ();
 
         Granite.init ();
         FileBase.init ();

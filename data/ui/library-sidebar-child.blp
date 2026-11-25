@@ -1,0 +1,18 @@
+using Gtk 4.0;
+using Granite 7.0;
+
+template $PaperLibrarySidebarChild: Granite.Bin {
+    child: Granite.Box {
+      orientation: horizontal;
+      child-spacing: half;
+
+      Gtk.Image {
+        icon-name: bind template.icon-name;
+        visible: bind $string_to_bool (template.icon-name);
+      }
+
+      Gtk.Label {
+        label: bind template.text;
+      }
+    };
+}

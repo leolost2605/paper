@@ -5,20 +5,21 @@
 
 [GtkTemplate (ui = "/io/github/leolost2605/paper/ui/library-view.ui")]
 public class Paper.LibraryView : Adw.NavigationPage {
-    public NotebookManager notebook_manager { get; construct; }
-
     [GtkChild]
-    private unowned Gtk.SingleSelection notebook_selection;
+    private unowned ListStore sidebar_items;
+
     [GtkChild]
     private unowned Gtk.MultiSelection selection_model;
 
+    private Home home;
     private OperationManager operation_manager;
 
-    public LibraryView (NotebookManager notebook_manager) {
-        Object (notebook_manager: notebook_manager);
-    }
-
     construct {
+        home = new Home ();
+
+        sidebar_items.append (new LibrarySidebarItem ("user-home", _("Home"), home.files));
+        sidebar_items.append (new LibrarySidebarItem ("document-open-recent", _("Recents"), new ListStore (typeof (FileBase))));
+
         operation_manager = new OperationManager (selection_model);
 
         var create_note_action = new SimpleAction ("create-note", new VariantType.maybe (VariantType.STRING));
@@ -66,7 +67,7 @@ public class Paper.LibraryView : Adw.NavigationPage {
 
     private string get_parent_uri_for_creation () {
         if (selection_model.get_selection ().is_empty ()) {
-            return ((Notebook) notebook_selection.selected_item).uri;
+            return home.uri;
         }
 
         // TODO: Support multi selection
@@ -137,12 +138,12 @@ public class Paper.LibraryView : Adw.NavigationPage {
     }
 
     [GtkCallback]
-    private Gtk.TreeListModel? create_tree_model (Notebook? notebook) {
-        if (notebook == null || notebook.root == null) {
+    private Gtk.TreeListModel? create_tree_model (ListModel? files) {
+        if (files == null) {
             return null;
         }
 
-        return new Gtk.TreeListModel (notebook.root.children, false, false, create_child_model_func);
+        return new Gtk.TreeListModel (files, false, false, create_child_model_func);
     }
 
     private static ListModel? create_child_model_func (Object item) {
