@@ -1,0 +1,64 @@
+app-id: io.github.leolost2605.paper
+
+runtime: io.elementary.Platform
+runtime-version: '9.1'
+sdk: io.elementary.Sdk
+
+command: io.github.leolost2605.paper
+
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+
+cleanup:
+  - /include
+  - /lib/girepository-1.0
+  - /lib/pkgconfig
+  - /share/gir-1.0
+  - /share/vala
+  - '*.la'
+  - '*.a'
+
+modules:
+  - name: popplerdata
+    no-autogen: true
+    make-install-args:
+      - prefix=/app
+    sources:
+      - type: archive
+        url: https://poppler.freedesktop.org/poppler-data-0.4.12.tar.gz
+        sha256: c835b640a40ce357e1b83666aabd95edffa24ddddd49b8daff63adb851cdab74
+        x-checker-data:
+          type: anitya
+          project-id: 3687
+          url-template: https://poppler.freedesktop.org/poppler-data-$version.tar.gz
+  - name: poppler
+    buildsystem: cmake-ninja
+    config-opts:
+        - -DCMAKE_INSTALL_LIBDIR=/app/lib
+        - -DCMAKE_INSTALL_INCLUDEDIR=/app/include
+        - -DBUILD_GTK_TESTS=OFF
+        - -DBUILD_CPP_TESTS=OFF
+        - -DENABLE_CPP=OFF
+        - -DENABLE_BOOST=OFF
+        - -DENABLE_GOBJECT_INTROSPECTION=OFF
+        - -DENABLE_LIBOPENJPEG=openjpeg2
+        - -DENABLE_QT5=OFF
+        - -DENABLE_QT6=OFF
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://poppler.freedesktop.org/poppler-26.11.0.tar.xz
+        sha256: 41c32680160addf5a8dd7a830e4869c01e9f6bee1abb91e44fabd1ba9d7828fb
+        x-checker-data:
+          type: anitya
+          project-id: 3686
+          url-template: https://poppler.freedesktop.org/poppler-$version.tar.xz
+  - name: paper
+    buildsystem: meson
+    sources:
+      - type: dir
+        path: .
