@@ -7,6 +7,7 @@ template $PaperPenListItem: Granite.Bin {
 
     child: Gtk.AspectFrame {
       ratio: 1.0;
+
       child: $PaperColorCircle {
         color: bind template.pen as <$PaperPen>.color;
         width-request: 32;

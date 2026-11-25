@@ -5,10 +5,8 @@ template $PaperNoteView: Adw.NavigationPage {
   title: bind template.current-note as <$PaperNote>.display-name;
 
   Adw.ToolbarView toolbar_view {
-
     [top]
     Adw.HeaderBar {
-
       [end]
       Gtk.Button {
         icon-name: "document-properties";

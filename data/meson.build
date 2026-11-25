@@ -4,6 +4,7 @@ blueprint_files = files(
     'ui' / 'library-view.blp',
     'ui' / 'main-window.blp',
     'ui' / 'note-list-item.blp',
+    'ui' / 'note-list.blp',
     'ui' / 'note-view.blp',
     'ui' / 'pen-list-item.blp',
     'ui' / 'penbar.blp',

@@ -9,7 +9,7 @@ template $PaperLibraryView: Adw.NavigationPage {
     sidebar: Adw.NavigationPage {
       title: _("Sections");
 
-      Adw.ToolbarView {
+      child: Adw.ToolbarView {
         bottom-bar-style: raised;
 
         content: $PaperLibrarySidebar sidebar {
@@ -17,7 +17,7 @@ template $PaperLibraryView: Adw.NavigationPage {
           icon-name-expression: expr item as <$PaperLibrarySidebarItem>.icon-name;
 
           items: Gio.ListStore sidebar_items {
-            item-type: typeof <$PaperLibrarySidebarItem>;
+            item-type: typeof<$PaperLibrarySidebarItem>;
           };
         };
 
@@ -29,68 +29,15 @@ template $PaperLibraryView: Adw.NavigationPage {
             "flat",
           ]
         }
-      }
+      };
     };
 
     content: Adw.NavigationPage {
       title: bind sidebar.selected-item as <$PaperLibrarySidebarItem>.name;
 
-      Adw.ToolbarView {
-        bottom-bar-style: raised;
-
-        Gtk.ScrolledWindow {
-          propagate-natural-height: true;
-
-          Gtk.ListView {
-            activate => $on_activate();
-
-            single-click-activate: true;
-
-            model: Gtk.MultiSelection selection_model {
-              model: Gtk.SortListModel {
-                model: bind $create_tree_model(sidebar.selected-item as <$PaperLibrarySidebarItem>.files);
-
-                sorter: Gtk.TreeListRowSorter {
-                    sorter: Gtk.MultiSorter {
-                        Gtk.StringSorter {
-                          expression: expr item as <$PaperFileBase>.display-name;
-                        }
-                    };
-                };
-              };
-            };
-
-            factory: Gtk.SignalListItemFactory {
-              setup => $on_note_item_setup();
-              bind => $on_note_item_bind();
-            };
-
-            styles [
-              "background"
-            ]
-          }
-        }
-
-        [top]
-        Adw.HeaderBar { }
-
-        [bottom]
-        Gtk.ActionBar {
-          [start]
-          Gtk.Button {
-            icon-name: "document-new-symbolic";
-            action-name: "library.create-note";
-            action-target: "@ms nothing";
-          }
-
-          [start]
-          Gtk.Button {
-            icon-name: "folder-new-symbolic";
-            action-name: "library.create-folder";
-            action-target: "@ms nothing";
-          }
-        }
-      }
+      child: $PaperNoteList {
+        root-files: bind sidebar.selected-item as <$PaperLibrarySidebarItem>.files;
+      };
     };
   }
 }
