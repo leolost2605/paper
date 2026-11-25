@@ -60,8 +60,9 @@ template $PaperLibraryView: Adw.NavigationPage {
               };
             };
 
-            factory: Gtk.BuilderListItemFactory {
-              resource: "/io/github/leolost2605/paper/ui/note-list-item.ui";
+            factory: Gtk.SignalListItemFactory {
+              setup => $on_note_item_setup();
+              bind => $on_note_item_bind();
             };
 
             styles [

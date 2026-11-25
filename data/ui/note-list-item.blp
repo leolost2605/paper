@@ -1,11 +1,11 @@
 using Gtk 4.0;
 using Granite 7.0;
 
-template ListItem {
+template $PaperNoteListItem: Granite.Bin {
     child: Granite.ListItem {
         menu-model: edit_menu;
 
-        Gtk.TreeExpander {
+        child: Gtk.TreeExpander {
             list-row: bind template.item as <Gtk.TreeListRow>;
 
             child: Granite.Box {
@@ -20,7 +20,7 @@ template ListItem {
                   label: bind template.item as <Gtk.TreeListRow>.item as <$PaperFileBase>.display-name;
                 }
             };
-        }
+        };
     };
 }
 
