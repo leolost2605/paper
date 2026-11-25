@@ -6,6 +6,8 @@
 public class Paper.Selection : Object {
     public ItemStore items { private get; construct; }
 
+    public bool is_empty { get { return selected_items.is_empty; } }
+
     private Gee.HashSet<Item> selected_items = new Gee.HashSet<Item> ();
     private Gsk.Transform current_transform;
 
@@ -21,6 +23,8 @@ public class Paper.Selection : Object {
         foreach (var item in items) {
             selected_items.add (item);
         }
+
+        notify_property ("is-empty");
     }
 
     public void transform (Gsk.Transform transform) {
@@ -52,6 +56,23 @@ public class Paper.Selection : Object {
         selected_items.clear ();
 
         current_transform = new Gsk.Transform ();
+
+        notify_property ("is-empty");
+    }
+
+    public void delete (out Gee.Collection<Item> removed_items) {
+        removed_items = new Gee.ArrayList<Item> ();
+
+        foreach (var item in selected_items) {
+            items.remove (item);
+            removed_items.add (item);
+        }
+
+        selected_items.clear ();
+
+        current_transform = new Gsk.Transform ();
+
+        notify_property ("is-empty");
     }
 
     public Gee.Collection<Item> get_selected_items () {

@@ -23,10 +23,14 @@ public class Paper.DrawingArea : Granite.Bin {
             valign = CENTER
         };
 
+        var selection_bar = new SelectionBar ();
+        engine.bind_property ("has-selection", selection_bar, "should-show", SYNC_CREATE);
+
         var overlay = new Gtk.Overlay () {
             child = canvas,
         };
         overlay.add_overlay (penbar);
+        overlay.add_overlay (selection_bar);
 
         child = overlay;
 
@@ -40,6 +44,9 @@ public class Paper.DrawingArea : Granite.Bin {
         redo_action.set_enabled (engine.can_redo);
         redo_action.activate.connect (engine.redo);
 
+        var delete_selection_action = new SimpleAction ("delete-selection", null);
+        delete_selection_action.activate.connect (engine.delete_selection);
+
         var go_to_origin_action = new SimpleAction ("go-to-origin", null);
         go_to_origin_action.activate.connect (engine.go_to_origin);
 
@@ -49,6 +56,7 @@ public class Paper.DrawingArea : Granite.Bin {
         var action_group = new SimpleActionGroup ();
         action_group.add_action (undo_action);
         action_group.add_action (redo_action);
+        action_group.add_action (delete_selection_action);
         action_group.add_action (go_to_origin_action);
         action_group.add_action (import_pdf_action);
         insert_action_group ("drawing-area", action_group);

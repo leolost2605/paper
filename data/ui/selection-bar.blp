@@ -1,0 +1,39 @@
+using Gtk 4.0;
+using Granite 7.0;
+
+template $PaperSelectionBar: Granite.Bin {
+  halign: center;
+  valign: start;
+  can-target: bind template.should-show;
+
+  child: Gtk.Revealer {
+    reveal-child: bind template.should-show;
+    transition-type: crossfade;
+
+    child: Granite.Bin {
+        styles [
+          "penbar",
+          "card",
+        ]
+
+        child: Granite.Box {
+            styles [
+              "content-margin",
+            ]
+
+            child-spacing: single;
+            orientation: horizontal;
+
+
+            Gtk.Button {
+                icon-name: "edit-delete";
+                action-name: "drawing-area.delete-selection";
+
+                styles [
+                    "large-icons",
+                ]
+            }
+        };
+    };
+  };
+}
