@@ -18,6 +18,7 @@ public class Paper.Application : Gtk.Application {
 
         /* Ensure some types needed for blp construction */
         typeof (FileBase).ensure ();
+        typeof (NoteList).ensure ();
         typeof (ColorCircle).ensure ();
         typeof (LibrarySidebar).ensure ();
         typeof (LibrarySidebarItem).ensure ();
