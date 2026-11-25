@@ -158,6 +158,19 @@ public class Paper.LibraryView : Adw.NavigationPage {
     }
 
     [GtkCallback]
+    private void on_note_item_setup (Object obj) {
+        var item = (Gtk.ListItem) obj;
+        item.child = new NoteListItem ();
+    }
+
+    [GtkCallback]
+    private void on_note_item_bind (Object obj) {
+        var item = (Gtk.ListItem) obj;
+        var child = (NoteListItem) item.child;
+        child.item = item.item;
+    }
+
+    [GtkCallback]
     private void on_activate (Gtk.ListView list_view, uint position) {
         var row = (Gtk.TreeListRow) list_view.model.get_item (position);
         var note = (Note) row.item;
