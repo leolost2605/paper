@@ -2,29 +2,29 @@ using Gtk 4.0;
 using Granite 7.0;
 
 template $PaperNoteListItem: Granite.Bin {
-    child: Granite.ListItem {
-        menu-model: edit_menu;
+  child: Granite.ListItem {
+    menu-model: edit_menu;
 
-        child: Gtk.TreeExpander {
-            list-row: bind template.item as <Gtk.TreeListRow>;
+    child: Gtk.TreeExpander {
+      list-row: bind template.item as <Gtk.TreeListRow>;
 
-            child: Granite.Box {
-                child-spacing: single;
+      child: Granite.Box {
+        child-spacing: single;
 
-                Gtk.Image {
-                  gicon: bind template.item as <Gtk.TreeListRow>.item as <$PaperFileBase>.icon;
-                  pixel-size: 24;
-                }
+        Gtk.Image {
+          gicon: bind template.item as <Gtk.TreeListRow>.item as <$PaperFileBase>.icon;
+          pixel-size: 24;
+        }
 
-                Gtk.Label {
-                  label: bind template.item as <Gtk.TreeListRow>.item as <$PaperFileBase>.display-name;
-                }
-            };
-        };
+        Gtk.Label {
+          label: bind template.item as <Gtk.TreeListRow>.item as <$PaperFileBase>.display-name;
+        }
+      };
     };
+  };
 }
 
 menu edit_menu {
-    item (_("Delete"), "library.delete-note")
-    item (_("Rename"), "library.rename-note")
+  item (_("Delete"), "note-list.delete-note")
+  item (_("Rename"), "note-list.rename-note")
 }
