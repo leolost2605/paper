@@ -97,7 +97,9 @@ public class Paper.Content : Object {
     }
 
     public void commit_selection () {
-        selection.commit ();
+        Gee.Collection<Item> removed_items, added_items;
+        selection.commit (out removed_items, out added_items);
+        undo_stack.notify_selection_committed (removed_items, added_items);
         emit_changed ();
     }
 }
