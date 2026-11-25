@@ -70,20 +70,8 @@ public class Paper.Content : Object {
 
     public Gee.List<Page> calculate_pages () {
         var all_items = items.get_all ();
-        var full_bounds = get_item_bounds (all_items);
+        var full_bounds = Item.compute_bounds (all_items);
         return page_format.calculate_pages (full_bounds);
-    }
-
-    public Graphene.Rect get_item_bounds (Gee.Collection<Item> items) requires (!items.is_empty) {
-        Graphene.Rect? bounds = null;
-        foreach (var item in items) {
-            if (bounds == null) {
-                bounds = item.get_bounds ();
-            } else {
-                bounds = bounds.union (item.get_bounds ());
-            }
-        }
-        return bounds;
     }
 
     public void select_items (Gee.Collection<Item> to_select) {

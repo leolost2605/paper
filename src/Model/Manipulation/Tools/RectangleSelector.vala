@@ -18,11 +18,16 @@ public class Paper.RectangleSelector : Paper.Tool {
         return new Variant.boolean (false);
     }
 
+    public override void activate (Content content) {
+        selection = new SelectionManager (content);
+    }
+
     public override void deactivate (Content content) {
-        if (selection != null) {
+        if (selection.active) {
             content.commit_selection ();
-            selection = null;
         }
+
+        selection = null;
     }
 
     public override RenderFlags start (Content content, float x, float y) {
@@ -31,9 +36,8 @@ public class Paper.RectangleSelector : Paper.Tool {
             y = y
         };
 
-        if (selection != null && !selection.start (start_point)) {
+        if (selection.active && !selection.start (start_point)) {
             content.commit_selection ();
-            selection = null;
             return STROKES_CHANGED;
         }
 
@@ -48,7 +52,7 @@ public class Paper.RectangleSelector : Paper.Tool {
 
         RenderFlags flags = TOOL_CHANGED;
 
-        if (selection != null) {
+        if (selection.active) {
             selection.motion (content, current_point);
             flags |= STROKES_CHANGED;
         }
@@ -57,7 +61,7 @@ public class Paper.RectangleSelector : Paper.Tool {
     }
 
     public override RenderFlags commit (Content content, float x, float y) {
-        if (selection == null) {
+        if (!selection.active) {
             select_items_in_rectangle (content);
         }
 
@@ -82,16 +86,14 @@ public class Paper.RectangleSelector : Paper.Tool {
 
         content.select_items (items);
 
-        var bounds = content.get_item_bounds (items);
-
-        selection = new SelectionManager (bounds);
+        selection.update_bounds ();
     }
 
     public override void snapshot_transformed (Gtk.Snapshot snapshot) {
-        if (selection == null) {
-            snapshot_selection_rectangle (snapshot);
-        } else {
+        if (selection.active) {
             selection.snapshot (snapshot);
+        } else {
+            snapshot_selection_rectangle (snapshot);
         }
     }
 
