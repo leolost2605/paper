@@ -54,6 +54,7 @@ files = [
     'UI' / 'NoteView' / 'DrawingArea.vala',
     'UI' / 'NoteView' / 'NoteView.vala',
     'UI' / 'NoteView' / 'PropertiesDialog.vala',
+    'UI' / 'NoteView' / 'SelectionBar.vala',
     'UI' / 'NoteView' / 'Canvas' / 'Canvas.vala',
     'UI' / 'NoteView' / 'Canvas' / 'InputHandler.vala',
     'UI' / 'NoteView' / 'Canvas' / 'KineticScrolling.vala',

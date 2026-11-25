@@ -6,6 +6,7 @@
 public class Paper.Engine : Object, Gdk.Paintable {
     public bool can_undo { get { return content != null ? content.undo_stack.can_undo : false; } }
     public bool can_redo { get { return content != null ? content.undo_stack.can_redo : false; } }
+    public bool has_selection { get { return content != null ? !content.selection.is_empty : false; } }
 
     private Renderer renderer;
     private Viewport viewport;
@@ -28,12 +29,14 @@ public class Paper.Engine : Object, Gdk.Paintable {
 
         if (this.content != null) {
             content.undo_stack.notify.disconnect (on_undo_stack_notify);
+            content.selection.notify.disconnect (on_selection_notify);
         }
 
         this.content = content;
 
         if (this.content != null) {
             content.undo_stack.notify.connect (on_undo_stack_notify);
+            content.selection.notify.connect (on_selection_notify);
         }
 
         if (tool != null && this.content != null) {
@@ -47,6 +50,10 @@ public class Paper.Engine : Object, Gdk.Paintable {
 
     private void on_undo_stack_notify (ParamSpec pspec) {
         notify_property (pspec.name);
+    }
+
+    private void on_selection_notify () {
+        notify_property ("has-selection");
     }
 
     public void load_tool (Tool? tool) {
@@ -165,6 +172,12 @@ public class Paper.Engine : Object, Gdk.Paintable {
         content.undo_stack.redo ();
 
         maybe_queue_render (STROKES_CHANGED);
+    }
+
+    public void delete_selection () {
+        content.delete_selection ();
+
+        maybe_queue_render (STROKES_CHANGED | TOOL_CHANGED);
     }
 
     public async void export_pdf (File target_file) throws Error {

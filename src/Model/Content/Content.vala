@@ -102,4 +102,11 @@ public class Paper.Content : Object {
         undo_stack.notify_selection_committed (removed_items, added_items);
         emit_changed ();
     }
+
+    public void delete_selection () {
+        Gee.Collection<Item> removed_items;
+        selection.delete (out removed_items);
+        undo_stack.notify_selection_committed (removed_items, new Gee.ArrayList<Item> ());
+        emit_changed ();
+    }
 }
