@@ -48,6 +48,7 @@ files = [
     'UI' / 'Library' / 'LibrarySidebar.vala',
     'UI' / 'Library' / 'LibrarySidebarItem.vala',
     'UI' / 'Library' / 'LibraryView.vala',
+    'UI' / 'Library' / 'NoteList.vala',
     'UI' / 'Library' / 'NoteListItem.vala',
     'UI' / 'Library' / 'RenameDialog.vala',
     'UI' / 'NoteView' / 'DrawingArea.vala',
