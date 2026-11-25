@@ -1,0 +1,30 @@
+using Gtk 4.0;
+using Granite 7.0;
+using Adw 1;
+
+template $PaperLibrarySidebar: Granite.Bin {
+    selected-item: bind item_selection.selected-item;
+
+    child: Gtk.ScrolledWindow {
+        propagate-natural-height: true;
+
+        child: Adw.ClampScrollable {
+            Gtk.ListView list_view {
+                model: Gtk.SingleSelection item_selection {
+                    model: bind template.items;
+                    autoselect: true;
+                    selected: bind template.selected bidirectional;
+                };
+
+                factory: Gtk.SignalListItemFactory {
+                    setup => $on_setup();
+                    bind => $on_bind();
+                };
+
+                styles [
+                    "navigation-sidebar",
+                ]
+            }
+        };
+    };
+}

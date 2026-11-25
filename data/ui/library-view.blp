@@ -1,4 +1,5 @@
 using Gtk 4.0;
+using Gio 2.0;
 using Adw 1;
 
 template $PaperLibraryView: Adw.NavigationPage {
@@ -6,31 +7,19 @@ template $PaperLibraryView: Adw.NavigationPage {
 
   Adw.NavigationSplitView {
     sidebar: Adw.NavigationPage {
-      title: _("Notebooks");
+      title: _("Sections");
 
       Adw.ToolbarView {
         bottom-bar-style: raised;
 
-        Gtk.ScrolledWindow {
-          propagate-natural-height: true;
+        content: $PaperLibrarySidebar sidebar {
+          name-expression: expr item as <$PaperLibrarySidebarItem>.name;
+          icon-name-expression: expr item as <$PaperLibrarySidebarItem>.icon-name;
 
-          Adw.ClampScrollable {
-            Gtk.ListView {
-              model: Gtk.SingleSelection notebook_selection {
-                model: bind template.notebook_manager as <$PaperNotebookManager>.notebooks;
-                autoselect: true;
-              };
-
-              factory: Gtk.BuilderListItemFactory {
-                resource: "/io/github/leolost2605/paper/ui/notebook-list-item.ui";
-              };
-
-              styles [
-                "navigation-sidebar",
-              ]
-            }
-          }
-        }
+          items: Gio.ListStore sidebar_items {
+            item-type: typeof <$PaperLibrarySidebarItem>;
+          };
+        };
 
         [top]
         Adw.HeaderBar {
@@ -40,26 +29,11 @@ template $PaperLibraryView: Adw.NavigationPage {
             "flat",
           ]
         }
-
-        [bottom]
-        Adw.Clamp {
-          Gtk.ActionBar {
-            [start]
-            Gtk.Button {
-              label: _("New Notebook…");
-              action-name: "win.create-notebook";
-
-              styles [
-                "flat",
-              ]
-            }
-          }
-        }
       }
     };
 
     content: Adw.NavigationPage {
-      title: bind notebook_selection.selected-item as <$PaperNotebook>.name;
+      title: bind sidebar.selected-item as <$PaperLibrarySidebarItem>.name;
 
       Adw.ToolbarView {
         bottom-bar-style: raised;
@@ -74,12 +48,12 @@ template $PaperLibraryView: Adw.NavigationPage {
 
             model: Gtk.MultiSelection selection_model {
               model: Gtk.SortListModel {
-                model: bind $create_tree_model(notebook_selection.selected-item as <$PaperNotebook>);
+                model: bind $create_tree_model(sidebar.selected-item as <$PaperLibrarySidebarItem>.files);
 
                 sorter: Gtk.TreeListRowSorter {
                     sorter: Gtk.MultiSorter {
                         Gtk.StringSorter {
-                            expression: expr item as <$PaperFileBase>.display-name;
+                          expression: expr item as <$PaperFileBase>.display-name;
                         }
                     };
                 };
