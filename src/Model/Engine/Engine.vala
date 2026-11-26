@@ -3,6 +3,10 @@
  * SPDX-FileCopyrightText: 2026 Leonhard Kargl <leo.kargl@proton.me>
  */
 
+/**
+ * All UI interaction goes via the engine. UI doesn't interact
+ * with the content directly.
+ */
 public class Paper.Engine : Object, Gdk.Paintable {
     public bool can_undo { get { return content != null ? content.undo_stack.can_undo : false; } }
     public bool can_redo { get { return content != null ? content.undo_stack.can_redo : false; } }
@@ -44,6 +48,10 @@ public class Paper.Engine : Object, Gdk.Paintable {
         }
 
         viewport.load_and_set_state_id (content.id, last_snapshot_size);
+
+        notify_property ("can-undo");
+        notify_property ("can-redo");
+        notify_property ("has-selection");
 
         maybe_queue_render (TOOL_CHANGED | ZOOM_CHANGED | TRANSLATION_CHANGED | STROKES_CHANGED);
     }
