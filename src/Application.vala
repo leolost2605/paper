@@ -21,7 +21,7 @@ public class Paper.Application : Gtk.Application {
         typeof (NoteList).ensure ();
         typeof (ColorCircle).ensure ();
         typeof (LibrarySidebar).ensure ();
-        typeof (LibrarySidebarItem).ensure ();
+        typeof (FileList).ensure ();
 
         Granite.init ();
         FileBase.init ();

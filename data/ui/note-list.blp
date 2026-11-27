@@ -15,7 +15,7 @@ template $PaperNoteList: Granite.Bin {
 
         model: Gtk.MultiSelection selection_model {
           model: Gtk.SortListModel {
-            model: bind $create_tree_model(template.current-files);
+            model: bind $create_tree_model(template.current-files as <$PaperFileList>.files);
 
             sorter: Gtk.TreeListRowSorter {
               sorter: Gtk.MultiSorter {

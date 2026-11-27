@@ -8,12 +8,24 @@ public class Paper.Home : Object {
     private Gtk.MapListModel _map_list_model;
     public ListModel files { get { return _map_list_model; } }
 
-    public string? uri { get { return root_dir?.uri; } }
+    public string path { get; private set; }
+    public string uri { get; private set; }
 
     private Directory? root_dir;
 
     construct {
         _map_list_model = new Gtk.MapListModel (null, map_func);
+
+        var data_dir = Environment.get_user_data_dir ();
+
+        path = Path.build_filename (data_dir, "paper_documents");
+
+        try {
+            uri = Filename.to_uri (path);
+        } catch (Error e) {
+            critical ("Failed to get URI for home path: %s", path);
+            return;
+        }
 
         load.begin ();
     }
@@ -23,15 +35,11 @@ public class Paper.Home : Object {
     }
 
     private async void load () {
-        var data_dir = Environment.get_user_data_dir ();
-
-        var path = Path.build_filename (data_dir, "paper_documents");
-
-        var root = yield FileBase.get_for_path (path);
+        var root = yield FileBase.get_for_uri (uri);
 
         if (root == null) {
             DirUtils.create_with_parents (path, 0755);
-            root = yield FileBase.get_for_path (path);
+            root = yield FileBase.get_for_uri (uri);
         }
 
         if (root == null || !(root is Directory)) {
