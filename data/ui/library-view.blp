@@ -13,11 +13,11 @@ template $PaperLibraryView: Adw.NavigationPage {
         bottom-bar-style: raised;
 
         content: $PaperLibrarySidebar sidebar {
-          name-expression: expr item as <$PaperLibrarySidebarItem>.name;
-          icon-name-expression: expr item as <$PaperLibrarySidebarItem>.icon-name;
+          name-expression: expr item as <$PaperFileList>.name;
+          icon-name-expression: expr item as <$PaperFileList>.icon-name;
 
           items: Gio.ListStore sidebar_items {
-            item-type: typeof<$PaperLibrarySidebarItem>;
+            item-type: typeof<$PaperFileList>;
           };
         };
 
@@ -33,10 +33,10 @@ template $PaperLibraryView: Adw.NavigationPage {
     };
 
     content: Adw.NavigationPage {
-      title: bind sidebar.selected-item as <$PaperLibrarySidebarItem>.name;
+      title: bind sidebar.selected-item as <$PaperFileList>.name;
 
       child: $PaperNoteList {
-        root-files: bind sidebar.selected-item as <$PaperLibrarySidebarItem>.files;
+        root-files: bind sidebar.selected-item as <$PaperFileList>;
       };
     };
   }

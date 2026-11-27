@@ -5,19 +5,24 @@
 
 [GtkTemplate (ui = "/io/github/leolost2605/paper/ui/note-list.ui")]
 public class Paper.NoteList : Granite.Bin {
-    public ListModel root_files {
+    public FileList? root_files {
         set {
+            if (value == null) {
+                stack.remove_all ();
+                return;
+            }
+
             stack.splice (0, stack.n_items, { value });
         }
     }
 
-    public ListModel? current_files {
+    public FileList? current_files {
         owned get {
             if (stack == null || stack.n_items == 0) {
                 return null;
             }
 
-            return (ListModel) stack.get_item (stack.n_items - 1);
+            return (FileList) stack.get_item (stack.n_items - 1);
         }
     }
 
@@ -30,7 +35,7 @@ public class Paper.NoteList : Granite.Bin {
     private OperationManager operation_manager;
 
     construct {
-        stack = new ListStore (typeof (ListModel));
+        stack = new ListStore (typeof (FileList));
         stack.items_changed.connect (on_stack_changed);
 
         back_action = new SimpleAction ("back", null);
@@ -67,47 +72,24 @@ public class Paper.NoteList : Granite.Bin {
     }
 
     private void create_new_note (Variant? param) requires (param != null) {
-        var parent_uri = get_parent_uri_for_creation ();
-
-        var maybe = param.get_maybe ();
-        if (maybe != null) {
-            parent_uri = maybe.get_string ();
-        }
-
-        var parent_file = File.new_for_uri (parent_uri);
+        var parent_file = get_parent_for_creation (param);
         var new_note = parent_file.get_child (Uuid.string_random ());
         operation_manager.create_note.begin (new_note);
     }
 
     private void create_new_folder (Variant? param) requires (param != null) {
-        var parent_uri = get_parent_uri_for_creation ();
-
-        var maybe = param.get_maybe ();
-        if (maybe != null) {
-            parent_uri = maybe.get_string ();
-        }
-
-        var parent_file = File.new_for_uri (parent_uri);
+        var parent_file = get_parent_for_creation (param);
         var new_dir = parent_file.get_child (Uuid.string_random ());
         operation_manager.create_directory.begin (new_dir);
     }
 
-    private string get_parent_uri_for_creation () {
-        //  if (selection_model.get_selection ().is_empty ()) {
-        //      return home.uri;
-        //  }
-
-        // TODO: Support multi selection
-        var first_selected_index = selection_model.get_selection ().get_nth (0);
-        var first_selected_row = (Gtk.TreeListRow) selection_model.get_item (first_selected_index);
-
-        var first_selected = (FileBase) first_selected_row.item;
-
-        if (first_selected is Directory) {
-            return first_selected.uri;
+    private File get_parent_for_creation (Variant? param) {
+        var maybe = param?.get_maybe ();
+        if (maybe != null) {
+            return File.new_for_uri (maybe.get_string ());
         }
 
-        return first_selected.file.get_parent ().get_uri ();
+        return File.new_for_uri (current_files?.uri ?? "invalid");
     }
 
     private void delete_note (Variant? param) requires (param == null) {
@@ -206,7 +188,8 @@ public class Paper.NoteList : Granite.Bin {
             activate_action_variant (MainWindow.ACTION_PREFIX + MainWindow.OPEN_NOTE_ACTION, new Variant.string (file.uri));
         } else {
             var dir = (Directory) file;
-            stack.append (dir.children);
+            var file_list = new FileList (dir.display_name, dir.children, dir.uri);
+            stack.append (file_list);
         }
     }
 }

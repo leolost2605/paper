@@ -13,7 +13,7 @@ public class Paper.LibraryView : Adw.NavigationPage {
     construct {
         home = new Home ();
 
-        sidebar_items.append (new LibrarySidebarItem ("user-home", _("Home"), home.files));
-        sidebar_items.append (new LibrarySidebarItem ("document-open-recent", _("Recents"), new ListStore (typeof (FileBase))));
+        sidebar_items.append (new FileList (_("Home"), home.files, home.uri, "user-home"));
+        sidebar_items.append (new FileList (_("Recents"), new ListStore (typeof (FileBase)), null, "document-open-recent"));
     }
 }
